@@ -1,0 +1,51 @@
+syntax  = "proto3";
+
+package pb;
+
+option go_package = "/proto";
+
+// 执行屏蔽词
+message DoReq {
+  string str = 1;
+  string sub = 2;
+}
+
+message DoResp {
+  string str = 1;
+}
+
+// 添加屏蔽词
+message AddReq {
+  string word = 1;
+}
+
+message AddResp {
+  int64 code = 1;
+  string msg = 2;
+}
+
+// 删除屏蔽词
+message DelReq {
+  string word = 1;
+}
+
+message DelResp {
+  int64 code = 1;
+  string msg = 2;
+}
+
+// 查看屏蔽词
+message GetReq {
+
+}
+
+message GetResp {
+  repeated string list = 1;
+}
+
+service MessageRPC {
+  rpc Do (DoReq) returns (DoResp);
+  rpc Add (AddReq) returns (AddResp);
+  rpc Del(DelReq) returns (DelResp);
+  rpc Get(GetReq) returns (GetResp);
+}
