@@ -19,8 +19,35 @@ type HttpOutBody struct {
 	Msg string `json:"msg"`
 	Data interface{} `json:"data"`
 }
+const (
+	BodyJSON            = "application/json; charset=utf-8"
+	BodyAsciiJSON       = "application/json"
+	BodyHTML            = "text/html; charset=utf-8"
+	BodyJavaScript      = "application/javascript; charset=utf-8"
+	BodyXML             = "application/xml; charset=utf-8"
+	BodyPlain           = "text/plain; charset=utf-8"
+	BodyYAML            = "application/x-yaml; charset=utf-8"
+	BodyDownload        = "application/octet-stream; charset=utf-8"
+)
+
+func OutSucceedBodyJsonP(w http.ResponseWriter, data interface{}) {
+	w.Header().Add("Content-Type", BodyJavaScript)
+	body := &HttpOutBody{
+		Code: 0,
+		Timestamp: time.Now().Unix(),
+		Msg: "succeed",
+		Data: data,
+	}
+	bodyJson, err := body.JsonStr()
+	if err != nil {
+		OutErrBody(w,2001, err)
+	}
+	_,_=fmt.Fprintln(w, bodyJson)
+	return
+}
 
 func OutSucceedBody(w http.ResponseWriter, data interface{}) {
+	w.Header().Add("Content-Type", BodyJSON)
 	body := &HttpOutBody{
 		Code: 0,
 		Timestamp: time.Now().Unix(),

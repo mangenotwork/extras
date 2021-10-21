@@ -6,6 +6,10 @@ import (
 	"sync"
 )
 
+
+// TODO bug: 如word=废物，input“废品” -> "*品"，不应该被屏蔽
+
+
 var Words = &wordMaps{
 	words : make(map[string]struct{}),
 	size : 0,

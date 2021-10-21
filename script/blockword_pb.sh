@@ -1,3 +1,4 @@
+#! /bin/bash
 cd ../api/BlockWord_Proto/
 protoc --go_out=plugins=grpc:. *.proto
 cp -rf proto/blockword.pb.go ../../apps/BlockWord/proto/blockword.pb.go

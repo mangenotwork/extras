@@ -24,7 +24,7 @@ func Do(w http.ResponseWriter, r *http.Request) {
 	decoder.Decode(&params)
 	params.Str = service.BlockWorkTrie.Replace(params.Str, params.Sub)
 	fmt.Println("POST json req: ",params.Str)
-	utils.OutSucceedBody(w, params)
+	utils.OutSucceedBodyJsonP(w, params)
 	return
 }
 
@@ -34,7 +34,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		utils.OutErrBody(w, 201, err)
 		return
 	}
-	utils.OutSucceedBody(w,"")
+	utils.OutSucceedBodyJsonP(w,"")
 	return
 }
 
@@ -44,11 +44,11 @@ func Del(w http.ResponseWriter, r *http.Request) {
 		utils.OutErrBody(w, 201, err)
 		return
 	}
-	utils.OutSucceedBody(w,"")
+	utils.OutSucceedBodyJsonP(w,"")
 	return
 }
 
 func List(w http.ResponseWriter, r *http.Request) {
-	utils.OutSucceedBody(w, service.GetWord())
+	utils.OutSucceedBodyJsonP(w, service.GetWord())
 	return
 }

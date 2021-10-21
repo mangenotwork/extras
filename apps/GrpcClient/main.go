@@ -16,8 +16,9 @@ func main() {
 	c := proto.NewMessageRPCClient(conn)
 	r, err := c.Get(context.Background(), &proto.GetReq{})
 	log.Println(r, err)
-	for i:=0; i<100; i++ {
-		r1, err := c.Do(context.Background(), &proto.DoReq{Str: "你是个废物你知道吗", Sub: "*"})
+	for i:=0; i<2; i++ {
+		//r1, err := c.Do(context.Background(), &proto.DoReq{Str: "你是个废品你个狗日的你知道吗", Sub: "*"})
+		r1, err := c.Do(context.Background(), &proto.DoReq{Str: "你是个废品", Sub: "*"})
 		log.Println(r1, err)
 	}
 
