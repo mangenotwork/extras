@@ -74,18 +74,19 @@ func FileWrite(fileName string, data []byte)  {
 		f *os.File
 		err error
 	)
+	// 如果存在就删除
 	if CheckFileExist(fileName) {
-		f, err = os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND, 0666)
+		//f, err = os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND, 0666)
+		err = os.Remove(fileName)
 		if err != nil{
 			log.Println("file open fail : ", err)
 			return
 		}
-	}else {
-		f, err = os.Create(fileName)
-		if err != nil {
-			log.Println("file create fail : ", err)
-			return
-		}
+	}
+	f, err = os.Create(fileName)
+	if err != nil {
+		log.Println("file create fail : ", err)
+		return
 	}
 	defer f.Close()
 	//写入文件时，使用带缓存的 *Writer

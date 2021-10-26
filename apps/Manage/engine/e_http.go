@@ -2,20 +2,15 @@ package engine
 
 import (
 	"github.com/mangenotwork/extras/common/conf"
+	"golang.org/x/net/netutil"
 	"log"
 	"net"
 	"net/http"
 	"runtime"
 	"syscall"
 	"time"
-
-	"github.com/mangenotwork/extras/apps/BlockWord/handler"
-	"github.com/mangenotwork/extras/common/middleware"
-	"golang.org/x/net/netutil"
 )
 
-
-// TODO : 紧急情况重启
 func StartHttpSrc(){
 
 	runtime.GOMAXPROCS(runtime.NumCPU())

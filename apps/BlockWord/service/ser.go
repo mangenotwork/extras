@@ -6,6 +6,7 @@ import (
 	"github.com/mangenotwork/extras/common/utils"
 	"log"
 	"os"
+	"strings"
 )
 
 var BlockWorkTrie = model.NewTrie()
@@ -17,13 +18,9 @@ func AddWord(word string) error {
 	if model.Words.IsHave(word) {
 		return nil
 	}
-	if err := BlockWorkTrie.AddWord(word); err!=nil {
-		return err
-	}
+	BlockWorkTrie.Add(word)
 	model.Words.Add(word)
-	buf := utils.Compressed("add|"+word)
-	buf = append(buf, '\n')
-	utils.FileWrite(FileName, buf)
+	model.Words.Save(FileName)
 	return nil
 }
 
@@ -32,13 +29,11 @@ func DelWord(word string) error {
 	if !model.Words.IsHave(word) {
 		return nil
 	}
-	if err := BlockWorkTrie.Remove(word); err!=nil {
+	if err := BlockWorkTrie.RemoveWord(word); err!=nil {
 		return err
 	}
 	model.Words.Del(word)
-	buf := utils.Compressed("del|"+word)
-	buf = append(buf, '\n')
-	utils.FileWrite(FileName, buf)
+	model.Words.Save(FileName)
 	return nil
 }
 
@@ -61,20 +56,11 @@ func InitWord(){
 	for scanner.Scan() {
 		data := scanner.Bytes()
 		str := utils.Decompress(data)
-		if len(str) < 5 {
-			continue
-		}
-		doType := str[:3]
-		word := str[4:]
-		switch doType {
-		case "add":
-			if err := BlockWorkTrie.AddWord(word); err==nil {
-				model.Words.Add(word)
-			}
-		case "del":
-			if err := BlockWorkTrie.Remove(word); err==nil {
-				model.Words.Del(word)
+		for _,v := range strings.Split(str, "\n") {
+			if err := BlockWorkTrie.Add(v); err==nil {
+				model.Words.Add(v)
 			}
 		}
 	}
 }
+

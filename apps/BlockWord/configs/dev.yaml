@@ -1,0 +1,9 @@
+app:
+  name: BlockWord
+  runType: dev
+
+http:
+  prod: 1231
+
+grpc:
+  prod: 1232

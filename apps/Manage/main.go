@@ -1,7 +1,7 @@
-package main
+package Manage
 
 import (
-	"github.com/mangenotwork/extras/apps/BlockWord/engine"
+	"github.com/mangenotwork/extras/apps/Manage/engine"
 	"github.com/mangenotwork/extras/common/conf"
 	"github.com/mangenotwork/extras/common/utils"
 	"log"
@@ -15,7 +15,7 @@ func main(){
 
 	conf.InitConf()
 
-	engine.StartJobSrc()
-	engine.StartRpcSrc()
+	//engine.StartJobSrc()
+	//engine.StartRpcSrc()
 	engine.StartHttpSrc()
 }
