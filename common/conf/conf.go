@@ -20,6 +20,7 @@ type Configs struct {
 	TcpClient *TcpClient `yaml:"tcpClient"`
 	UdpServer *UdpServer `yaml:"udpServer"`
 	UdpClient *UdpClient `yaml:"udpClient"`
+	Redis *Redis `yaml:"redis"`
 }
 
 type App struct {
@@ -28,10 +29,12 @@ type App struct {
 }
 
 type HttpServer struct {
+	Open bool `yaml:"open"`
 	Prod string `yaml:"prod"`
 }
 
 type GrpcServer struct {
+	Open bool `yaml:"open"`
 	Prod string `yaml:"prod"`
 }
 
@@ -40,6 +43,7 @@ type GrpcClient struct {
 }
 
 type TcpServer struct {
+	Open bool `yaml:"open"`
 	Prod string `yaml:"prod"`
 }
 
@@ -48,11 +52,21 @@ type TcpClient struct {
 }
 
 type UdpServer struct {
+	Open bool `yaml:"open"`
 	Prod string `yaml:"prod"`
 }
 
 type UdpClient struct {
 	Prod string `yaml:"prod"`
+}
+
+type Redis struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+	DB int `yaml:"db"`
+	Password string `yaml:"password"`
+	MaxIdle int `yaml:"maxidle"`
+	MaxActive int `yaml:"maxactive"`
 }
 
 

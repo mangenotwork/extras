@@ -14,8 +14,14 @@ func main(){
 	log.Println("Starting block word http server")
 
 	conf.InitConf()
-
 	engine.StartJobSrc()
-	engine.StartRpcSrc()
-	engine.StartHttpSrc()
+
+	if conf.Arg.HttpServer.Open {
+		engine.StartHttpSrc()
+	}
+	if conf.Arg.HttpServer.Open {
+		engine.StartRpcSrc()
+	}
+
+	select {}
 }

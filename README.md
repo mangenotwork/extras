@@ -9,14 +9,11 @@
 
 ## 服务
 
-#### Manage 管理服务，管理界面
-> 账号体系
+#### BlockWord 屏蔽词服务
+> 屏蔽词增删该查，词语白名单等; 提供 http/s, grpc api
 
 #### ShortLink 短链接服务
 >  短链接生成,管理; 提供 http/s,grpc api
-
-#### BlockWord 屏蔽词服务
-> 屏蔽词增删该查，词语白名单等; 提供 http/s, grpc api
 
 #### StringHelper 文字处理服务
 > 重名验证， 分词， 自动生成姓名， 网名， 查询邮编， 查询旅游景点， 城市id查询， 拼音， 诗人查询， 诗词查询， 成语查询;

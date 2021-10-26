@@ -3,7 +3,17 @@ app:
   runType: dev
 
 httpServer:
+  open: true
   prod: 1231
 
 grpcServer:
+  open: true
   prod: 1232
+
+redis:
+  host: 192.168.0.197
+  port: 6379
+  db: 4
+  password: love0021$%
+  maxidle: 50
+  maxactive: 10000

@@ -1,9 +1,0 @@
-app:
-  name: Manage
-  runType: dev
-
-httpServer:
-  prod: 14444
-
-grpcServer:
-  prod: 15555

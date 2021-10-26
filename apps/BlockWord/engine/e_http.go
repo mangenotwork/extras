@@ -15,9 +15,13 @@ import (
 )
 
 
-// TODO : 紧急情况重启
 func StartHttpSrc(){
+	go func() {
+		HttpServer()
+	}()
+}
 
+func HttpServer(){
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	server := &http.Server{
 		Addr:         ":"+conf.Arg.HttpServer.Prod,
@@ -64,7 +68,6 @@ func StartHttpSrc(){
 	if err != nil {
 		log.Panic("ListenAndServe err : ", err)
 	}
-
 }
 
 func Router() *http.ServeMux {
