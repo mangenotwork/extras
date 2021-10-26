@@ -9,7 +9,7 @@ import (
 	"net"
 )
 
-func StartRpcSrc(){
+func StartRpcServer(){
 	go func() {
 		listen, err := net.Listen("tcp", ":"+conf.Arg.GrpcServer.Prod)
 		if err != nil {

@@ -15,7 +15,7 @@ import (
 )
 
 
-func StartHttpSrc(){
+func StartHttpServer(){
 	go func() {
 		HttpServer()
 	}()

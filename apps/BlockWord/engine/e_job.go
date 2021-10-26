@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func StartJobSrc(){
+func StartJobServer(){
 	go func() {
 		// 初始化树
 		// 是否有存储文件，没有创建，存在读取数据

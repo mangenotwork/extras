@@ -1,3 +1,7 @@
+/*
+	词语白名单 - 前缀树实现
+ */
+
 package model
 
 var WhiteWord = newWhiteWordTrie()

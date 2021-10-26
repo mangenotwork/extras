@@ -9,18 +9,17 @@ import (
 
 func main(){
 
-	// 打印logo
 	log.Println(utils.Logo)
 	log.Println("Starting block word http server")
-
 	conf.InitConf()
-	engine.StartJobSrc()
+	engine.StartJobServer()
 
 	if conf.Arg.HttpServer.Open {
-		engine.StartHttpSrc()
+		engine.StartHttpServer()
 	}
+
 	if conf.Arg.HttpServer.Open {
-		engine.StartRpcSrc()
+		engine.StartRpcServer()
 	}
 
 	select {}
