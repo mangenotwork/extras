@@ -57,3 +57,4 @@ func (*GRPCService) Get(ctx context.Context, req *proto.GetReq) (*proto.GetResp,
 	utils.RpcLog(start, ctx)
 	return resp, nil
 }
+

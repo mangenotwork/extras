@@ -43,9 +43,41 @@ message GetResp {
   repeated string list = 1;
 }
 
+// 添加白名单词语
+message WhiteWordAddReq {
+  string word = 1;
+}
+
+message WhiteWordAddResp {
+  int64 code = 1;
+  string msg = 2;
+}
+
+// 删除白名单词语
+message WhiteWordDelReq {
+  string word = 1;
+}
+
+message WhiteWordDelResp {
+  int64 code = 1;
+  string msg = 2;
+}
+
+// 查看白名单词语
+message WhiteWordGetReq {
+
+}
+
+message WhiteWordGetResp {
+  repeated string list = 1;
+}
+
 service MessageRPC {
   rpc Do (DoReq) returns (DoResp);
   rpc Add (AddReq) returns (AddResp);
   rpc Del(DelReq) returns (DelResp);
   rpc Get(GetReq) returns (GetResp);
+  rpc WhiteWordAdd (WhiteWordAddReq) returns (WhiteWordAddResp);
+  rpc WhiteWordDel(WhiteWordDelReq) returns (WhiteWordDelResp);
+  rpc WhiteWordGet(WhiteWordGetReq) returns (WhiteWordGetResp);
 }

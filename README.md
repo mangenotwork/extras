@@ -12,6 +12,8 @@
 #### BlockWord 屏蔽词服务
 > 屏蔽词增删该查，词语白名单等; 提供 http/s, grpc api
 
+>  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/BlockWord)
+
 #### ShortLink 短链接服务
 >  短链接生成,管理; 提供 http/s,grpc api
 
