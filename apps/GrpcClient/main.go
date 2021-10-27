@@ -8,17 +8,19 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial("192.168.0.9:1211", grpc.WithInsecure())
+	conn, err := grpc.Dial("192.168.0.9:1232", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 	c := proto.NewMessageRPCClient(conn)
-	r, err := c.Get(context.Background(), &proto.GetReq{})
+	r, err := c.WhiteWordAdd(context.Background(), &proto.WhiteWordAddReq{
+		Word: "飞机",
+	})
 	log.Println(r, err)
 	for i:=0; i<2; i++ {
 		//r1, err := c.Do(context.Background(), &proto.DoReq{Str: "你是个废品你个狗日的你知道吗", Sub: "*"})
-		r1, err := c.Do(context.Background(), &proto.DoReq{Str: "你是个废品", Sub: "*"})
+		r1, err := c.Do(context.Background(), &proto.DoReq{Str: "打飞机,我在路口交通进爱圣诞节在欧帕斯卡分速度发完全二维卡；〔〕看好小卡卡是爬山分明；；发送爱啥啥的加拉收到啦行口交就在这个dsf收到了几个了路口交接", Sub: "*"})
 		log.Println(r1, err)
 	}
 

@@ -109,7 +109,7 @@ func (t *Trie) PrefixSearch(key string) (result []*Node) {
 	return
 }
 
-func (t *Trie) BlockWord(text, replace string) (result string) {
+func (t *Trie) BlockWord(text, replace string) (result, runTime string) {
 	startTime := time.Now()
 	if len(replace) < 0 {
 		replace = "***"
@@ -164,8 +164,8 @@ func (t *Trie) BlockWord(text, replace string) (result string) {
 		}
 	}
 	result = string(left)
-
-	log.Println("time : ", time.Since(startTime))
+	runTime = time.Since(startTime).String()
+	log.Println("time : ", runTime)
 	return
 }
 

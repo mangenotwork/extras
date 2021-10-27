@@ -16,13 +16,14 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 type BlockPostParam struct {
 	Str string `json:"str"`
 	Sub string `json:"sub"` // 替换符号
+	Time string `json:"time"`
 }
 
 func Do(w http.ResponseWriter, r *http.Request) {
 	decoder:=json.NewDecoder(r.Body)
 	params := &BlockPostParam{}
 	_=decoder.Decode(&params)
-	params.Str = service.BlockWorkTrie.BlockWord(params.Str, params.Sub)
+	params.Str, params.Time  = service.BlockWorkTrie.BlockWord(params.Str, params.Sub)
 	utils.OutSucceedBodyJsonP(w, params)
 	return
 }

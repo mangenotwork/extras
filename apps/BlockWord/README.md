@@ -70,7 +70,6 @@ redis:
 ##### [GET] /v1/list 
 > 查看所有屏蔽词
 
-无参数
 返回
 ```json
 {"code":0,"timestamp":1635240175,"msg":"succeed","data":["口交","废物"]}
@@ -91,7 +90,6 @@ redis:
 ##### [GET] /v1/white/list 
 > 查看所有词语白名单
 
-无参数
 返回
 ```json
 {"code":0,"timestamp":1635240175,"msg":"succeed","data":["路口"]}

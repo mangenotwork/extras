@@ -15,7 +15,8 @@ type GRPCService struct {}
 func (*GRPCService) Do(ctx context.Context, req *proto.DoReq) (*proto.DoResp, error) {
 	start := time.Now()
 	resp := new(proto.DoResp)
-	resp.Str = service.BlockWorkTrie.BlockWord(req.Str, req.Sub)
+	resp.Sub = req.Sub
+	resp.Str, resp.Time = service.BlockWorkTrie.BlockWord(req.Str, req.Sub)
 	utils.RpcLog(start, ctx)
 	return resp, nil
 }

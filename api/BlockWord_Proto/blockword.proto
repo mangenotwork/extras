@@ -12,6 +12,8 @@ message DoReq {
 
 message DoResp {
   string str = 1;
+  string sub = 2;
+  string time = 3;
 }
 
 // 添加屏蔽词
