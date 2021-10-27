@@ -26,11 +26,7 @@ func (*GRPCService) Add(ctx context.Context, req *proto.AddReq) (*proto.AddResp,
 		Code: 0,
 		Msg: "succeed",
 	}
-	err := service.AddWord(req.Word)
-	if err != nil {
-		resp.Code = 201
-		resp.Msg = err.Error()
-	}
+	service.AddWord(req.Word)
 	utils.RpcLog(start, ctx)
 	return resp, nil
 }
@@ -41,11 +37,7 @@ func (*GRPCService) Del(ctx context.Context, req *proto.DelReq) (*proto.DelResp,
 		Code: 0,
 		Msg: "succeed",
 	}
-	err := service.DelWord(req.Word)
-	if err != nil {
-		resp.Code = 201
-		resp.Msg = err.Error()
-	}
+	service.DelWord(req.Word)
 	utils.RpcLog(start, ctx)
 	return resp, nil
 }
@@ -58,3 +50,32 @@ func (*GRPCService) Get(ctx context.Context, req *proto.GetReq) (*proto.GetResp,
 	return resp, nil
 }
 
+func (*GRPCService) WhiteWordAdd (ctx context.Context, req *proto.WhiteWordAddReq) (*proto.WhiteWordAddResp, error) {
+	start := time.Now()
+	resp := &proto.WhiteWordAddResp{
+		Code: 0,
+		Msg: "succeed",
+	}
+	service.WhiteAddWord(req.Word)
+	utils.RpcLog(start, ctx)
+	return resp, nil
+}
+
+func (*GRPCService) WhiteWordDel(ctx context.Context, req *proto.WhiteWordDelReq) (*proto.WhiteWordDelResp, error) {
+	start := time.Now()
+	resp := &proto.WhiteWordDelResp{
+		Code: 0,
+		Msg: "succeed",
+	}
+	service.WhiteDelWord(req.Word)
+	utils.RpcLog(start, ctx)
+	return resp, nil
+}
+
+func (*GRPCService) WhiteWordGet(ctx context.Context, req *proto.WhiteWordGetReq) (*proto.WhiteWordGetResp, error) {
+	start := time.Now()
+	resp := new(proto.WhiteWordGetResp)
+	resp.List = service.WhiteGetWord()
+	utils.RpcLog(start, ctx)
+	return resp, nil
+}

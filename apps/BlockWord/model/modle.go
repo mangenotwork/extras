@@ -6,7 +6,10 @@
 package model
 
 import (
+	"github.com/mangenotwork/extras/common/conn"
 	"github.com/mangenotwork/extras/common/utils"
+	"github.com/garyburd/redigo/redis"
+	"log"
 	"sort"
 	"sync"
 )
@@ -62,3 +65,88 @@ func (wmp *wordMaps) Save(fileName string) {
 		utils.FileWrite(fileName, buf)
 	}()
 }
+
+const (
+	BlockWordKey = "bw"
+	WhiteWordKey = "ww"
+)
+
+func addWord(key, word string) (err error) {
+	c := conn.RedisConn().Get()
+	defer c.Close()
+	_, err = c.Do("SADD", key, word)
+	return
+}
+
+func getWord(key string) (res []string, err error) {
+	c := conn.RedisConn().Get()
+	defer c.Close()
+	res, err = redis.Strings(c.Do("SMEMBERS", key))
+	return
+}
+
+func delWord(key, word string) (err error){
+	c := conn.RedisConn().Get()
+	defer c.Close()
+	_, err = c.Do("SREM", key, word)
+	return
+}
+
+type Word interface {
+	Add(word string)
+	Get() []string
+	Del(word string)
+}
+
+func NewWord(key string) Word {
+	if key == WhiteWordKey {
+		return new(whiteWord)
+	}
+	return new(blockWord)
+}
+
+type blockWord struct {}
+
+func (*blockWord) Add(word string) {
+	if err := addWord(BlockWordKey, word); err != nil {
+		log.Println(err)
+	}
+}
+
+func (*blockWord) Get() []string {
+	res, err := getWord(BlockWordKey)
+	if err != nil {
+		return nil
+	}
+	return res
+}
+
+func (*blockWord) Del(word string) {
+	if err := delWord(BlockWordKey, word); err != nil {
+		log.Println(err)
+	}
+}
+
+type whiteWord struct {}
+
+func (*whiteWord) Add(word string) {
+	if err := addWord(WhiteWordKey, word); err != nil {
+		log.Println(err)
+	}
+}
+
+func (*whiteWord) Get() []string {
+	res, err := getWord(WhiteWordKey)
+	if err != nil {
+		return nil
+	}
+	return res
+}
+
+func (*whiteWord) Del(word string) {
+	if err := delWord(WhiteWordKey, word); err != nil {
+		log.Println(err)
+	}
+}
+
+

@@ -200,3 +200,15 @@ func (t *Trie) RemoveWord(key string) error {
 	return nil
 }
 
+func (t *Trie) Search(txt string) bool {
+	word := []rune(txt)
+	node := t.root
+	for i := 0; i < len(word); i++ {
+		_, ok := node.child[word[i]]
+		if !ok {
+			return false
+		}
+		node = node.child[word[i]]
+	}
+	return node.end
+}

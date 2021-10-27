@@ -419,6 +419,298 @@ func (x *GetResp) GetList() []string {
 	return nil
 }
 
+// 添加白名单词语
+type WhiteWordAddReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Word string `protobuf:"bytes,1,opt,name=word,proto3" json:"word,omitempty"`
+}
+
+func (x *WhiteWordAddReq) Reset() {
+	*x = WhiteWordAddReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_blockword_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WhiteWordAddReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WhiteWordAddReq) ProtoMessage() {}
+
+func (x *WhiteWordAddReq) ProtoReflect() protoreflect.Message {
+	mi := &file_blockword_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WhiteWordAddReq.ProtoReflect.Descriptor instead.
+func (*WhiteWordAddReq) Descriptor() ([]byte, []int) {
+	return file_blockword_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *WhiteWordAddReq) GetWord() string {
+	if x != nil {
+		return x.Word
+	}
+	return ""
+}
+
+type WhiteWordAddResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code int64  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Msg  string `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+}
+
+func (x *WhiteWordAddResp) Reset() {
+	*x = WhiteWordAddResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_blockword_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WhiteWordAddResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WhiteWordAddResp) ProtoMessage() {}
+
+func (x *WhiteWordAddResp) ProtoReflect() protoreflect.Message {
+	mi := &file_blockword_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WhiteWordAddResp.ProtoReflect.Descriptor instead.
+func (*WhiteWordAddResp) Descriptor() ([]byte, []int) {
+	return file_blockword_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *WhiteWordAddResp) GetCode() int64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *WhiteWordAddResp) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
+// 删除白名单词语
+type WhiteWordDelReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Word string `protobuf:"bytes,1,opt,name=word,proto3" json:"word,omitempty"`
+}
+
+func (x *WhiteWordDelReq) Reset() {
+	*x = WhiteWordDelReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_blockword_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WhiteWordDelReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WhiteWordDelReq) ProtoMessage() {}
+
+func (x *WhiteWordDelReq) ProtoReflect() protoreflect.Message {
+	mi := &file_blockword_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WhiteWordDelReq.ProtoReflect.Descriptor instead.
+func (*WhiteWordDelReq) Descriptor() ([]byte, []int) {
+	return file_blockword_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *WhiteWordDelReq) GetWord() string {
+	if x != nil {
+		return x.Word
+	}
+	return ""
+}
+
+type WhiteWordDelResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code int64  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Msg  string `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+}
+
+func (x *WhiteWordDelResp) Reset() {
+	*x = WhiteWordDelResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_blockword_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WhiteWordDelResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WhiteWordDelResp) ProtoMessage() {}
+
+func (x *WhiteWordDelResp) ProtoReflect() protoreflect.Message {
+	mi := &file_blockword_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WhiteWordDelResp.ProtoReflect.Descriptor instead.
+func (*WhiteWordDelResp) Descriptor() ([]byte, []int) {
+	return file_blockword_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *WhiteWordDelResp) GetCode() int64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *WhiteWordDelResp) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
+// 查看白名单词语
+type WhiteWordGetReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *WhiteWordGetReq) Reset() {
+	*x = WhiteWordGetReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_blockword_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WhiteWordGetReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WhiteWordGetReq) ProtoMessage() {}
+
+func (x *WhiteWordGetReq) ProtoReflect() protoreflect.Message {
+	mi := &file_blockword_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WhiteWordGetReq.ProtoReflect.Descriptor instead.
+func (*WhiteWordGetReq) Descriptor() ([]byte, []int) {
+	return file_blockword_proto_rawDescGZIP(), []int{12}
+}
+
+type WhiteWordGetResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	List []string `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *WhiteWordGetResp) Reset() {
+	*x = WhiteWordGetResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_blockword_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WhiteWordGetResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WhiteWordGetResp) ProtoMessage() {}
+
+func (x *WhiteWordGetResp) ProtoReflect() protoreflect.Message {
+	mi := &file_blockword_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WhiteWordGetResp.ProtoReflect.Descriptor instead.
+func (*WhiteWordGetResp) Descriptor() ([]byte, []int) {
+	return file_blockword_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *WhiteWordGetResp) GetList() []string {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
 var File_blockword_proto protoreflect.FileDescriptor
 
 var file_blockword_proto_rawDesc = []byte{
@@ -440,17 +732,44 @@ var file_blockword_proto_rawDesc = []byte{
 	0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x22, 0x08, 0x0a, 0x06,
 	0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x22, 0x1d, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73,
 	0x70, 0x12, 0x12, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52,
-	0x04, 0x6c, 0x69, 0x73, 0x74, 0x32, 0x89, 0x01, 0x0a, 0x0a, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x52, 0x50, 0x43, 0x12, 0x1b, 0x0a, 0x02, 0x44, 0x6f, 0x12, 0x09, 0x2e, 0x70, 0x62, 0x2e,
-	0x44, 0x6f, 0x52, 0x65, 0x71, 0x1a, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x6f, 0x52, 0x65, 0x73,
-	0x70, 0x12, 0x1e, 0x0a, 0x03, 0x41, 0x64, 0x64, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x64,
-	0x64, 0x52, 0x65, 0x71, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x64, 0x64, 0x52, 0x65, 0x73,
-	0x70, 0x12, 0x1e, 0x0a, 0x03, 0x44, 0x65, 0x6c, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65,
-	0x6c, 0x52, 0x65, 0x71, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65, 0x6c, 0x52, 0x65, 0x73,
-	0x70, 0x12, 0x1e, 0x0a, 0x03, 0x47, 0x65, 0x74, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x47, 0x65,
-	0x74, 0x52, 0x65, 0x71, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73,
-	0x70, 0x42, 0x08, 0x5a, 0x06, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x25, 0x0a, 0x0f, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f,
+	0x72, 0x64, 0x41, 0x64, 0x64, 0x52, 0x65, 0x71, 0x12, 0x12, 0x0a, 0x04, 0x77, 0x6f, 0x72, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x38, 0x0a, 0x10,
+	0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x41, 0x64, 0x64, 0x52, 0x65, 0x73, 0x70,
+	0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04,
+	0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x73, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x22, 0x25, 0x0a, 0x0f, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57,
+	0x6f, 0x72, 0x64, 0x44, 0x65, 0x6c, 0x52, 0x65, 0x71, 0x12, 0x12, 0x0a, 0x04, 0x77, 0x6f, 0x72,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x38, 0x0a,
+	0x10, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x44, 0x65, 0x6c, 0x52, 0x65, 0x73,
+	0x70, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x73, 0x67, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x22, 0x11, 0x0a, 0x0f, 0x57, 0x68, 0x69, 0x74, 0x65,
+	0x57, 0x6f, 0x72, 0x64, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x22, 0x26, 0x0a, 0x10, 0x57, 0x68,
+	0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x12,
+	0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x04, 0x6c, 0x69,
+	0x73, 0x74, 0x32, 0xba, 0x02, 0x0a, 0x0a, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x50,
+	0x43, 0x12, 0x1b, 0x0a, 0x02, 0x44, 0x6f, 0x12, 0x09, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x6f, 0x52,
+	0x65, 0x71, 0x1a, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x12, 0x1e,
+	0x0a, 0x03, 0x41, 0x64, 0x64, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x64, 0x64, 0x52, 0x65,
+	0x71, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x64, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x1e,
+	0x0a, 0x03, 0x44, 0x65, 0x6c, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65, 0x6c, 0x52, 0x65,
+	0x71, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x12, 0x1e,
+	0x0a, 0x03, 0x47, 0x65, 0x74, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65,
+	0x71, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x39,
+	0x0a, 0x0c, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x41, 0x64, 0x64, 0x12, 0x13,
+	0x2e, 0x70, 0x62, 0x2e, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x41, 0x64, 0x64,
+	0x52, 0x65, 0x71, 0x1a, 0x14, 0x2e, 0x70, 0x62, 0x2e, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f,
+	0x72, 0x64, 0x41, 0x64, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x39, 0x0a, 0x0c, 0x57, 0x68, 0x69,
+	0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x44, 0x65, 0x6c, 0x12, 0x13, 0x2e, 0x70, 0x62, 0x2e, 0x57,
+	0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x44, 0x65, 0x6c, 0x52, 0x65, 0x71, 0x1a, 0x14,
+	0x2e, 0x70, 0x62, 0x2e, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x44, 0x65, 0x6c,
+	0x52, 0x65, 0x73, 0x70, 0x12, 0x39, 0x0a, 0x0c, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72,
+	0x64, 0x47, 0x65, 0x74, 0x12, 0x13, 0x2e, 0x70, 0x62, 0x2e, 0x57, 0x68, 0x69, 0x74, 0x65, 0x57,
+	0x6f, 0x72, 0x64, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x14, 0x2e, 0x70, 0x62, 0x2e, 0x57,
+	0x68, 0x69, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x42,
+	0x08, 0x5a, 0x06, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -465,31 +784,43 @@ func file_blockword_proto_rawDescGZIP() []byte {
 	return file_blockword_proto_rawDescData
 }
 
-var file_blockword_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_blockword_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_blockword_proto_goTypes = []interface{}{
-	(*DoReq)(nil),   // 0: pb.DoReq
-	(*DoResp)(nil),  // 1: pb.DoResp
-	(*AddReq)(nil),  // 2: pb.AddReq
-	(*AddResp)(nil), // 3: pb.AddResp
-	(*DelReq)(nil),  // 4: pb.DelReq
-	(*DelResp)(nil), // 5: pb.DelResp
-	(*GetReq)(nil),  // 6: pb.GetReq
-	(*GetResp)(nil), // 7: pb.GetResp
+	(*DoReq)(nil),            // 0: pb.DoReq
+	(*DoResp)(nil),           // 1: pb.DoResp
+	(*AddReq)(nil),           // 2: pb.AddReq
+	(*AddResp)(nil),          // 3: pb.AddResp
+	(*DelReq)(nil),           // 4: pb.DelReq
+	(*DelResp)(nil),          // 5: pb.DelResp
+	(*GetReq)(nil),           // 6: pb.GetReq
+	(*GetResp)(nil),          // 7: pb.GetResp
+	(*WhiteWordAddReq)(nil),  // 8: pb.WhiteWordAddReq
+	(*WhiteWordAddResp)(nil), // 9: pb.WhiteWordAddResp
+	(*WhiteWordDelReq)(nil),  // 10: pb.WhiteWordDelReq
+	(*WhiteWordDelResp)(nil), // 11: pb.WhiteWordDelResp
+	(*WhiteWordGetReq)(nil),  // 12: pb.WhiteWordGetReq
+	(*WhiteWordGetResp)(nil), // 13: pb.WhiteWordGetResp
 }
 var file_blockword_proto_depIdxs = []int32{
-	0, // 0: pb.MessageRPC.Do:input_type -> pb.DoReq
-	2, // 1: pb.MessageRPC.Add:input_type -> pb.AddReq
-	4, // 2: pb.MessageRPC.Del:input_type -> pb.DelReq
-	6, // 3: pb.MessageRPC.Get:input_type -> pb.GetReq
-	1, // 4: pb.MessageRPC.Do:output_type -> pb.DoResp
-	3, // 5: pb.MessageRPC.Add:output_type -> pb.AddResp
-	5, // 6: pb.MessageRPC.Del:output_type -> pb.DelResp
-	7, // 7: pb.MessageRPC.Get:output_type -> pb.GetResp
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: pb.MessageRPC.Do:input_type -> pb.DoReq
+	2,  // 1: pb.MessageRPC.Add:input_type -> pb.AddReq
+	4,  // 2: pb.MessageRPC.Del:input_type -> pb.DelReq
+	6,  // 3: pb.MessageRPC.Get:input_type -> pb.GetReq
+	8,  // 4: pb.MessageRPC.WhiteWordAdd:input_type -> pb.WhiteWordAddReq
+	10, // 5: pb.MessageRPC.WhiteWordDel:input_type -> pb.WhiteWordDelReq
+	12, // 6: pb.MessageRPC.WhiteWordGet:input_type -> pb.WhiteWordGetReq
+	1,  // 7: pb.MessageRPC.Do:output_type -> pb.DoResp
+	3,  // 8: pb.MessageRPC.Add:output_type -> pb.AddResp
+	5,  // 9: pb.MessageRPC.Del:output_type -> pb.DelResp
+	7,  // 10: pb.MessageRPC.Get:output_type -> pb.GetResp
+	9,  // 11: pb.MessageRPC.WhiteWordAdd:output_type -> pb.WhiteWordAddResp
+	11, // 12: pb.MessageRPC.WhiteWordDel:output_type -> pb.WhiteWordDelResp
+	13, // 13: pb.MessageRPC.WhiteWordGet:output_type -> pb.WhiteWordGetResp
+	7,  // [7:14] is the sub-list for method output_type
+	0,  // [0:7] is the sub-list for method input_type
+	0,  // [0:0] is the sub-list for extension type_name
+	0,  // [0:0] is the sub-list for extension extendee
+	0,  // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_blockword_proto_init() }
@@ -594,6 +925,78 @@ func file_blockword_proto_init() {
 				return nil
 			}
 		}
+		file_blockword_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WhiteWordAddReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_blockword_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WhiteWordAddResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_blockword_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WhiteWordDelReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_blockword_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WhiteWordDelResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_blockword_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WhiteWordGetReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_blockword_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WhiteWordGetResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -601,7 +1004,7 @@ func file_blockword_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_blockword_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -631,6 +1034,9 @@ type MessageRPCClient interface {
 	Add(ctx context.Context, in *AddReq, opts ...grpc.CallOption) (*AddResp, error)
 	Del(ctx context.Context, in *DelReq, opts ...grpc.CallOption) (*DelResp, error)
 	Get(ctx context.Context, in *GetReq, opts ...grpc.CallOption) (*GetResp, error)
+	WhiteWordAdd(ctx context.Context, in *WhiteWordAddReq, opts ...grpc.CallOption) (*WhiteWordAddResp, error)
+	WhiteWordDel(ctx context.Context, in *WhiteWordDelReq, opts ...grpc.CallOption) (*WhiteWordDelResp, error)
+	WhiteWordGet(ctx context.Context, in *WhiteWordGetReq, opts ...grpc.CallOption) (*WhiteWordGetResp, error)
 }
 
 type messageRPCClient struct {
@@ -677,12 +1083,42 @@ func (c *messageRPCClient) Get(ctx context.Context, in *GetReq, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *messageRPCClient) WhiteWordAdd(ctx context.Context, in *WhiteWordAddReq, opts ...grpc.CallOption) (*WhiteWordAddResp, error) {
+	out := new(WhiteWordAddResp)
+	err := c.cc.Invoke(ctx, "/pb.MessageRPC/WhiteWordAdd", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messageRPCClient) WhiteWordDel(ctx context.Context, in *WhiteWordDelReq, opts ...grpc.CallOption) (*WhiteWordDelResp, error) {
+	out := new(WhiteWordDelResp)
+	err := c.cc.Invoke(ctx, "/pb.MessageRPC/WhiteWordDel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messageRPCClient) WhiteWordGet(ctx context.Context, in *WhiteWordGetReq, opts ...grpc.CallOption) (*WhiteWordGetResp, error) {
+	out := new(WhiteWordGetResp)
+	err := c.cc.Invoke(ctx, "/pb.MessageRPC/WhiteWordGet", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MessageRPCServer is the server API for MessageRPC service.
 type MessageRPCServer interface {
 	Do(context.Context, *DoReq) (*DoResp, error)
 	Add(context.Context, *AddReq) (*AddResp, error)
 	Del(context.Context, *DelReq) (*DelResp, error)
 	Get(context.Context, *GetReq) (*GetResp, error)
+	WhiteWordAdd(context.Context, *WhiteWordAddReq) (*WhiteWordAddResp, error)
+	WhiteWordDel(context.Context, *WhiteWordDelReq) (*WhiteWordDelResp, error)
+	WhiteWordGet(context.Context, *WhiteWordGetReq) (*WhiteWordGetResp, error)
 }
 
 // UnimplementedMessageRPCServer can be embedded to have forward compatible implementations.
@@ -700,6 +1136,15 @@ func (*UnimplementedMessageRPCServer) Del(context.Context, *DelReq) (*DelResp, e
 }
 func (*UnimplementedMessageRPCServer) Get(context.Context, *GetReq) (*GetResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (*UnimplementedMessageRPCServer) WhiteWordAdd(context.Context, *WhiteWordAddReq) (*WhiteWordAddResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WhiteWordAdd not implemented")
+}
+func (*UnimplementedMessageRPCServer) WhiteWordDel(context.Context, *WhiteWordDelReq) (*WhiteWordDelResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WhiteWordDel not implemented")
+}
+func (*UnimplementedMessageRPCServer) WhiteWordGet(context.Context, *WhiteWordGetReq) (*WhiteWordGetResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WhiteWordGet not implemented")
 }
 
 func RegisterMessageRPCServer(s *grpc.Server, srv MessageRPCServer) {
@@ -778,6 +1223,60 @@ func _MessageRPC_Get_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessageRPC_WhiteWordAdd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WhiteWordAddReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessageRPCServer).WhiteWordAdd(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MessageRPC/WhiteWordAdd",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessageRPCServer).WhiteWordAdd(ctx, req.(*WhiteWordAddReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessageRPC_WhiteWordDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WhiteWordDelReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessageRPCServer).WhiteWordDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MessageRPC/WhiteWordDel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessageRPCServer).WhiteWordDel(ctx, req.(*WhiteWordDelReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessageRPC_WhiteWordGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WhiteWordGetReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessageRPCServer).WhiteWordGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MessageRPC/WhiteWordGet",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessageRPCServer).WhiteWordGet(ctx, req.(*WhiteWordGetReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _MessageRPC_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.MessageRPC",
 	HandlerType: (*MessageRPCServer)(nil),
@@ -797,6 +1296,18 @@ var _MessageRPC_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _MessageRPC_Get_Handler,
+		},
+		{
+			MethodName: "WhiteWordAdd",
+			Handler:    _MessageRPC_WhiteWordAdd_Handler,
+		},
+		{
+			MethodName: "WhiteWordDel",
+			Handler:    _MessageRPC_WhiteWordDel_Handler,
+		},
+		{
+			MethodName: "WhiteWordGet",
+			Handler:    _MessageRPC_WhiteWordGet_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
