@@ -78,5 +78,17 @@ func Router() *http.ServeMux {
 
 	mux.Handle("/ttttt", m(http.HandlerFunc(handler.Te)))
 
+	// [post] /v1/add  创建短链接
+	mux.Handle("/v1/add", m(http.HandlerFunc(handler.Add)))
+
+	// [post] /v1/modify  修改短链接
+	mux.Handle("/v1/modify", m(http.HandlerFunc(handler.Modify)))
+
+	// [post] /v1/get   获取短链接信息
+	mux.Handle("/v1/get", m(http.HandlerFunc(handler.Get)))
+
+	// [post] /v1/del   删除短链接
+	mux.Handle("/v1/del", m(http.HandlerFunc(handler.Del)))
+
 	return mux
 }

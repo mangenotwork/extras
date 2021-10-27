@@ -1,12 +1,18 @@
 package handler
 
 import (
+	"encoding/json"
+	"errors"
+	"github.com/mangenotwork/extras/apps/ShortLink/model"
+	"github.com/mangenotwork/extras/apps/ShortLink/service"
+	"github.com/mangenotwork/extras/common/utils"
 	"io"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +92,30 @@ type AddBody struct {
 
 // 创建短链接
 func Add(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &AddParam{}
+	_=decoder.Decode(&params)
+	if params.IsPrivacy && len(params.Password) < 1 {
+		utils.OutErrBody(w, 1001, errors.New("设置了隐私但是password为空"))
+	}
+	// 生成短链接
+
+	exp := params.Aging
+	if exp == 0 {
+		exp = params.Deadline
+	}
+	shortLink := &model.ShortLink{
+		Short: "/"+service.MustGenerate(),
+		Url: params.Url,
+		Expiration: exp,
+		IsPrivacy : params.IsPrivacy,
+		Password : params.Password,
+		Creation : time.Now().Unix(),
+		View : 0,
+		OpenBlockList : params.OpenBlockList,
+		OpenWhiteList : params.OpenWhiteList,
+	}
+	shortLink.Save()
 
 }
 

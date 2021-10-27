@@ -1,9 +1,17 @@
 package model
 
+import (
+	"github.com/mangenotwork/extras/apps/ShortLink/service"
+	"github.com/mangenotwork/extras/common/conn"
+	"log"
+	"fmt"
+	"github.com/garyburd/redigo/redis"
+)
+
 type ShortLink struct {
+	Short string
 	Url string
-	Aging int64 // 时效，单位秒
-	Deadline int64 // 截止日期， 单位时间戳, 只有当Aging为0时才用
+	Expiration int64 // 过期时间
 	IsPrivacy bool // 是否隐私
 	Password string // 只有当IsPrivacy=true使用
 	Creation int64 // 创建时间
@@ -18,3 +26,30 @@ const (
 	ShortLinkWhiteList = "link:%s:w" // 短链接白名单， set
 )
 
+func (sl *ShortLink) Save(){
+	shortLinkKey := fmt.Sprintf(ShortLinkInfoKey, "/"+service.MustGenerate())
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	args := redis.Args{}.Add(shortLinkKey)
+	// 不使用反射， 反射效率低
+	args = args.Add("Short").Add(sl.Short)
+	args = args.Add("Url").Add(sl.Url)
+	args = args.Add("Expiration").Add(sl.Expiration)
+	args = args.Add("IsPrivacy").Add(sl.IsPrivacy)
+	args = args.Add("Password").Add(sl.Password)
+	args = args.Add("Creation").Add(sl.Creation)
+	args = args.Add("View").Add(sl.View)
+	args = args.Add("OpenBlockList").Add(sl.OpenBlockList)
+	args = args.Add("OpenWhiteList").Add(sl.OpenWhiteList)
+
+	log.Println("执行redis : ", "HMSET", args)
+	res, err := rc.Do("HMSET", args...)
+	if err != nil {
+		log.Println("GET error", err.Error())
+	}
+	log.Println(res)
+
+
+	//blockListKey := fmt.Sprintf(ShortLinkBlockList, "/"+service.MustGenerate())
+	//whiteListKey := fmt.Sprintf(ShortLinkWhiteList, "/"+service.MustGenerate())
+}
