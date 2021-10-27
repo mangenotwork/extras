@@ -111,12 +111,12 @@ redis:
 > 是否存在非法词如果存在返回所有屏蔽词，应用场景：判断命名非法,显示非法词
 
 参数 
-- post : {"str":"我在路口交通进行口交就在这个路口交接"}
-- get : /v1/ishave/list?str=我在路口交通进行口交就在这个路口交接
+- post : {"str":"我在口交通进爱操你妈圣诞节在欧帕斯卡分废速度发完全二维卡"}
+- get : /v1/ishave/list?str=我在口交通进爱操你妈圣诞节在欧帕斯卡分废速度发完全二维卡
 
 返回
 ```json
-{"code":0,"timestamp":1635304798,"msg":"succeed","data":true}
+{"code":0,"timestamp":1635306381,"msg":"succeed","data":["口交","操你妈"]}
 ```
 
 ## grpc
@@ -138,6 +138,10 @@ redis:
 > 词语白名单删除
 ##### rpc WhiteWordGet(WhiteWordGetReq) returns (WhiteWordGetResp);
 > 查看所有词语白名单
+##### rpc IsHave(IsHaveReq) returns (IsHaveResp);
+> 是否存在非法词，应用场景：判断命名非法
+##### rpc IsHaveList(IsHaveListReq) returns (IsHaveListResp);
+> 是否存在非法词如果存在返回所有屏蔽词，应用场景：判断命名非法,显示非法词
 
 ## 编译
 > 直接编译:  go build main.go
