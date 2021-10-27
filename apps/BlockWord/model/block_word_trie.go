@@ -212,3 +212,87 @@ func (t *Trie) Search(txt string) bool {
 	}
 	return node.end
 }
+
+func (t *Trie) IsHave(text string) bool {
+	chars := []rune(text)
+	if t.root == nil {
+		return false
+	}
+	node := t.root
+	i := 0
+	isInvalidWord := false
+	l := len(chars)
+	for index:=0; index<l; index++ {
+		v := chars[index]
+		if WhiteWord.StartsWithRune(v) {
+			i = index
+			isInvalidWord = true
+		}
+		if isInvalidWord {
+			if WhiteWord.Search(chars[i:index]) {
+				if index+1 != l {
+					continue
+				}
+				index++
+			}
+		}
+		ret, ok := node.child[v]
+		if !ok {
+			node = t.root
+			continue
+		}
+		node = ret
+		if ret.end {
+			node = t.root
+			return true
+		}
+	}
+	return false
+}
+
+func (t *Trie) BlockHaveList(text string) (rse []string) {
+	rse = make([]string,0)
+	chars := []rune(text)
+	if t.root == nil {
+		return
+	}
+	var left []rune
+	node := t.root
+	start := 0
+	i := 0
+	isInvalidWord := false
+	l := len(chars)
+	for index:=0; index<l; index++ {
+		v := chars[index]
+		if WhiteWord.StartsWithRune(v) {
+			i = index
+			isInvalidWord = true
+		}
+		if isInvalidWord {
+			if WhiteWord.Search(chars[i:index]) {
+				if index+1 != l {
+					continue
+				}
+				index++
+			}
+		}
+		ret, ok := node.child[v]
+		if !ok {
+			left = append(left, chars[start:index+1]...)
+			start = index + 1
+			node = t.root
+			continue
+		}
+		node = ret
+		if ret.end {
+			node = t.root
+			rse = append(rse, string(chars[start:index+1]))
+			start = index + 1
+			continue
+		}
+		if index+1 == l {
+			left = append(left, v)
+		}
+	}
+	return
+}

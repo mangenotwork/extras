@@ -65,3 +65,31 @@ func WhiteList(w http.ResponseWriter, r *http.Request) {
 	utils.OutSucceedBodyJsonP(w, service.WhiteGetWord())
 	return
 }
+
+func IsHave(w http.ResponseWriter, r *http.Request){
+	word := ""
+	if r.Method == "POST" {
+		decoder:=json.NewDecoder(r.Body)
+		params := &BlockPostParam{}
+		_=decoder.Decode(&params)
+		word = params.Str
+	} else {
+		word = utils.GetUrlArg(r, "str")
+	}
+	utils.OutSucceedBodyJsonP(w, service.BlockWorkTrie.IsHave(word))
+	return
+}
+
+func IsHaveList(w http.ResponseWriter, r *http.Request){
+	word := ""
+	if r.Method == "POST" {
+		decoder:=json.NewDecoder(r.Body)
+		params := &BlockPostParam{}
+		_=decoder.Decode(&params)
+		word = params.Str
+	} else {
+		word = utils.GetUrlArg(r, "str")
+	}
+	utils.OutSucceedBodyJsonP(w,service.BlockWorkTrie.BlockHaveList(word))
+	return
+}

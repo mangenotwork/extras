@@ -74,6 +74,25 @@ message WhiteWordGetResp {
   repeated string list = 1;
 }
 
+// 是否存在非法词
+message IsHaveReq {
+  string str = 1;
+}
+
+message IsHaveResp {
+  int32 isHave = 1;
+}
+
+// 是否存在非法词并返回
+message IsHaveListReq {
+  string str = 1;
+}
+
+message IsHaveListResp {
+  int32 isHave = 1;
+  repeated string list = 2;
+}
+
 service MessageRPC {
   rpc Do (DoReq) returns (DoResp);
   rpc Add (AddReq) returns (AddResp);
@@ -82,4 +101,6 @@ service MessageRPC {
   rpc WhiteWordAdd (WhiteWordAddReq) returns (WhiteWordAddResp);
   rpc WhiteWordDel(WhiteWordDelReq) returns (WhiteWordDelResp);
   rpc WhiteWordGet(WhiteWordGetReq) returns (WhiteWordGetResp);
+  rpc IsHave(IsHaveReq) returns (IsHaveResp);
+  rpc IsHaveList(IsHaveListReq) returns (IsHaveListResp);
 }

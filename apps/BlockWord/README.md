@@ -95,6 +95,30 @@ redis:
 {"code":0,"timestamp":1635240175,"msg":"succeed","data":["路口"]}
 ```
 
+##### [POST|GET] /v1/ishave
+> 是否存在非法词，应用场景：判断命名非法
+
+参数 
+- post : {"str":"我在路口交通进行口交就在这个路口交接"}
+- get : /v1/ishave?str=我在路口交通进行口交就在这个路口交接
+
+返回
+```json
+{"code":0,"timestamp":1635304798,"msg":"succeed","data":true}
+```
+
+##### [POST|GET] /v1/ishave/list
+> 是否存在非法词如果存在返回所有屏蔽词，应用场景：判断命名非法,显示非法词
+
+参数 
+- post : {"str":"我在路口交通进行口交就在这个路口交接"}
+- get : /v1/ishave/list?str=我在路口交通进行口交就在这个路口交接
+
+返回
+```json
+{"code":0,"timestamp":1635304798,"msg":"succeed","data":true}
+```
+
 ## grpc
 > proto文件: https://github.com/mangenotwork/extras/api/BlockWord_Proto/blockword.proto
 

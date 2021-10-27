@@ -24,4 +24,8 @@ func main() {
 		log.Println(r1, err)
 	}
 
+	r2, err := c.IsHaveList(context.Background(), &proto.IsHaveListReq{
+		Str: "我在口交通进爱操好了你妈圣诞节在欧帕斯卡分废速度发完全二维卡",
+	})
+	log.Println(r2, r2.IsHave, r2.List, err)
 }

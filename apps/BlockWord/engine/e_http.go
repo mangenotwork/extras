@@ -98,5 +98,11 @@ func Router() *http.ServeMux {
 	// [GET] /v1/white/list 查看所有词语白名单
 	mux.Handle("/v1/white/list", m(http.HandlerFunc(handler.WhiteList)))
 
+	// [POST] /v1/ishave 是否存在非法词语
+	mux.Handle("/v1/ishave", m(http.HandlerFunc(handler.IsHave)))
+
+	// [POST] /v1/ishave/list 是否存在非法词语并返回非法的词语
+	mux.Handle("/v1/ishave/list", m(http.HandlerFunc(handler.IsHaveList)))
+
 	return mux
 }
