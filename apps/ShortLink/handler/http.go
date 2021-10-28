@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/mangenotwork/extras/apps/ShortLink/model"
 	"github.com/mangenotwork/extras/apps/ShortLink/service"
+	"github.com/mangenotwork/extras/common/middleware"
 	"github.com/mangenotwork/extras/common/utils"
 	"io"
 	"log"
@@ -20,12 +21,28 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
 	log.Println(r.URL.Path,  r.URL.User, r.URL.Query())
 	// 获取短链接
-	link, err := new(model.ShortLink).GetUrl(r.URL.Path)
-	if err != nil || len(link) < 1 {
+	link := new(model.ShortLink)
+	err := link.Get(r.URL.Path)
+	if err != nil || len(link.Url) < 1 {
 		http.Redirect(w, r, "/err", http.StatusMovedPermanently)
 		return
 	}
-	http.Redirect(w, r, link, http.StatusMovedPermanently)
+	if link.IsPrivacy {
+		if utils.GetUrlArg(r, "password") != link.Password {
+			http.Redirect(w, r, "/NotPrivacy", http.StatusMovedPermanently)
+			return
+		}
+	}
+	ip := middleware.GetIP(r)
+	if !link.IsWhiteList(ip){
+		http.Redirect(w, r, "/WhiteNote", http.StatusMovedPermanently)
+		return
+	}
+	if link.IsBlockList(ip) {
+		http.Redirect(w, r, "/BlockNote", http.StatusMovedPermanently)
+		return
+	}
+	http.Redirect(w, r, link.Url, http.StatusMovedPermanently)
 }
 
 // 隐藏静态页面， 如果是动态页面由于隐藏了host无法实现跨域请求
@@ -78,6 +95,21 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	_,_=w.Write([]byte("Error: 未知链接!"))
 }
 
+func NotPrivacy(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusUnauthorized)
+	_,_=w.Write([]byte("Error: 访问密码错误! 请设置密码参数如: /url?password="))
+}
+
+func WhiteNote(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusUnauthorized)
+	_,_=w.Write([]byte("对不起: 只有在白名单内的地址访问."))
+}
+
+func BlockNote(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusUnauthorized)
+	_,_=w.Write([]byte("对不起: 你再在黑名单内,禁止访问."))
+}
+
 type AddParam struct {
 	Url string `json:"url"` // 目的地址
 	Aging int64 `json:"aging"` // 时效，单位秒
@@ -119,6 +151,8 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		View : 0,
 		OpenBlockList : params.OpenBlockList,
 		OpenWhiteList : params.OpenWhiteList,
+		BlockList: params.BlockList,
+		WhiteList: params.WhiteList,
 	}
 
 	err := shortLink.Save()

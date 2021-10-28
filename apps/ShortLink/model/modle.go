@@ -109,3 +109,37 @@ func (sl *ShortLink) GetUrl(key string) (url string,err error){
 	url = sl.Url
 	return
 }
+
+func (sl *ShortLink) IsWhiteList(ip string) (resBool bool) {
+	resBool = true
+	if !sl.OpenWhiteList {
+		return
+	}
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	res, err := redis.Int64(rc.Do("SISMEMBER", fmt.Sprintf(ShortLinkWhiteListKey, sl.Short), ip))
+	if err != nil || res != 1 {
+		resBool = false
+		return
+	}
+	return
+}
+
+func (sl *ShortLink) IsBlockList(ip string) (resBool bool) {
+	resBool = false
+	if !sl.OpenBlockList {
+		return
+	}
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	res, err := redis.Int64(rc.Do("SISMEMBER", fmt.Sprintf(ShortLinkBlockListKey, sl.Short), ip))
+	if err != nil {
+		log.Println("GET error", err.Error())
+		return
+	}
+	if res == 1 {
+		resBool = true
+		return
+	}
+	return
+}

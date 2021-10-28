@@ -75,6 +75,9 @@ func Router() *http.ServeMux {
 	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
 
 	mux.Handle("/err", m(http.HandlerFunc(handler.Error)))
+	mux.Handle("/NotPrivacy", m(http.HandlerFunc(handler.NotPrivacy)))
+	mux.Handle("/WhiteNote", m(http.HandlerFunc(handler.WhiteNote)))
+	mux.Handle("/BlockNote", m(http.HandlerFunc(handler.BlockNote)))
 
 	mux.Handle("/ttttt", m(http.HandlerFunc(handler.Te)))
 
