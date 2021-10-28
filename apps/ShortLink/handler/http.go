@@ -19,7 +19,13 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	log.Print("Received request %s %s %s\n", r.Method, r.Host, r.RemoteAddr)
 	log.Println(r.URL)
 	log.Println(r.URL.Path,  r.URL.User, r.URL.Query())
-	http.Redirect(w, r, "https://www.baidu.com", http.StatusMovedPermanently)
+	// 获取短链接
+	link, err := new(model.ShortLink).GetUrl(r.URL.Path)
+	if err != nil || len(link) < 1 {
+		http.Redirect(w, r, "/err", http.StatusMovedPermanently)
+		return
+	}
+	http.Redirect(w, r, link, http.StatusMovedPermanently)
 }
 
 // 隐藏静态页面， 如果是动态页面由于隐藏了host无法实现跨域请求
@@ -99,7 +105,6 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		utils.OutErrBody(w, 1001, errors.New("设置了隐私但是password为空"))
 	}
 	// 生成短链接
-
 	exp := params.Aging
 	if exp == 0 {
 		exp = params.Deadline
@@ -115,8 +120,18 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		OpenBlockList : params.OpenBlockList,
 		OpenWhiteList : params.OpenWhiteList,
 	}
-	shortLink.Save()
 
+	err := shortLink.Save()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	sLink := &AddBody{
+		Url: shortLink.Short,
+		Password: params.Password,
+		Expire: time.Unix(exp, 0).Format("2006-01-02 15:04:05"),
+	}
+	utils.OutSucceedBody(w, sLink)
 }
 
 // 查看短链接, 如果是隐私的则需要带密码访问
