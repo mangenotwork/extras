@@ -15,3 +15,14 @@ type Topic struct {
 }
 
 
+func (t *Topic) Send(data string) {
+	for _,wsClient := range t.WsClient {
+		wsClient.TopicSend(data)
+	}
+	//for _,t.tcpClient := range t.TcpClient {
+	//
+	//}
+	//for _,t.udpClient := range t.UdpClient {
+	//
+	//}
+}

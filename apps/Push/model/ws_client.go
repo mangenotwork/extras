@@ -16,3 +16,11 @@ func (ws *WsClient) SendMessage(str string) {
 	}
 	_=ws.Conn.WriteMessage(websocket.BinaryMessage, msg.Byte())
 }
+
+func (ws *WsClient) TopicSend(data string){
+	msg := CmdData{
+		Cmd: "TopicMessage",
+		Data: data,
+	}
+	_=ws.Conn.WriteMessage(websocket.BinaryMessage, msg.Byte())
+}

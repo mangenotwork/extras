@@ -13,6 +13,7 @@ func main(){
 	log.Println("Starting push server")
 	conf.InitConf()
 	engine.StartJobServer()
+	engine.StartMqServer()
 
 	if conf.Arg.HttpServer.Open {
 		engine.StartHttpServer()

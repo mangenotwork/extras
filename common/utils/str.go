@@ -34,3 +34,7 @@ func Str2Bool(str string) bool {
 	}
 	return true
 }
+
+func Int642Str(i int64) string {
+	return strconv.FormatInt(i,10)
+}

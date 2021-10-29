@@ -14,12 +14,23 @@ func main(){
 	log.Println(wsc, err)
 
 	go func(){
-		time.Sleep(5*time.Second)
+		time.Sleep(1*time.Second)
 		err = wsc.Send([]byte(`
 {
 	"cmd":"Auth",
 	"data":{
 		"device":"123"
+	}
+}
+`))
+		time.Sleep(1*time.Second)
+		log.Println(err)
+
+		err = wsc.Send([]byte(`
+{
+	"cmd":"TopicJoin",
+	"data":{
+		"topic":"test1"
 	}
 }
 `))

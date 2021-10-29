@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"github.com/mangenotwork/extras/apps/Push/model"
+	"github.com/mangenotwork/extras/apps/Push/service"
 	"github.com/mangenotwork/extras/common/middleware"
 	"github.com/mangenotwork/extras/common/utils"
 	"log"
@@ -162,21 +163,37 @@ func into(wsUser *model.WsClient, deviceId, ip string) (device *model.Device) {
 
 // 创建 Topic
 type TopicCreateParam struct {
-	Name string
+	Name string `json:"name"`
 }
 
 func TopicCreate(w http.ResponseWriter, r *http.Request) {
-
+	decoder:=json.NewDecoder(r.Body)
+	params := &TopicCreateParam{}
+	_=decoder.Decode(&params)
+	err := service.NewTopic(params.Name)
+	if err != nil {
+		utils.OutErrBody(w, 2001,err)
+		return
+	}
+	utils.OutSucceedBody(w, "创建成功")
 }
 
 // 发布
 type PublishParam struct {
-	TopicName string
-	Data string  // 发布的内容
+	TopicName string `json:"name"`
+	Data string  `json:"data"` // 发布的内容
 }
 
 func Publish(w http.ResponseWriter, r *http.Request) {
-
+	decoder:=json.NewDecoder(r.Body)
+	params := &PublishParam{}
+	_=decoder.Decode(&params)
+	err := service.TopicSend(params.TopicName, params.Data)
+	if err != nil {
+		utils.OutErrBody(w, 2001,err)
+		return
+	}
+	utils.OutSucceedBody(w, "发送成功")
 }
 
 // 设备注册

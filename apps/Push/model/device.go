@@ -92,7 +92,7 @@ func (d *Device) OnLineState() bool {
 }
 
 func (d *Device) SubTopic(conn *WsClient, topicName string) (err error) {
-	if rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
+	if !rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
 		err = errors.New("订阅的topic不存在!")
 		return
 	}
@@ -115,7 +115,7 @@ func (d *Device) SubTopic(conn *WsClient, topicName string) (err error) {
 }
 
 func (d *Device) CancelTopic(topicName string) (err error) {
-	if rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
+	if !rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
 		err = errors.New("订阅的topic不存在!")
 		return
 	}
