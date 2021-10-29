@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mangenotwork/extras/apps/ShortLink/engine"
+	"github.com/mangenotwork/extras/apps/Push/engine"
 	"github.com/mangenotwork/extras/common/conf"
 	"github.com/mangenotwork/extras/common/utils"
 	"log"
@@ -10,7 +10,7 @@ import (
 func main(){
 
 	log.Println(utils.Logo)
-	log.Println("Starting short link server")
+	log.Println("Starting push server")
 	conf.InitConf()
 	engine.StartJobServer()
 
@@ -18,8 +18,11 @@ func main(){
 		engine.StartHttpServer()
 	}
 
-	if conf.Arg.GrpcServer.Open {
-		engine.StartRpcServer()
+	if conf.Arg.TcpServer.Open {
+		engine.StartTcpServer()
+	}
+	if conf.Arg.UdpServer.Open {
+		engine.StartUdpServer()
 	}
 
 	select {}

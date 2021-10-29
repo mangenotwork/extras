@@ -1,0 +1,39 @@
+app:
+  name: BlockWord
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 1241
+
+grpcServer:
+  open: false
+  prod: 1242
+
+tcpServer:
+  open: true
+  prod: 1243
+
+udpServer:
+  open: true
+  prod: 1244
+
+redis:
+  host: 192.168.0.197
+  port: 6379
+  db: 4
+  password: love0021$%
+  maxidle: 50
+  maxactive: 10000
+
+mqType: nsq
+
+nsq:
+  producer: 192.168.0.197:4150
+  consumer: 192.168.0.197:4161
+
+rabbit:
+  addr: "amqp://admin:123456@192.168.0.197:5672"
+
+kafka:
+  addr: 192.168.0.191:9092

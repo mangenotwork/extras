@@ -18,7 +18,7 @@ func main(){
 		engine.StartHttpServer()
 	}
 
-	if conf.Arg.HttpServer.Open {
+	if conf.Arg.GrpcServer.Open {
 		engine.StartRpcServer()
 	}
 

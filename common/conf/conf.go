@@ -21,6 +21,10 @@ type Configs struct {
 	UdpServer *UdpServer `yaml:"udpServer"`
 	UdpClient *UdpClient `yaml:"udpClient"`
 	Redis *Redis `yaml:"redis"`
+	MqType string `yaml:"mqType"`
+	Nsq *Nsq `yaml:"nsq"`
+	Rabbit *Rabbit `yaml:"rabbit"`
+	Kafka *Kafka `yaml:"kafka"`
 }
 
 type App struct {
@@ -67,6 +71,23 @@ type Redis struct {
 	Password string `yaml:"password"`
 	MaxIdle int `yaml:"maxidle"`
 	MaxActive int `yaml:"maxactive"`
+}
+
+type MqType struct {
+
+}
+
+type Nsq struct {
+	Producer string `yaml:"producer"`
+	Consumer string `yaml:"consumer"`
+}
+
+type Rabbit struct {
+	Addr string `yaml:"addr"`
+}
+
+type Kafka struct {
+	Addr string `yaml:"addr"`
 }
 
 
