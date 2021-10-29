@@ -77,5 +77,7 @@ func Router() *http.ServeMux {
 
 	mux.Handle("/ws", m(http.HandlerFunc(handler.Ws)))
 
+	// 登记, 下发一个uuid以便确认设备
+	mux.Handle("/register", m(http.HandlerFunc(handler.Register)))
 	return mux
 }

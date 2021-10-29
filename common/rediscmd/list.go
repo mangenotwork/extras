@@ -36,7 +36,7 @@ func LRANGE(key string, start, stop int64) (res []interface{}, err error) {
 }
 
 // 新创建list 将一个或多个值 value 插入到列表 key 的表头
-func LPUSH(rc redis.Conn, key string, values []interface{}) error {
+func LPUSH(key string, values []interface{}) error {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	args := redis.Args{}.Add(key)
@@ -162,7 +162,7 @@ func LPOP(key string) (res string, err error) {
 // LPUSHX key value
 // 将值 value 插入到列表 key 的表头，当且仅当 key 存在并且是一个列表。
 // 和 LPUSH 命令相反，当 key 不存在时， LPUSHX 命令什么也不做。
-func LPUSHX(rc redis.Conn, key string, value interface{}) (err error) {
+func LPUSHX(key string, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	log.Println("执行redis : ", "LPUSHX", key, value)
@@ -228,7 +228,7 @@ func LTRIM(key string, start, stop int64) (err error) {
 
 // RPOP key
 // 移除并返回列表 key 的尾元素。
-func RPOP(rc redis.Conn, key string) (res string, err error) {
+func RPOP(key string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	log.Println("执行redis : ", "RPOP", key)

@@ -5,6 +5,8 @@ go 1.15
 replace github.com/mangenotwork/extras/common => ../../common
 
 require (
+	github.com/garyburd/redigo v1.6.2 // indirect
+	github.com/gomodule/redigo v1.8.5 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/mangenotwork/extras/common v0.0.0-00010101000000-000000000000
 	golang.org/x/net v0.0.0-20200822124328-c89045814202

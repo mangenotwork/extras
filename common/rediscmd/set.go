@@ -10,11 +10,23 @@ import (
 // SMEMBERS key
 // 返回集合 key 中的所有成员。
 // 获取Set value 返回集合 key 中的所有成员。
-func SMEMBERS(rc redis.Conn, key string) []interface{} {
+func SMEMBERS(key string) []interface{} {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	log.Println("执行redis : ", "SMEMBERS", key)
 	res, err := redis.Values(rc.Do("SMEMBERS", key))
+	if err != nil {
+		log.Println("GET error", err.Error())
+	}
+	log.Println(res)
+	return res
+}
+
+func SMEMBERSString(key string) []string {
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	log.Println("执行redis : ", "SMEMBERS", key)
+	res, err := redis.Strings(rc.Do("SMEMBERS", key))
 	if err != nil {
 		log.Println("GET error", err.Error())
 	}

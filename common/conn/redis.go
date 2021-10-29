@@ -3,7 +3,7 @@ package conn
 import (
 	"errors"
 	"fmt"
-	"github.com/gomodule/redigo/redis"
+	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conf"
 	"sync"
 	"time"

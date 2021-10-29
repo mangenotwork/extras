@@ -12,14 +12,27 @@ func main(){
 	path := "/ws"
 	wsc, err := gt.WsClient(host, path)
 	log.Println(wsc, err)
-	for {
-		err = wsc.Send([]byte(`okok`))
+
+	go func(){
+		time.Sleep(5*time.Second)
+		err = wsc.Send([]byte(`
+{
+	"cmd":"Auth",
+	"data":{
+		"device":"123"
+	}
+}
+`))
 		log.Println(err)
-		data := make([]byte,100)
+	}()
+
+	for {
+		data := make([]byte,1024)
 		err = wsc.Read(data)
 		log.Println(err)
 		log.Println("data = ", string(data))
-		time.Sleep(1*time.Second)
+		err = wsc.Send([]byte(``))
+		log.Println(err)
 	}
 
 	wsc.Close()

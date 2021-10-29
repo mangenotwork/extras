@@ -1,7 +1,7 @@
 ### 开发日志
 - v0.0.18  [Push] 新增Push服务端engine实现
 - v0.0.19  [新增PushClient] 新增PushClient
-- v0.0.20  [Push] 新增连接断开客户端连接存储
+- v0.0.20  [Push] 新增ws连接断开客户端连接存储
 - v0.0.21  [Push] 新增nsq消息队列
 - v0.0.22  [Push] 新增rabbitMq消息队列
 - v0.0.23  [Push] 新增kafka消息队列

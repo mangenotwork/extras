@@ -137,7 +137,7 @@ func GetAllKeyName() ([]interface{}, int) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	allKey := make([]interface{}, 0)
-	keyData, cursor := getallkey(rc, "0")
+	keyData, cursor := getAllKey(rc, "0")
 	allKey = append(allKey, keyData...)
 	if cursor != "0" {
 		for {
@@ -194,7 +194,7 @@ func GetKeyTTL(key string) int64 {
 }
 
 // EXISTSKey 检查给定 key 是否存在。
-func EXISTSKey(key string) bool {
+func EXISTS(key string) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	log.Println("[Execute redis command]: ", "EXISTS", key)
@@ -257,3 +257,4 @@ func DELKey(key string) bool {
 	}
 	return true
 }
+
