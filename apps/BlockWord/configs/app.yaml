@@ -9,6 +9,7 @@ httpServer:
 grpcServer:
   open: true
   prod: 1232
+  log: true
 
 redis:
   host: 192.168.0.197

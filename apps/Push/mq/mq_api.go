@@ -16,8 +16,8 @@ func NewMQ() MQ {
 	switch conf.Arg.MqType {
 	case "nsq":
 		return new(MQNsqService)
-	//case "rabbit":
-	//	return new(MQRabbitService)
+	case "rabbit":
+		return new(MQRabbitService)
 	default:
 		return new(MQNsqService)
 	}

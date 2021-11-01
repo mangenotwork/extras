@@ -40,6 +40,7 @@ type HttpServer struct {
 type GrpcServer struct {
 	Open bool `yaml:"open"`
 	Prod string `yaml:"prod"`
+	Log bool `yaml:"log"`
 }
 
 type GrpcClient struct {
@@ -84,6 +85,8 @@ type Nsq struct {
 
 type Rabbit struct {
 	Addr string `yaml:"addr"`
+	User string `yaml:"user"`
+	Password string `yaml:"password"`
 }
 
 type Kafka struct {

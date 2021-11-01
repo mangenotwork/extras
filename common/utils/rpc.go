@@ -2,6 +2,8 @@ package utils
 
 import (
 	"context"
+	"github.com/mangenotwork/extras/common/conf"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 	"log"
 	"runtime"
@@ -19,6 +21,10 @@ func runFuncName()string{
 }
 
 func RpcLog(start time.Time,ctx context.Context) {
-	pr, _ := peer.FromContext(ctx)
-	log.Printf("[%s] %s %s %v", pr.Addr.String(), "GRPC", runFuncName(), time.Since(start))
+	if conf.Arg.GrpcServer.Log {
+		pr, _ := peer.FromContext(ctx)
+		md, _ := metadata.FromIncomingContext(ctx)
+		log.Printf("[GRPC] %v %s %s %v", pr.Addr.String(), md, runFuncName(), time.Since(start))
+	}
+
 }

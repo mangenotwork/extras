@@ -4,19 +4,20 @@ app:
 
 httpServer:
   open: true
-  prod: 1241
+  prod: 1251
 
 grpcServer:
   open: false
-  prod: 1242
+  prod: 1252
+  log: true
 
 tcpServer:
   open: true
-  prod: 1243
+  prod: 1253
 
 udpServer:
   open: true
-  prod: 1244
+  prod: 1254
 
 redis:
   host: 192.168.0.197
@@ -26,14 +27,16 @@ redis:
   maxidle: 50
   maxactive: 10000
 
-mqType: nsq
+mqType: rabbit
 
 nsq:
   producer: 192.168.0.197:4150
   consumer: 192.168.0.197:4161
 
 rabbit:
-  addr: "amqp://admin:123456@192.168.0.197:5672"
+  addr: 192.168.0.191:5672/admin
+  user: admin
+  password: admin
 
 kafka:
   addr: 192.168.0.191:9092
