@@ -1,10 +1,11 @@
 package model
 
 import (
+	"github.com/mangenotwork/extras/apps/Push/mq"
 	"net"
 )
 
-var TopicMap = make(map[string]*Topic)
+var TopicMap map[string]*Topic
 
 type Topic struct {
 	Name string `json:"topic_name"`
@@ -15,9 +16,9 @@ type Topic struct {
 }
 
 
-func (t *Topic) Send(data string) {
+func (t *Topic) Send(msg *mq.MQMsg) {
 	for _,wsClient := range t.WsClient {
-		wsClient.TopicSend(data)
+		wsClient.TopicSend(msg)
 	}
 	//for _,t.tcpClient := range t.TcpClient {
 	//

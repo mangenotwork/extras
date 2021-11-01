@@ -77,14 +77,17 @@ func Router() *http.ServeMux {
 
 	mux.Handle("/ws", m(http.HandlerFunc(handler.Ws)))
 
-	// 登记, 下发一个uuid以便确认设备
-	mux.Handle("/register", m(http.HandlerFunc(handler.Register)))
+	// 登记, 下发一个随机uuid可以作为设备id,以便确认设备
+	mux.Handle("/register", m(http.HandlerFunc(handler.GetDeviceId)))
 
 	// 创建 Topic
 	mux.Handle("/topic/create", m(http.HandlerFunc(handler.TopicCreate)))
 
 	// 发布
 	mux.Handle("/topic/publish", m(http.HandlerFunc(handler.Publish)))
+
+	// 设备订阅, 支持批量
+	mux.Handle("/topic/sub", m(http.HandlerFunc(handler.Subscription)))
 
 	return mux
 }

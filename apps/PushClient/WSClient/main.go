@@ -14,6 +14,7 @@ func main(){
 	log.Println(wsc, err)
 
 	go func(){
+
 		time.Sleep(1*time.Second)
 		err = wsc.Send([]byte(`
 {
@@ -26,15 +27,18 @@ func main(){
 		time.Sleep(1*time.Second)
 		log.Println(err)
 
-		err = wsc.Send([]byte(`
-{
-	"cmd":"TopicJoin",
-	"data":{
-		"topic":"test1"
-	}
-}
-`))
-		log.Println(err)
+
+//		err = wsc.Send([]byte(`
+//{
+//	"cmd":"TopicJoin",
+//	"data":{
+//		"topic":"test1"
+//	}
+//}
+//`))
+//		log.Println(err)
+
+
 	}()
 
 	for {

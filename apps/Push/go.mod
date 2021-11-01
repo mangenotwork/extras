@@ -7,6 +7,7 @@ replace github.com/mangenotwork/extras/common => ../../common
 require (
 	github.com/garyburd/redigo v1.6.2 // indirect
 	github.com/gomodule/redigo v1.8.5 // indirect
+	github.com/google/uuid v1.1.2
 	github.com/gorilla/websocket v1.4.2
 	github.com/mangenotwork/extras/common v0.0.0-00010101000000-000000000000
 	github.com/nsqio/go-nsq v1.1.0

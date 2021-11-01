@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"github.com/mangenotwork/extras/common/rediscmd"
+	"github.com/mangenotwork/extras/common/utils"
 	"log"
 	"net"
 	"errors"
@@ -21,18 +22,18 @@ const (
 
 // 获取订阅, 并加入订阅
 func (d *Device) GetTopic(conn *WsClient) {
-	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceTopic, d.ID)) {
-		log.Println(v)
-		topic, ok := TopicMap[v.(string)]
+	for _,v := range rediscmd.SMEMBERSString(fmt.Sprintf(DeviceTopic, d.ID)) {
+		log.Println("获取订阅, 并加入订阅", v)
+		topic, ok := TopicMap[v]
 		if !ok {
-			TopicMap[v.(string)] = &Topic{
-				Name : v.(string),
-				ID : v.(string),
+			TopicMap[v] = &Topic{
+				Name : v,
+				ID : v,
 				WsClient : make(map[string]*WsClient),
 				TcpClient : make(map[string]*net.Conn),
 				UdpClient : make(map[string]*net.UDPAddr),
 			}
-			topic = TopicMap[v.(string)]
+			topic = TopicMap[v]
 		}
 		topic.WsClient[d.ID] = conn
 	}
@@ -42,7 +43,7 @@ func (d *Device) GetTopic(conn *WsClient) {
 func (d *Device) Discharge() {
 	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceTopic, d.ID)) {
 		log.Println(v)
-		if topic, ok := TopicMap[v.(string)]; ok {
+		if topic, ok := TopicMap[utils.Any2String(v)]; ok {
 			delete(topic.WsClient, d.ID)
 		}
 	}
@@ -76,12 +77,13 @@ func (d *Device) GetGroup(conn *WsClient) {
 
 // 上线
 func (d *Device) UpLine() {
-	_=rediscmd.SETEX(fmt.Sprintf(DeviceOnLine,d.ID), 60*60*24*7, 1)
+	_=rediscmd.SETEX(fmt.Sprintf(DeviceOnLine, d.ID), 60, 1)
 }
 
 // 下线
 func (d *Device) OffLine() {
-	_=rediscmd.SETEX(fmt.Sprintf(DeviceOnLine,d.ID), 60*60*24*7, 0)
+	log.Println(d)
+	_=rediscmd.SETEX(fmt.Sprintf(DeviceOnLine, d.ID), 60, 0)
 }
 
 func (d *Device) OnLineState() bool {

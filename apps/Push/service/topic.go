@@ -36,23 +36,36 @@ func NewTopic(topicName string) (err error) {
 }
 
 func TopicSend(topicName, msg string) (err error) {
-	if !rediscmd.EXISTS(fmt.Sprintf(model.TopicKey, topicName)) {
+	if !TopicIsHave(topicName) {
 		err = errors.New("topic不存在!")
 		return
 	}
 
 	mqMsg := mq.MQMsg{
 		Topic: topicName,
-		Data: msg,
+		Message: msg,
+		SendTime: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	b, _ := json.Marshal(&mqMsg)
 	mq.NewMQ().Producer("mange-push-send", b)
 
-	//if topic, ok := model.TopicMap[topicName]; ok {
-	//	for _, v := range topic.WsClient {
-	//		v.TopicSend(msg)
-	//	}
-	//}
+	return
+}
 
+func TopicIsHave(topicName string) bool {
+	return rediscmd.EXISTS(fmt.Sprintf(model.TopicKey, topicName))
+}
+
+func TopicAddDevice(topicName, device string) (err error) {
+	if !rediscmd.EXISTS(fmt.Sprintf(model.TopicKey, topicName)) {
+		err = errors.New("topic不存在!")
+		return
+	}
+	mqDevice := mq.MQAddDevice{
+		Topic: topicName,
+		Device: device,
+	}
+	b, _ := json.Marshal(&mqDevice)
+	mq.NewMQ().Producer("mange-add-device", b)
 	return
 }

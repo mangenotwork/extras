@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/service"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"errors"
 )
 
 var upGrader = websocket.Upgrader{
@@ -71,10 +73,12 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 		_, data, err := conn.ReadMessage()
 		if err != nil {
 			// 释放客户端连接
-			log.Println("释放客户端连接")
-			device.OffLine() // 下线记录
-			delete(model.AllWsClient, deviceId)
-			device.Discharge() // 连接离开topic,group
+			if device != nil {
+				log.Println("释放客户端连接")
+				device.OffLine() // 下线记录
+				delete(model.AllWsClient, deviceId)
+				device.Discharge() // 连接离开topic,group
+			}
 			return
 		}
 		log.Println(data)
@@ -196,14 +200,40 @@ func Publish(w http.ResponseWriter, r *http.Request) {
 	utils.OutSucceedBody(w, "发送成功")
 }
 
-// 设备注册
-func Register(w http.ResponseWriter, r *http.Request) {
-
+// 获取一个随机id, 可以作为设备id使用
+func GetDeviceId(w http.ResponseWriter, r *http.Request) {
+	utils.OutSucceedBody(w, uuid.New().String())
 }
 
 // 设备订阅, 支持批量
-func Subscription(w http.ResponseWriter, r *http.Request) {
+type SubscriptionParam struct {
+	TopicName string `json:"topic_name"`
+	DeviceList []string  `json:"device_list"` // 发布的内容
+}
 
+func Subscription(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &SubscriptionParam{}
+	_=decoder.Decode(&params)
+
+	if !service.TopicIsHave(params.TopicName) {
+		utils.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
+		return
+	}
+
+	for _, v := range params.DeviceList {
+		device := &model.Device{
+			ID:v,
+		}
+		// 当前服务是否存在连接; 如果不存在则需要发布消息所有服务查找是否存在,如果存在则加入连接
+		conn, ok := model.AllWsClient[v]
+		if !ok {
+			// 生产一条消息
+			_=service.TopicAddDevice(params.TopicName, v)
+		}
+		_=device.SubTopic(conn, params.TopicName)
+	}
+	utils.OutSucceedBody(w, "订阅成功")
 }
 
 // 设备取消订阅, 支持批量
