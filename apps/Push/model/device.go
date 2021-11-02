@@ -8,18 +8,25 @@ import (
 	"log"
 )
 
+const (
+	DeviceTopic = "d:%s:topic" // 设备订阅的topic   set
+	DeviceGroup = "d:%s:group" // 设备加入的组      set
+	DeviceOnLine = "d:%s:onlien" // 0:不在线; 1:在线;  string
+	TopicKey = "topic:%s" // topic信息   hash
+	TopicAllDevice = "topic:%s:all" // 已经订阅过该topic的所有设备
+
+)
+
 type Device struct {
 	ID string
 }
 
-const (
-	DeviceTopic = "d:%s:topic" // 设备订阅的topic
-	DeviceGroup = "d:%s:group" // 设备加入的组
-	DeviceOnLine = "d:%s:onlien" // 0:不在线; 1:在线;
-	TopicKey = "topic:%s" //
-)
+func (d *Device) SetId(deviceId string) *Device {
+	d.ID = deviceId
+	return d
+}
 
-// 获取订阅, 并加入订阅
+// 获取订阅, 并加入连接
 func (d *Device) GetTopic(conn Client) {
 	for _,v := range rediscmd.SMEMBERSString(fmt.Sprintf(DeviceTopic, d.ID)) {
 		log.Println("获取订阅, 并加入订阅", v)
@@ -47,6 +54,10 @@ func (d *Device) GetTopic(conn Client) {
 			topic.UdpClient[d.ID] = conn.GetUdpConn()
 		}
 	}
+}
+
+func (d *Device) AllTopic() []string {
+	return rediscmd.SMEMBERSString(fmt.Sprintf(DeviceTopic, d.ID))
 }
 
 // 释放连接
@@ -127,11 +138,13 @@ func (d *Device) OnLineState() bool {
 	return false
 }
 
+// 订阅
 func (d *Device) SubTopic(conn Client, topicName string) (err error) {
 	if !rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
 		err = errors.New("订阅的topic不存在!")
 		return
 	}
+
 	err = rediscmd.SADD(fmt.Sprintf(DeviceTopic, d.ID), []interface{}{topicName})
 	if err == nil {
 		topic, ok := TopicMap[topicName]
@@ -158,9 +171,15 @@ func (d *Device) SubTopic(conn Client, topicName string) (err error) {
 			topic.UdpClient[d.ID] = conn.GetUdpConn()
 		}
 	}
+
+	err = rediscmd.SADD(fmt.Sprintf(TopicAllDevice, topicName), []interface{}{d.ID})
+	if err != nil {
+		log.Println(err)
+	}
 	return
 }
 
+// 取消订阅
 func (d *Device) CancelTopic(topicName string) (err error) {
 	if !rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
 		err = errors.New("订阅的topic不存在!")
@@ -181,5 +200,19 @@ func (d *Device) CancelTopic(topicName string) (err error) {
 	if err == nil {
 		log.Println(err)
 	}
+	err = rediscmd.SREMOne(fmt.Sprintf(TopicAllDevice, topicName), d.ID)
+	if err == nil {
+		log.Println(err)
+	}
 	return
+}
+
+// 获取topic 被哪些设备订阅
+func GetTopicAllDevice(topicName string) []string {
+	return rediscmd.SMEMBERSString(fmt.Sprintf(TopicAllDevice, topicName))
+}
+
+// 查询topic是否被指定device订阅
+func GetTopicHasDevice(topicName, device string) (bool, error) {
+	return rediscmd.SISMEMBER(fmt.Sprintf(TopicAllDevice, topicName), device)
 }

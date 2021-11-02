@@ -54,18 +54,21 @@ redis:
 ```json
 {"code":0,"timestamp":1635232884,"msg":"succeed","data":{"str":"我在路口交通进行???就在这个路口交接","sub":"???"}}
 ```
+___
 
 ##### [GET] /v1/add?word= 
 > 添加屏蔽词
 
 参数
 - word 添加的需要屏蔽的词语，如口交
+---
 
 ##### [GET] /v1/del?word=  
 > 删除屏蔽词
 
 参数
 - word 删除的屏蔽词语，如口交
+---
 
 ##### [GET] /v1/list 
 > 查看所有屏蔽词
@@ -74,18 +77,21 @@ redis:
 ```json
 {"code":0,"timestamp":1635240175,"msg":"succeed","data":["口交","废物"]}
 ```
+---
 
 ##### [GET] /v1/white/add?word=  
 > 词语白名单添加
 
 参数
 - word 添加不需要被屏蔽的词语，如路口； 假设屏蔽词为口交，“路口交通”不会被屏蔽为“路××通”
+---
 
 #####  [GET] /v1/white/del?word=   
 > 词语白名单删除
 
 参数
 - word 删除不需要被屏蔽的词语，如路口; 假设屏蔽词为口交,“路口交通”会被屏蔽“
+---
 
 ##### [GET] /v1/white/list 
 > 查看所有词语白名单
@@ -94,6 +100,7 @@ redis:
 ```json
 {"code":0,"timestamp":1635240175,"msg":"succeed","data":["路口"]}
 ```
+---
 
 ##### [POST|GET] /v1/ishave
 > 是否存在非法词，应用场景：判断命名非法
@@ -106,6 +113,7 @@ redis:
 ```json
 {"code":0,"timestamp":1635304798,"msg":"succeed","data":true}
 ```
+---
 
 ##### [POST|GET] /v1/ishave/list
 > 是否存在非法词如果存在返回所有屏蔽词，应用场景：判断命名非法,显示非法词
@@ -118,6 +126,7 @@ redis:
 ```json
 {"code":0,"timestamp":1635306381,"msg":"succeed","data":["口交","操你妈"]}
 ```
+---
 
 ## grpc 文档
 > proto文件: https://github.com/mangenotwork/extras/api/BlockWord_Proto/blockword.proto
@@ -126,22 +135,39 @@ redis:
 
 ##### rpc Do (DoReq) returns (DoResp);
 > 屏蔽词过滤
+---
+
 ##### rpc Add (AddReq) returns (AddResp);
 > 添加屏蔽词
+---
+
 ##### rpc Del(DelReq) returns (DelResp);
 > 删除屏蔽词
+---
+
 ##### rpc Get(GetReq) returns (GetResp);
 > 查看所有屏蔽词
+---
+
 ##### rpc WhiteWordAdd (WhiteWordAddReq) returns (WhiteWordAddResp);
 > 词语白名单添加
+---
+
 ##### rpc WhiteWordDel(WhiteWordDelReq) returns (WhiteWordDelResp);
 > 词语白名单删除
+---
+
 ##### rpc WhiteWordGet(WhiteWordGetReq) returns (WhiteWordGetResp);
 > 查看所有词语白名单
+---
+
 ##### rpc IsHave(IsHaveReq) returns (IsHaveResp);
 > 是否存在非法词，应用场景：判断命名非法
+---
+
 ##### rpc IsHaveList(IsHaveListReq) returns (IsHaveListResp);
 > 是否存在非法词如果存在返回所有屏蔽词，应用场景：判断命名非法,显示非法词
+---
 
 ## 编译
 > 直接编译:  go build main.go

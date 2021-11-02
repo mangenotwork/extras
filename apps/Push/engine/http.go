@@ -77,20 +77,29 @@ func Router() *http.ServeMux {
 
 	mux.Handle("/ws", m(http.HandlerFunc(handler.Ws)))
 
-	// 登记, 下发一个随机uuid可以作为设备id,以便确认设备
+	// [post] 登记, 下发一个随机uuid可以作为设备id,以便确认设备
 	mux.Handle("/register", m(http.HandlerFunc(handler.GetDeviceId)))
 
-	// 创建 Topic
+	// [post] 创建 Topic
 	mux.Handle("/topic/create", m(http.HandlerFunc(handler.TopicCreate)))
 
-	// 发布
+	// [post] 发布
 	mux.Handle("/topic/publish", m(http.HandlerFunc(handler.Publish)))
 
-	// 设备订阅, 支持批量
+	// [post] 设备订阅, 支持批量
 	mux.Handle("/topic/sub", m(http.HandlerFunc(handler.Subscription)))
 
-	// 设备取消订阅, 支持批量
+	// [post] 设备取消订阅, 支持批量
 	mux.Handle("/topic/cancel", m(http.HandlerFunc(handler.TopicCancel)))
+
+	// [get] 查询设备订阅的topic
+	mux.Handle("/device/view/topic", m(http.HandlerFunc(handler.DeviceViewTopic)))
+
+	// [get] 查询topic被哪些设备订阅
+	mux.Handle("/topic/all/device", m(http.HandlerFunc(handler.TopicAllDevice)))
+
+	// [get] 查询topic是否被指定device订阅
+	mux.Handle("/topic/check/device", m(http.HandlerFunc(handler.TopicCheckDevice)))
 
 	return mux
 }

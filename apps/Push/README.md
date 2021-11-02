@@ -62,19 +62,152 @@ rabbit:
 ##### [post|get] /register
 > 登记, 下发一个随机uuid可以作为设备id,以便确认设备
 
+返回
+```
+{"code":0,"timestamp":1635842677,"msg":"succeed","data":"76b50d7f-9e0f-4d4f-915d-7782b325f909"}
+```
+---
+
 ##### [post] /topic/create
 > 创建 Topic
+
+参数
+- topic_name 要创建的topic的name
+```
+{
+    "name":"test"
+}
+```
+
+返回
+```
+{
+    "code": 0,
+    "timestamp": 1635842830,
+    "msg": "succeed",
+    "data": "创建成功"
+}
+```
+---
 
 ##### [post] /topic/publish
 > 发布推送
 
+参数
+- topic_name  topic的name
+- data  推送的数据
+```
+{
+	"name": "t3",
+	"data":"903ac7d9da690f831f10a78f6eff87ae"
+}
+```
+
+返回
+```
+{
+    "code": 0,
+    "timestamp": 1635841971,
+    "msg": "succeed",
+    "data": "发送成功"
+}
+```
+---
+
 ##### [post] /topic/sub
 > 设备订阅推送, 支持批量
+
+参数
+- topic_name  topic的name
+- device_list device列表
+```
+{
+	"topic_name":"t3",
+	"device_list": ["123", "456"]
+}
+```
+
+返回
+```
+{
+    "code": 0,
+    "timestamp": 1635842123,
+    "msg": "succeed",
+    "data": "订阅成功"
+}
+```
+---
 
 ##### [post] /topic/cancel
 > 设备取消订阅, 支持批量
 
+参数
+- topic_name  topic的name
+- device_list device列表
+```
+{
+	"topic_name":"t3",
+	"device_list": ["123", "456"]
+}
+```
 
+返回
+```
+{
+    "code": 0,
+    "timestamp": 1635842123,
+    "msg": "succeed",
+    "data": "取消订阅成功"
+}
+```
+---
+
+##### [get] /device/view/topic 
+> 查询设备订阅的topic
+
+参数
+- device  设备id
+```
+/device/view/topic?device=123
+```
+
+返回
+```
+{"code":0,"timestamp":1635842500,"msg":"succeed","data":["t1","t2","t3","test1"]}
+```
+
+---
+
+##### [get] /topic/all/device
+> 查询topic被哪些设备订阅
+
+参数
+- topic  TopicName
+```
+/topic/all/device?topic=t3
+```
+
+返回
+```
+{"code":0,"timestamp":1635842573,"msg":"succeed","data":["123","456"]}
+```
+--- 
+
+##### [get] /topic/check/device
+> 查询topic是否被指定device订阅
+
+参数
+- device  设备id
+- topic  TopicName
+```
+/topic/check/device?device=123&topic=t3
+```
+
+返回
+```
+{"code":0,"timestamp":1635842628,"msg":"succeed","data":"123订阅了t3"}
+```
+---
 
 ## WebSocket 文档
 

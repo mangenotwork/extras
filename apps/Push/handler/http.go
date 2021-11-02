@@ -93,7 +93,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 
 // 创建 Topic
 type TopicCreateParam struct {
-	Name string `json:"name"`
+	Name string `json:"topic_name"`
 }
 
 func TopicCreate(w http.ResponseWriter, r *http.Request) {
@@ -110,7 +110,7 @@ func TopicCreate(w http.ResponseWriter, r *http.Request) {
 
 // 发布
 type PublishParam struct {
-	TopicName string `json:"name"`
+	TopicName string `json:"topic_name"`
 	Data string  `json:"data"` // 发布的内容
 }
 
@@ -178,6 +178,31 @@ func TopicCancel(w http.ResponseWriter, r *http.Request) {
 		// 生产一条消息
 		_=service.TopicDelDevice(params.TopicName, v)
 	}
-	utils.OutSucceedBody(w, "订阅成功")
+	utils.OutSucceedBody(w, "取消订阅成功")
 }
 
+// 查询设备订阅的topic
+func DeviceViewTopic(w http.ResponseWriter, r *http.Request) {
+	device := utils.GetUrlArg(r, "device")
+	dataList := new(model.Device).SetId(device).AllTopic()
+	utils.OutSucceedBody(w, dataList)
+}
+
+// 查询topic被哪些设备订阅
+func TopicAllDevice(w http.ResponseWriter, r *http.Request) {
+	topic := utils.GetUrlArg(r, "topic")
+	dataList := model.GetTopicAllDevice(topic)
+	utils.OutSucceedBody(w, dataList)
+}
+
+// 查询topic是否被指定device订阅
+func TopicCheckDevice(w http.ResponseWriter, r *http.Request) {
+	device := utils.GetUrlArg(r, "device")
+	topic := utils.GetUrlArg(r, "topic")
+	isHas, _ := model.GetTopicHasDevice(topic, device)
+	rse := device+"没有订阅"+topic
+	if isHas {
+		rse = device+"订阅了"+topic
+	}
+	utils.OutSucceedBody(w, rse)
+}
