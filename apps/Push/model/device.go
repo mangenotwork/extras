@@ -121,11 +121,12 @@ func (d *Device) CancelTopic(topicName string) (err error) {
 		err = errors.New("订阅的topic不存在!")
 		return
 	}
-	err = rediscmd.SREM(fmt.Sprintf(DeviceTopic, d.ID), []interface{}{topicName})
+	if topic, ok := TopicMap[topicName]; ok {
+		delete(topic.WsClient, d.ID)
+	}
+	err = rediscmd.SREMOne(fmt.Sprintf(DeviceTopic, d.ID), topicName)
 	if err == nil {
-		if topic, ok := TopicMap[topicName]; ok {
-			delete(topic.WsClient, d.ID)
-		}
+		log.Println(err)
 	}
 	return
 }

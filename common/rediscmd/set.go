@@ -251,6 +251,21 @@ func SREM(key string, member []interface{}) (err error) {
 	return
 }
 
+// SREM key member [member ...]
+// 移除集合 key 中的一个或多个 member 元素，不存在的 member 元素会被忽略。
+func SREMOne(key string, member interface{}) (err error) {
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	log.Println("执行redis : ", "SREM", key, member)
+	res, err := rc.Do("SREM", key, member)
+	if err != nil {
+		log.Println("GET error", err.Error())
+		return
+	}
+	log.Println(res)
+	return
+}
+
 // SUNION key [key ...]
 // 返回一个集合的全部成员，该集合是所有给定集合的并集。
 func SUNION(keys []string) (res []interface{}, err error) {

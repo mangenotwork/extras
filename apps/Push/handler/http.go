@@ -205,12 +205,13 @@ func GetDeviceId(w http.ResponseWriter, r *http.Request) {
 	utils.OutSucceedBody(w, uuid.New().String())
 }
 
-// 设备订阅, 支持批量
+
 type SubscriptionParam struct {
 	TopicName string `json:"topic_name"`
 	DeviceList []string  `json:"device_list"` // 发布的内容
 }
 
+// 设备订阅, 支持批量
 func Subscription(w http.ResponseWriter, r *http.Request) {
 	decoder:=json.NewDecoder(r.Body)
 	params := &SubscriptionParam{}
@@ -238,6 +239,19 @@ func Subscription(w http.ResponseWriter, r *http.Request) {
 
 // 设备取消订阅, 支持批量
 func TopicCancel(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &SubscriptionParam{}
+	_=decoder.Decode(&params)
 
+	if !service.TopicIsHave(params.TopicName) {
+		utils.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
+		return
+	}
+
+	for _, v := range params.DeviceList {
+		// 生产一条消息
+		_=service.TopicDelDevice(params.TopicName, v)
+	}
+	utils.OutSucceedBody(w, "订阅成功")
 }
 

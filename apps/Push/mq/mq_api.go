@@ -9,7 +9,8 @@ type MQMsg struct {
 }
 
 // 通知topic 加入新的设备连接
-type MQAddDevice struct {
+type MQDevice struct {
+	Type string // add  del
 	Topic string
 	Device string
 }

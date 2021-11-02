@@ -57,15 +57,23 @@ func TopicIsHave(topicName string) bool {
 }
 
 func TopicAddDevice(topicName, device string) (err error) {
-	if !rediscmd.EXISTS(fmt.Sprintf(model.TopicKey, topicName)) {
-		err = errors.New("topic不存在!")
-		return
-	}
-	mqDevice := mq.MQAddDevice{
+	mqDevice := mq.MQDevice{
+		Type: "add",
 		Topic: topicName,
 		Device: device,
 	}
 	b, _ := json.Marshal(&mqDevice)
-	mq.NewMQ().Producer("mange-add-device", b)
+	mq.NewMQ().Producer("mange-push-device", b)
+	return
+}
+
+func TopicDelDevice(topicName, device string) (err error) {
+	mqDevice := mq.MQDevice{
+		Type: "del",
+		Topic: topicName,
+		Device: device,
+	}
+	b, _ := json.Marshal(&mqDevice)
+	mq.NewMQ().Producer("mange-push-device", b)
 	return
 }

@@ -89,5 +89,8 @@ func Router() *http.ServeMux {
 	// 设备订阅, 支持批量
 	mux.Handle("/topic/sub", m(http.HandlerFunc(handler.Subscription)))
 
+	// 设备取消订阅, 支持批量
+	mux.Handle("/topic/cancel", m(http.HandlerFunc(handler.TopicCancel)))
+
 	return mux
 }
