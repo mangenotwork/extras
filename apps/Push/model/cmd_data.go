@@ -7,6 +7,14 @@ type CmdData struct {
 	Data interface{} `json:"data"`
 }
 
+func CmdDataMsg(str string) []byte {
+	msg := &CmdData{
+		Cmd: "Message",
+		Data: str,
+	}
+	return msg.Byte()
+}
+
 func (c *CmdData) Byte() []byte {
 	if data, err := json.Marshal(c); err == nil {
 		return data
@@ -18,4 +26,3 @@ func (c *CmdData) Byte() []byte {
 type AuthData struct {
 	Device string `json:"device"`
 }
-

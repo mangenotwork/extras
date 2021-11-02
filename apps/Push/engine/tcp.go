@@ -1,7 +1,11 @@
 package engine
 
 import (
+	"encoding/json"
+	"github.com/mangenotwork/extras/apps/Push/model"
+	"github.com/mangenotwork/extras/apps/Push/service"
 	"github.com/mangenotwork/extras/common/conf"
+	"io"
 	"log"
 	"net"
 )
@@ -39,6 +43,12 @@ func StartTcpServer(){
 		//接收请求
 		for {
 
+			var (
+				device *model.Device
+				client model.Client
+				deviceId string
+			)
+
 			//来自客户端的连接
 			conn, err := tcpServer.Listener.Accept()
 			if err != nil {
@@ -46,7 +56,47 @@ func StartTcpServer(){
 				continue
 			}
 			log.Println("[连接成功]: ", conn.RemoteAddr().String(), conn)
-		}
 
+			wsClient := model.NewTcpClient().AddConn(conn).SetIP(conn.RemoteAddr().String())
+			client = wsClient
+
+			go func(){
+				recv := make([]byte, 1024*10)
+				for {
+					n, err := conn.Read(recv)
+					log.Println(n, err)
+					if err != nil{
+						if err == io.EOF {
+							log.Println(conn.RemoteAddr().String(), " 断开了连接!")
+							// 如果认证了设备则清理设备
+							if device != nil {
+								log.Println("释放客户端连接")
+								device.OffLine() // 下线记录
+								delete(model.AllWsClient, deviceId)
+								device.DischargeTCP() // 连接离开topic,group
+							}
+							_=conn.Close()
+							return
+						}
+					}
+					if n > 0 && n < 10241 {
+						data := recv[:n]
+						log.Println(string(data))
+						cmdData := &model.CmdData{}
+						jsonErr := json.Unmarshal(data, &cmdData)
+						if jsonErr != nil {
+							_,_=conn.Write(model.CmdDataMsg("非法数据格式"))
+							continue
+						}
+						device = service.Interactive(cmdData, client)
+
+					}else{
+						_,_=conn.Write(model.CmdDataMsg("传入的数据太小或太大, 建议 1~10240个字节"))
+
+					}
+				}
+			}()
+		}
 	}()
 }
+

@@ -50,12 +50,18 @@ func deviceDo(b []byte) {
 	}
 	if deviceData.Type == "add" {
 		// 当前服务存在连接则加入到topic
-		conn, ok := model.AllWsClient[deviceData.Device]
-		if ok {
+		if conn, ok := model.AllWsClient[deviceData.Device]; ok {
 			log.Println("存在连接 加入连接")
 			_=device.SubTopic(conn, deviceData.Topic)
 		}
+
+		if conn, ok := model.AllTcpClient[deviceData.Device]; ok {
+			log.Println("存在连接 加入连接")
+			_=device.SubTopicTcp(conn, deviceData.Topic)
+		}
+
 	}
+
 	if deviceData.Type == "del" {
 		_=device.CancelTopic(deviceData.Topic)
 	}

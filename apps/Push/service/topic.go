@@ -28,7 +28,7 @@ func NewTopic(topicName string) (err error) {
 		Name: topicName,
 		ID: topicName,
 		WsClient: make(map[string]*model.WsClient),
-		TcpClient: make(map[string]*net.Conn),
+		TcpClient: make(map[string]*model.TcpClient),
 		UdpClient: make(map[string]*net.UDPAddr),
 	}
 	model.TopicMap[topicName] = topic

@@ -20,7 +20,7 @@ func main(){
 {
 	"cmd":"Auth",
 	"data":{
-		"device":"123"
+		"device":"456"
 	}
 }
 `))

@@ -30,10 +30,9 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 
 func Ws(w http.ResponseWriter, r *http.Request) {
 	st := time.Now()
-
 	var (
 		device *model.Device
-		wsUser *model.WsClient
+		client model.Client
 		ip = middleware.GetIP(r)
 	)
 
@@ -51,21 +50,15 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 	}
 }
 	`
-	wsUser = &model.WsClient{
-		Conn : conn,
-		IP : ip,
-	}
+
+	wsClient := model.NewWsClient().AddConn(conn).SetIP(ip)
+	client = wsClient
 
 	if len(deviceId) < 1 {
-		msg := &model.CmdData{
-			Cmd: "message",
-			Data: "[未知身份连接]device为空, 客户端可以send数据来确认身份: "+str,
-		}
-		_ = conn.WriteMessage(websocket.BinaryMessage, msg.Byte())
+		_ = conn.WriteMessage(websocket.BinaryMessage, model.CmdDataMsg("[未知身份连接]device为空, 客户端可以send数据来确认身份: "+str))
 	}else{
-		device = into(wsUser, deviceId, ip)
+		device = service.Into(client, deviceId)
 	}
-
 	log.Println("[连接日志] 连接成功. 用时 = ", time.Now().Sub(st))
 	log.Println("RemoteAddr = ", conn.RemoteAddr(), " | LocalAddr = ", conn.LocalAddr())
 
@@ -79,91 +72,24 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 				delete(model.AllWsClient, deviceId)
 				device.Discharge() // 连接离开topic,group
 			}
+			_=conn.Close()
 			return
 		}
 		log.Println(data)
 		if len(data) < 1 {
 			continue
 		}
-
 		cmdData := &model.CmdData{}
-		msg := &model.CmdData{}
 		jsonErr := json.Unmarshal(data, &cmdData)
 		if jsonErr != nil {
-			msg.Cmd = "Message"
-			msg.Data = "非法数据格式"
-			_=conn.WriteMessage(websocket.BinaryMessage, msg.Byte())
+			_=conn.WriteMessage(websocket.BinaryMessage, model.CmdDataMsg("非法数据格式"))
 			continue
 		}
 		log.Println(cmdData)
-		switch cmdData.Cmd {
-		case "Auth":
-			// 设备认证
-			if deviceData,ok := cmdData.Data.(map[string]interface{})["device"]; ok {
-				if deviceId, yes := deviceData.(string); yes && len(deviceId)>0 {
-					log.Println("device id = ", deviceId)
-					device = into(wsUser, deviceId, ip)
-				}
-			}
-		case "TopicJoin":
-			// 订阅 TopicJoin
-			if topicData,ok := cmdData.Data.(map[string]interface{})["topic"]; ok {
-				if topic, yes := topicData.(string); yes && len(topic)>0 {
-					log.Println("topic = ", topic)
-					err := device.SubTopic(wsUser, topic)
-					if err != nil {
-						wsUser.SendMessage(err.Error())
-					}else{
-						wsUser.SendMessage("订阅成功")
-					}
-				}
-			}
-		case "TopicCancel":
-			// 取消订阅 TopicCancel
-			if topicData,ok := cmdData.Data.(map[string]interface{})["topic"]; ok {
-				if topic, yes := topicData.(string); yes && len(topic)>0 {
-					log.Println("topic = ", topic)
-					err := device.CancelTopic(topic)
-					if err != nil {
-						wsUser.SendMessage(err.Error())
-					}else{
-						wsUser.SendMessage("取消订阅成功")
-					}
-				}
-			}
-		case "GroupJoin":
-			// 加入组
-		case "GroupQuit":
-			//退出组
-		default:
-			msg.Cmd = "Message"
-			msg.Data = "未知Cmd"
-			_=conn.WriteMessage(websocket.BinaryMessage, msg.Byte())
-		}
-
+		device = service.Interactive(cmdData, client)
 	}
 
 }
-
-func into(wsUser *model.WsClient, deviceId, ip string) (device *model.Device) {
-	device = &model.Device{
-		ID: deviceId,
-	}
-
-	if device.OnLineState() {
-		wsUser.SendMessage("设备已经在线")
-		return
-	}
-	model.AllWsClient[deviceId] = wsUser
-	device.UpLine()
-	// 获取 device 订阅过的所有 topic 并加入
-	device.GetTopic(wsUser)
-	// 获取 device 加入的所有组 group
-	device.GetGroup(wsUser)
-	wsUser.SendMessage("连接成功")
-	return
-}
-
 
 // 创建 Topic
 type TopicCreateParam struct {

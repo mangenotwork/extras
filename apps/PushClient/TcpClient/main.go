@@ -27,7 +27,7 @@ Reconnection:
 		time.Sleep(1 * time.Second)
 		goto Reconnection
 	}
-	log.Println("[连接成功] 连接服务器成功")
+	//log.Println("[连接成功] 连接服务器成功")
 
 	//创建客户端实例
 	client := &TcpClient{
@@ -51,29 +51,44 @@ Reconnection:
 					}
 				}
 				if n > 0 && n < 1025 {
-					conn.CmdChan <- string(recv[:n])
+					//conn.CmdChan <- string(recv[:n])
+					log.Println(string(recv[:n]))
 				}
 			}
 		}
 	}(client)
 
 	// 发送心跳
-	go func(conn *TcpClient){
-		i := 0
-		heartBeatTick := time.Tick(10 * time.Second)
-		for {
-			select {
-			case <-heartBeatTick:
-				if _, err := conn.Send([]byte("beat")); err != nil {
-					RConn <- true
-					return
-				}
-				i++
-			case <-conn.StopChan:
-				return
-			}
-		}
-	}(client)
+	//go func(conn *TcpClient){
+	//	i := 0
+	//	heartBeatTick := time.Tick(5 * time.Second)
+	//	for {
+	//		select {
+	//		case <-heartBeatTick:
+	//			if _, err := conn.Send([]byte("beat")); err != nil {
+	//				RConn <- true
+	//				return
+	//			}
+	//			i++
+	//		case <-conn.StopChan:
+	//			return
+	//		}
+	//	}
+	//}(client)
+
+	// 交互测试
+	go func() {
+		time.Sleep(1*time.Second)
+		// 发送认证
+		_,err = client.Send([]byte(`
+{
+	"cmd":"Auth",
+	"data":{
+		"device":"123"
+	}
+}
+`))
+	}()
 
 	for {
 		select {
