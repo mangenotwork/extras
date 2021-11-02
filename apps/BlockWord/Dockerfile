@@ -9,7 +9,9 @@ RUN mkdir -p /app/logs
 
 # copy file to image
 COPY ${AppName} /app/
-#COPY conf /app/configs
+
+# copy configs file to image
+COPY conf /app/configs
 
 # add timezone
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \

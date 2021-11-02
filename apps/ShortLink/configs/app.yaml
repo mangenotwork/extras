@@ -1,5 +1,5 @@
 app:
-  name: BlockWord
+  name: ShortLink
   runType: dev
 
 httpServer:
