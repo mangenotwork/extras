@@ -17,8 +17,12 @@
 #### ShortLink 短链接服务
 >  短链接生成,管理; 提供 http/s,grpc api
 
+>  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/ShortLink)
+
 #### Push 推送服务
 > 提供 websocket, tcp, udp的推送, 支持 发布订阅模式,广播模式,组播模式等
+
+>  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/Push)
 
 #### StringHelper 文字处理服务
 > 重名验证， 分词， 自动生成姓名， 网名， 查询邮编， 查询旅游景点， 城市id查询， 拼音， 诗人查询， 诗词查询， 成语查询;

@@ -4,20 +4,20 @@ app:
 
 httpServer:
   open: true
-  prod: 1251
+  prod: 1241
 
 grpcServer:
   open: false
-  prod: 1252
+  prod: 1242
   log: true
 
 tcpServer:
   open: true
-  prod: 1253
+  prod: 1243
 
 udpServer:
   open: true
-  prod: 1254
+  prod: 1244
 
 redis:
   host: 192.168.0.197
@@ -38,5 +38,3 @@ rabbit:
   user: admin
   password: admin
 
-kafka:
-  addr: 192.168.0.191:9092

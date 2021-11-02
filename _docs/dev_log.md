@@ -9,7 +9,7 @@
 - v0.0.25  [Push] 新增文档
 - v0.0.26  [ShortLink] 新增文档
 
-> v0.1.0  Release
+> v0.1
 - v0.1.1  [push] 新增查询设备订阅的topic, 查询topic被哪些设备查询
 - v0.1.2  [Push] 新增tcp连接断开客户端连接存储
 - v0.1.3  [Push] 新增udp连接断开客户端连接存储

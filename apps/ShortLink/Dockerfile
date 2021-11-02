@@ -13,10 +13,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 WORKDIR /app
 
-# 日志挂载
 VOLUME /app/logs
 
-# port
 EXPOSE 1233
 EXPOSE 1234
 

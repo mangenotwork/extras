@@ -119,7 +119,7 @@ redis:
 {"code":0,"timestamp":1635306381,"msg":"succeed","data":["口交","操你妈"]}
 ```
 
-## grpc
+## grpc 文档
 > proto文件: https://github.com/mangenotwork/extras/api/BlockWord_Proto/blockword.proto
 
 > 生成pb.go: https://github.com/mangenotwork/extras/script/blockword_pb.sh

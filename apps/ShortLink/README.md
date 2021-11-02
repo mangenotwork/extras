@@ -38,16 +38,20 @@ redis:
 > 创建短链接
 
 参数
-- url  (sting) // 目的地址
-- aging  (int) // 时效，单位秒, -1表示不过期
-- deadline (int) // 截止日期， 单位时间戳, 只有当aging为0时才用
-- is_privacy (bool) // 是否隐私
-- password"` (string) // 只有当is_privacy=true使用
-- open_block_list (bool) // 是否启用黑名单，启用后黑名单不能访问
-- block_list ([]string) // 访问黑名单， OpenBlockList=true使用
-- open_white_list (bool) // 是否启用白名单，启用后只有白名单才能访问
-- white_list ([]string) // 访问白名单， OpenWhiteList=true使用
-}
+
+|  参数名   | 类型  | 说明 |
+|  ----  | ----  | ---- |
+| url  | sting | 目的地址 |
+| aging  | int |  时效，单位秒, -1表示不过期 |
+| deadline  | int | 截止日期， 单位时间戳, 只有当aging为0时才用 |
+| is_privacy  | bool | 是否隐私 |
+| password  | string | 只有当is_privacy=true使用 |
+| open_block_list  | bool | 是否启用黑名单，启用后黑名单不能访问 |
+| block_list  | []string | 访问黑名单， OpenBlockList=true使用 |
+| open_white_list  | bool | 是否启用白名单，启用后只有白名单才能访问 |
+| white_list  | []string | 访问白名单， OpenWhiteList=true使用 |
+
+传参例子:
 ```json
 {
   "url" : "https://www.baidu.com"
@@ -68,12 +72,23 @@ redis:
 ```
 注意:请求则需要加上当前host, 如 http://127.0.0.1:8080/mwxrj1Fng
 
-#### [TODO] [post] /v1/modify
+##### [TODO] [post] /v1/modify
 > 修改短链接
 
-#### [TODO] [post] /v1/get   
+##### [TODO] [post] /v1/get   
 > 获取短链接信息
 
-#### [TODO] [post] /v1/del   
+##### [TODO] [post] /v1/del   
 > 删除短链接
 
+
+## grpc 文档
+> proto文件: https://github.com/mangenotwork/extras/api/ShortLink_Proto/shortlink.proto
+
+> 生成pb.go: https://github.com/mangenotwork/extras/script/shortlink.sh
+
+
+## 编译
+> 直接编译:  go build main.go
+
+> 编译为docker: https://github.com/mangenotwork/extras/build/shortlink_build.sh
