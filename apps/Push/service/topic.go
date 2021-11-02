@@ -76,3 +76,13 @@ func TopicDelDevice(topicName, device string) (err error) {
 	mq.NewMQ().Producer("mange-push-device", b)
 	return
 }
+
+func TopicDisconnectionDevice(topicName string) (err error) {
+	mqDevice := mq.MQDevice{
+		Type: "disconnection",
+		Topic: topicName,
+	}
+	b, _ := json.Marshal(&mqDevice)
+	mq.NewMQ().Producer("mange-push-device", b)
+	return
+}

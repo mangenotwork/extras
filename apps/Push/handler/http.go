@@ -206,3 +206,10 @@ func TopicCheckDevice(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.OutSucceedBody(w, rse)
 }
+
+// 强制指定topic下全部设备断开接收推送
+func TopicDisconnection(w http.ResponseWriter, r *http.Request) {
+	topic := utils.GetUrlArg(r, "topic")
+	_= service.TopicDisconnectionDevice(topic)
+	utils.OutSucceedBody(w, "断开成功")
+}

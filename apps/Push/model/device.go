@@ -216,3 +216,12 @@ func GetTopicAllDevice(topicName string) []string {
 func GetTopicHasDevice(topicName, device string) (bool, error) {
 	return rediscmd.SISMEMBER(fmt.Sprintf(TopicAllDevice, topicName), device)
 }
+
+// topic断开所有device
+func TopicDisconnection(topicName string) {
+	if topic, ok := TopicMap[topicName]; ok {
+		topic.WsClient = map[string]*WsClient{}
+		topic.TcpClient = map[string]*TcpClient{}
+		topic.UdpClient = map[string]*UdpClient{}
+	}
+}

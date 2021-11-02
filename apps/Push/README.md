@@ -209,6 +209,21 @@ rabbit:
 ```
 ---
 
+##### [get] /topic/disconnection/all
+> 强制指定topic下全部设备断开接收推送
+
+参数
+- topic  TopicName
+```
+/topic/disconnection/all?topic=t3
+```
+
+返回
+```
+{"code":0,"timestamp":1635844695,"msg":"succeed","data":"断开成功"}
+```
+---
+
 ## WebSocket 文档
 
 

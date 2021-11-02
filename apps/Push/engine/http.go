@@ -101,5 +101,9 @@ func Router() *http.ServeMux {
 	// [get] 查询topic是否被指定device订阅
 	mux.Handle("/topic/check/device", m(http.HandlerFunc(handler.TopicCheckDevice)))
 
+	// [get] 强制指定topic下全部设备断开接收推送
+	mux.Handle("/topic/disconnection/all", m(http.HandlerFunc(handler.TopicDisconnection)))
+
+
 	return mux
 }

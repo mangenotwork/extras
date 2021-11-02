@@ -68,4 +68,8 @@ func deviceDo(b []byte) {
 		_=device.CancelTopic(deviceData.Topic)
 	}
 
+	if deviceData.Type == "disconnection" {
+		model.TopicDisconnection(deviceData.Topic)
+	}
+
 }
