@@ -1,12 +1,11 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"github.com/mangenotwork/extras/common/rediscmd"
 	"github.com/mangenotwork/extras/common/utils"
 	"log"
-	"net"
-	"errors"
 )
 
 type Device struct {
@@ -31,7 +30,7 @@ func (d *Device) GetTopic(conn Client) {
 				ID : v,
 				WsClient : make(map[string]*WsClient),
 				TcpClient : make(map[string]*TcpClient),
-				UdpClient : make(map[string]*net.UDPAddr),
+				UdpClient : make(map[string]*UdpClient),
 			}
 			topic = TopicMap[v]
 		}
@@ -44,22 +43,41 @@ func (d *Device) GetTopic(conn Client) {
 			topic.TcpClient[d.ID] = conn.GetTcpConn()
 		}
 
+		if conn.GetUdpConn() != nil {
+			topic.UdpClient[d.ID] = conn.GetUdpConn()
+		}
 	}
 }
 
 // 释放连接
-func (d *Device) Discharge() {
+func (d *Device) Discharge(connType string) {
 	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceTopic, d.ID)) {
 		log.Println(v)
 		if topic, ok := TopicMap[utils.Any2String(v)]; ok {
-			delete(topic.WsClient, d.ID)
+			if connType == "ws" {
+				delete(topic.WsClient, d.ID)
+			}
+			if connType == "tcp" {
+				delete(topic.TcpClient, d.ID)
+			}
+			if connType == "udp" {
+				delete(topic.UdpClient, d.ID)
+			}
 		}
 	}
 
 	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceGroup, d.ID)) {
 		log.Println(v)
 		if group, ok := GroupMap[v.(string)]; ok {
-			delete(group.WsClient, d.ID)
+			if connType == "ws" {
+				delete(group.WsClient, d.ID)
+			}
+			if connType == "tcp" {
+				delete(group.TcpClient, d.ID)
+			}
+			if connType == "udp" {
+				delete(group.UdpClient, d.ID)
+			}
 		}
 	}
 }
@@ -75,7 +93,7 @@ func (d *Device) GetGroup(conn Client) {
 				ID : v.(string),
 				WsClient : make(map[string]*WsClient),
 				TcpClient : make(map[string]*TcpClient),
-				UdpClient : make(map[string]*net.UDPAddr),
+				UdpClient : make(map[string]*UdpClient),
 			}
 			group = GroupMap[v.(string)]
 		}
@@ -123,7 +141,7 @@ func (d *Device) SubTopic(conn Client, topicName string) (err error) {
 				ID : topicName,
 				WsClient : make(map[string]*WsClient),
 				TcpClient : make(map[string]*TcpClient),
-				UdpClient : make(map[string]*net.UDPAddr),
+				UdpClient : make(map[string]*UdpClient),
 			}
 			topic = TopicMap[topicName]
 		}
@@ -136,6 +154,9 @@ func (d *Device) SubTopic(conn Client, topicName string) (err error) {
 			topic.TcpClient[d.ID] = conn.GetTcpConn()
 		}
 
+		if conn.GetUdpConn() != nil {
+			topic.UdpClient[d.ID] = conn.GetUdpConn()
+		}
 	}
 	return
 }
@@ -152,52 +173,13 @@ func (d *Device) CancelTopic(topicName string) (err error) {
 		if _,ok := topic.TcpClient[d.ID]; ok {
 			delete(topic.TcpClient, d.ID)
 		}
+		if _,ok := topic.UdpClient[d.ID]; ok {
+			delete(topic.UdpClient, d.ID)
+		}
 	}
 	err = rediscmd.SREMOne(fmt.Sprintf(DeviceTopic, d.ID), topicName)
 	if err == nil {
 		log.Println(err)
-	}
-	return
-}
-
-
-
-// 释放连接 - TCP
-func (d *Device) DischargeTCP() {
-	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceTopic, d.ID)) {
-		log.Println(v)
-		if topic, ok := TopicMap[utils.Any2String(v)]; ok {
-			delete(topic.TcpClient, d.ID)
-		}
-	}
-
-	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceGroup, d.ID)) {
-		log.Println(v)
-		if group, ok := GroupMap[v.(string)]; ok {
-			delete(group.TcpClient, d.ID)
-		}
-	}
-}
-
-func (d *Device) SubTopicTcp(conn *TcpClient, topicName string) (err error) {
-	if !rediscmd.EXISTS(fmt.Sprintf(TopicKey, topicName)) {
-		err = errors.New("订阅的topic不存在!")
-		return
-	}
-	err = rediscmd.SADD(fmt.Sprintf(DeviceTopic, d.ID), []interface{}{topicName})
-	if err == nil {
-		topic, ok := TopicMap[topicName]
-		if !ok {
-			TopicMap[topicName] = &Topic{
-				Name : topicName,
-				ID : topicName,
-				WsClient : make(map[string]*WsClient),
-				TcpClient : make(map[string]*TcpClient),
-				UdpClient : make(map[string]*net.UDPAddr),
-			}
-			topic = TopicMap[topicName]
-		}
-		topic.TcpClient[d.ID] = conn
 	}
 	return
 }

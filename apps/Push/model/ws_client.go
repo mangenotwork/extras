@@ -48,3 +48,11 @@ func (ws *WsClient) GetWsConn() *WsClient {
 func (ws *WsClient) GetTcpConn() *TcpClient {
 	return nil
 }
+
+func (ws *WsClient) GetUdpConn() *UdpClient {
+	return nil
+}
+
+func (ws *WsClient) Who() string {
+	return "ws"
+}

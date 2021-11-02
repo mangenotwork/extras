@@ -10,7 +10,7 @@ func Into(client model.Client, deviceId string) (device *model.Device) {
 		ID: deviceId,
 	}
 
-	if device.OnLineState() {
+	if device.OnLineState() && client.Who() != "udp" {
 		client.SendMessage("设备已经在线")
 		return
 	}

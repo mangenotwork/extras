@@ -70,7 +70,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 				log.Println("释放客户端连接")
 				device.OffLine() // 下线记录
 				delete(model.AllWsClient, deviceId)
-				device.Discharge() // 连接离开topic,group
+				device.Discharge("ws") // 连接离开topic,group
 			}
 			_=conn.Close()
 			return

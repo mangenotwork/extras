@@ -27,10 +27,25 @@ func main() {
 		}
 	}()
 
-	for {
+	go func() {
 		time.Sleep(1*time.Second)
-		conn.Write([]byte("hello"))
-		//fmt.Printf("<%s>\n", conn.RemoteAddr())
+		_,_=conn.Write([]byte(`
+{
+	"cmd":"Auth",
+	"data":{
+		"device":"123"
 	}
+}
+`))
+
+		//fmt.Printf("<%s>\n", conn.RemoteAddr())
+	}()
+
+	//for {
+	//	time.Sleep(1*time.Second)
+	//	_,_=conn.Write([]byte(`xt`))
+	//}
+
+	select {}
 
 }

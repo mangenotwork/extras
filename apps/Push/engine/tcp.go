@@ -73,7 +73,7 @@ func StartTcpServer(){
 								log.Println("释放客户端连接")
 								device.OffLine() // 下线记录
 								delete(model.AllWsClient, deviceId)
-								device.DischargeTCP() // 连接离开topic,group
+								device.Discharge("tcp") // 连接离开topic,group
 							}
 							_=conn.Close()
 							return

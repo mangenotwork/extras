@@ -3,7 +3,6 @@ package model
 import (
 	"github.com/gorilla/websocket"
 	"github.com/mangenotwork/extras/apps/Push/mq"
-	"net"
 )
 
 var TopicMap map[string]*Topic
@@ -13,7 +12,7 @@ type Topic struct {
 	ID string `json:"topic_id"` // 是uuid
 	WsClient map[string]*WsClient   // deviceId : *WsClient
 	TcpClient map[string]*TcpClient  // deviceId :
-	UdpClient map[string]*net.UDPAddr
+	UdpClient map[string]*UdpClient
 }
 
 
@@ -30,9 +29,11 @@ func (t *Topic) Send(msg *mq.MQMsg) {
 		}
 	}()
 
-	//for _,t.udpClient := range t.UdpClient {
-	//
-	//}
+	go func() {
+		for _, udpClient := range t.UdpClient {
+			udpClient.TopicSend(msg)
+		}
+	}()
 }
 
 type TopicData struct {
@@ -52,14 +53,24 @@ func (ws *WsClient) TopicSend(data *mq.MQMsg){
 	_=ws.Conn.WriteMessage(websocket.BinaryMessage, msg.Byte())
 }
 
-func (ws *TcpClient) TopicSend(data *mq.MQMsg){
-	if ws == nil {
+func (tcp *TcpClient) TopicSend(data *mq.MQMsg){
+	if tcp == nil {
 		return
 	}
 	msg := CmdData{
 		Cmd: "TopicMessage",
 		Data: data,
 	}
-	_,_=ws.Conn.Write(msg.Byte())
+	_,_=tcp.Conn.Write(msg.Byte())
 }
 
+func (udp *UdpClient) TopicSend(data *mq.MQMsg){
+	if udp == nil {
+		return
+	}
+	msg := CmdData{
+		Cmd: "TopicMessage",
+		Data: data,
+	}
+	_,_=UDPListener.WriteToUDP(msg.Byte(), udp.Conn)
+}

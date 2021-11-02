@@ -5,6 +5,8 @@ type Client interface {
 	IntoAllClient(device string)
 	GetWsConn() *WsClient
 	GetTcpConn() *TcpClient
+	GetUdpConn() *UdpClient
+	Who() string
 }
 
 func NewClient(clientType string) Client {
@@ -13,6 +15,8 @@ func NewClient(clientType string) Client {
 		return &WsClient{}
 	case "tcp":
 		return &TcpClient{}
+	case "udp":
+		return &UdpClient{}
 	}
 	return nil
 }

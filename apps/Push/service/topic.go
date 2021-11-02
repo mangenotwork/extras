@@ -7,7 +7,6 @@ import (
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/mq"
 	"github.com/mangenotwork/extras/common/rediscmd"
-	"net"
 	"time"
 )
 
@@ -29,7 +28,7 @@ func NewTopic(topicName string) (err error) {
 		ID: topicName,
 		WsClient: make(map[string]*model.WsClient),
 		TcpClient: make(map[string]*model.TcpClient),
-		UdpClient: make(map[string]*net.UDPAddr),
+		UdpClient: make(map[string]*model.UdpClient),
 	}
 	model.TopicMap[topicName] = topic
 	return
