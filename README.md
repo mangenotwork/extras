@@ -24,16 +24,16 @@
 
 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/Push)
 
+#### ImgHelper 图片功能服务
+> 生成二维码, 图片压缩， 图片水印， 生成文字图片， 图片固定剪切， 生成gif， 图片固定拼接， 图片基础信息获取，固定旋转， 格式转换;
+> 提供 http/s, grpc api
+
 #### StringHelper 文字处理服务
 > 重名验证， 分词， 自动生成姓名， 网名， 查询邮编， 查询旅游景点， 城市id查询， 拼音， 诗人查询， 诗词查询， 成语查询;
 > 提供 http/s, grpc api
 
 #### IM 即时聊天功能服务
 > 即时聊天功能; 提供 websocket, tcp, udp
-
-#### ImgHelper 图片功能服务
-> 生成二维码, 图片压缩， 图片水印， 生成文字图片， 图片固定剪切， 生成gif， 图片固定拼接， 图片基础信息获取，固定旋转， 格式转换;
-> 提供 http/s, grpc api
 
 
 ## LICENSE : MIT License

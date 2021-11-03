@@ -36,7 +36,7 @@ func sendMessage(b []byte) {
 	}
 }
 
-// addDevice 添加设备
+// deviceDo 设备操作
 func deviceDo(b []byte) {
 	log.Println("消费消息 : ", string(b))
 	deviceData := &mq.MQDevice{}

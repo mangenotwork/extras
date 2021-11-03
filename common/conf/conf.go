@@ -25,6 +25,7 @@ type Configs struct {
 	Nsq *Nsq `yaml:"nsq"`
 	Rabbit *Rabbit `yaml:"rabbit"`
 	Kafka *Kafka `yaml:"kafka"`
+	Mongo *Mongo `yaml:"mongo"`
 }
 
 type App struct {
@@ -93,6 +94,11 @@ type Kafka struct {
 	Addr string `yaml:"addr"`
 }
 
+type Mongo struct {
+	Host string `yaml:"mongo"`
+	User string `yaml:"user"`
+	Password string `yaml:"password"`
+}
 
 // 读取yaml文件
 // 获取配置
