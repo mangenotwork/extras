@@ -104,6 +104,9 @@ func Router() *http.ServeMux {
 	// [get] 强制指定topic下全部设备断开接收推送
 	mux.Handle("/topic/disconnection/all", m(http.HandlerFunc(handler.TopicDisconnection)))
 
+	// [get] 获取推送数据记录
+	mux.Handle("/topic/log", m(http.HandlerFunc(handler.TopicLog)))
+
 
 	return mux
 }

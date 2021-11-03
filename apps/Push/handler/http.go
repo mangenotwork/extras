@@ -213,3 +213,16 @@ func TopicDisconnection(w http.ResponseWriter, r *http.Request) {
 	_= service.TopicDisconnectionDevice(topic)
 	utils.OutSucceedBody(w, "断开成功")
 }
+
+// 获取topic记录
+func TopicLog(w http.ResponseWriter, r *http.Request) {
+	topic := utils.GetUrlArg(r, "topic")
+	page := utils.GetUrlArgInt64(r, "page")
+	limit := utils.GetUrlArgInt64(r, "limit")
+	data, err := service.GetTopicSend(topic, page, limit)
+	if err != nil {
+		utils.OutErrBody(w, 2001,err)
+		return
+	}
+	utils.OutSucceedBody(w, data)
+}

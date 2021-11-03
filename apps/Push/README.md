@@ -224,6 +224,39 @@ rabbit:
 ```
 ---
 
+##### [get] /topic/log 
+> 获取推送数据记录
+
+参数
+- topic  TopicName
+- page  页数
+- limit 每页数量
+```
+/topic/log?topic=t3&page=1&limit=5
+```
+
+返回
+```
+{
+    "code":0,
+    "timestamp":1635928264,
+    "msg":"succeed",
+    "data":{
+        "list":[
+            {"Message":"2222222222222","SendTime":"2021-11-03 16:31:02"},
+            {"Message":"1111111111111","SendTime":"2021-11-03 16:20:56"},
+            {"Message":"1111111111111","SendTime":"2021-11-03 16:20:55"},
+            {"Message":"1111111111111","SendTime":"2021-11-03 16:14:09"},
+            {"Message":"444444444444444444","SendTime":"2021-11-03 15:57:22"}
+        ],
+        "count":15,
+        "page":1,
+        "limit":5
+    }
+}
+```
+---
+
 ## WebSocket 文档
 
 

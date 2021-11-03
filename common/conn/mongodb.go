@@ -2,6 +2,7 @@ package conn
 
 import (
 	"context"
+	"log"
 	"sync"
 	"time"
 
@@ -15,9 +16,13 @@ var _mongoClient *mongo.Client
 var _mongoOnce sync.Once
 
 func MongoConn() *mongo.Client {
+	if conf.Arg.Mongo == nil {
+		panic("没有设置 mongodb的配置信息")
+	}
 	_mongoOnce.Do(func() {
 		var err error
 		url := "mongodb://"+conf.Arg.Mongo.User+":"+conf.Arg.Mongo.Password+"@"+conf.Arg.Mongo.Host
+		log.Println("mongodb url = ", url)
 		clientOptions := options.Client().ApplyURI(url).SetConnectTimeout(20*time.Second)
 		_mongoClient, err = mongo.Connect(context.TODO(), clientOptions)
 		if err != nil {
@@ -28,12 +33,11 @@ func MongoConn() *mongo.Client {
 			panic(err)
 		}
 	})
-
 	return _mongoClient
 }
 
 func GetMongoDB(dbName string) *mongo.Database {
-	return _mongoClient.Database(dbName)
+	return MongoConn().Database(dbName)
 }
 
 func GetMongoCollection(dbName, collection string) *mongo.Collection {

@@ -95,7 +95,7 @@ type Kafka struct {
 }
 
 type Mongo struct {
-	Host string `yaml:"mongo"`
+	Host string `yaml:"host"`
 	User string `yaml:"user"`
 	Password string `yaml:"password"`
 }

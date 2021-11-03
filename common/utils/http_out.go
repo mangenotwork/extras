@@ -90,3 +90,10 @@ func GetUrlArg(r *http.Request,name string)string{
 	arg=values.Get(name)
 	return arg
 }
+
+func GetUrlArgInt64(r *http.Request,name string)int64{
+	var arg string
+	values := r.URL.Query()
+	arg=values.Get(name)
+	return Str2Int64(arg)
+}
