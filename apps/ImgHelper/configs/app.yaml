@@ -1,0 +1,12 @@
+app:
+  name: ImgHelper
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 1261
+
+grpcServer:
+  open: true
+  prod: 1262
+  log: true
