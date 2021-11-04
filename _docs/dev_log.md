@@ -17,15 +17,15 @@
 - v0.1.5  [Push] 引入 MongoDB
 - v0.1.6  [Push] 记录推送数据
 - v0.1.7  [ImgHelper] init project
+- v0.1.8  [ImgHelper] 二维码生成, 条形码生成
 Todo
-- v0.1.8  [Push] 设备接收推送的反馈
-- v0.1.9  [Push] 获取设备在线情况
+- v0.1.9  [WordHelper] init project
 - v0.1.10 [Push] 指定设备强制断开
 - v0.1.11 [Push] 设备拉取离线推送
 - v0.1.12 [Push] 
-- v0.1.13 
+- v0.1.13 [Push] 设备接收推送的反馈
 - v0.1.14 [Push] 设备心跳,处理客户端心跳
-- v0.1.15 
+- v0.1.15 [Push] 获取设备在线情况
 - v0.1.16 
 - v0.1.17
 - v0.1.18
