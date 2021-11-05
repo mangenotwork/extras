@@ -1,0 +1,12 @@
+app:
+  name: WordHelper
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 1271
+
+grpcServer:
+  open: true
+  prod: 1272
+  log: true
