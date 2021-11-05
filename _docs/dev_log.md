@@ -19,8 +19,8 @@
 - v0.1.7  [ImgHelper] init project
 - v0.1.8  [ImgHelper] 二维码生成, 条形码生成
 - v0.1.9  [WordHelper] init project
-Todo
 - v0.1.10 [ConfigCenter] init project
+Todo
 - v0.1.11 [WordHelper] 分词接口
 - v0.1.12 [Push] 
 - v0.1.13 [Push] 设备接收推送的反馈

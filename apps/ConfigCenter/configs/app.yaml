@@ -1,0 +1,12 @@
+app:
+  name: ConfigCenter
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 1281
+
+grpcServer:
+  open: true
+  prod: 1282
+  log: true
