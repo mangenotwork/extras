@@ -21,9 +21,8 @@
 - v0.1.9  [WordHelper] init project
 - v0.1.10 [ConfigCenter] init project
 - v0.1.11 [WordHelper] 分词接口
-
+- v0.1.12 [WordHelper] Ocr接口
 > Todo
-- v0.1.12 [Push] 
 - v0.1.13 [Push] 设备接收推送的反馈
 - v0.1.14 [Push] 设备心跳,处理客户端心跳
 - v0.1.15 [Push] 获取设备在线情况

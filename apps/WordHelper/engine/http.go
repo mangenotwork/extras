@@ -19,7 +19,13 @@ func Router() *http.ServeMux {
 	mux.Handle("/hello", m(http.HandlerFunc(handler.Hello)))
 	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
 
+	// 分词
 	mux.Handle("/fenci/jieba",  m(http.HandlerFunc(handler.JieBaFenCi)))
+
+	// ocr
+	mux.Handle("/ocr", m(http.HandlerFunc(handler.OCR)))
+	mux.Handle("/ocr/languages", m(http.HandlerFunc(handler.GetOCRLanguages)))
+	mux.Handle("/ocr/version", m(http.HandlerFunc(handler.GetOCRVersion)))
 
 	return mux
 }
