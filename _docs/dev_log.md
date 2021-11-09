@@ -23,10 +23,10 @@
 - v0.1.11 [WordHelper] 分词接口
 - v0.1.12 [WordHelper] Ocr接口
 - v0.1.13 [WordHelper] 翻译接口, 文档更新
+- v0.1.14 [WordHelper] pdf内容提取
 
 > Todo
-- v0.1.14 [WordHelper] pdf内容提取
-- v0.1.15 
+- v0.1.15 [ImgHelper] 图片详情信息
 - v0.1.16 
 - v0.1.17 
 - v0.1.18 
@@ -42,7 +42,6 @@
 [WordHelper] 加密解密
 [ImgHelper] 添加水印 
 [ImgHelper] 生成文字图片, 含水印
-[ImgHelper] 图片详情信息
 [Push] 获取设备在线情况
 
 

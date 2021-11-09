@@ -30,6 +30,10 @@ func Router() *http.ServeMux {
 	// 翻译
 	mux.Handle("/fanyi", m(http.HandlerFunc(handler.FanYi)))
 
+	// pdf提取
+	mux.Handle("/pdf/txt", m(http.HandlerFunc(handler.PDFExtractionTxt)))
+	mux.Handle("/pdf/row", m(http.HandlerFunc(handler.PDFExtractionRow)))
+	mux.Handle("/pdf/table", m(http.HandlerFunc(handler.PDFExtractionTable)))
 
 	return mux
 }

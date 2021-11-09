@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/mangenotwork/extras/apps/WordHelper/service"
+	"github.com/mangenotwork/extras/apps/WordHelper/service/pdf"
 	"github.com/mangenotwork/extras/common/utils"
 	"io/ioutil"
 	"log"
@@ -22,6 +23,7 @@ func JieBaFenCi(w http.ResponseWriter, r *http.Request) {
 
 func OCR(w http.ResponseWriter, r *http.Request) {
 	file, handler, err := r.FormFile("file")
+	defer file.Close()
 	lang := r.FormValue("lang")
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
@@ -86,3 +88,80 @@ func FanYi(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(robots)
 }
+
+type PDFExtractionBody struct {
+	Page int `json:"page"`
+	Content interface{} `json:"content"`
+}
+
+func PDFExtractionTxt(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	reader, err := pdf.NewReader(file, handler.Size)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	data := make([]*PDFExtractionBody, 0, reader.NumPage())
+	for i:=1; i< reader.NumPage(); i++ {
+		pg := reader.Page(i)
+		txt,_ := pg.GetTxt()
+		data = append(data, &PDFExtractionBody{
+			Page: i,
+			Content: txt,
+		})
+	}
+	utils.OutSucceedBody(w, data)
+}
+
+func PDFExtractionRow(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	reader, err := pdf.NewReader(file, handler.Size)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	data := make([]*PDFExtractionBody, 0, reader.NumPage())
+	for i:=1; i< reader.NumPage(); i++ {
+		pg := reader.Page(i)
+		row, _ := pg.GetRow()
+		data = append(data, &PDFExtractionBody{
+			Page: i,
+			Content: row,
+		})
+	}
+	utils.OutSucceedBody(w, data)
+}
+
+func PDFExtractionTable(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	reader, err := pdf.NewReader(file, handler.Size)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	data := make([]*PDFExtractionBody, 0, reader.NumPage())
+	for i:=1; i< reader.NumPage(); i++ {
+		pg := reader.Page(i)
+		data = append(data, &PDFExtractionBody{
+			Page: i,
+			Content: pg.GetTable(),
+		})
+	}
+	utils.OutSucceedBody(w, data)
+}
+
