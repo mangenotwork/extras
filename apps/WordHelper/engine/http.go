@@ -27,5 +27,9 @@ func Router() *http.ServeMux {
 	mux.Handle("/ocr/languages", m(http.HandlerFunc(handler.GetOCRLanguages)))
 	mux.Handle("/ocr/version", m(http.HandlerFunc(handler.GetOCRVersion)))
 
+	// 翻译
+	mux.Handle("/fanyi", m(http.HandlerFunc(handler.FanYi)))
+
+
 	return mux
 }

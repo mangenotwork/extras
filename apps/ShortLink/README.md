@@ -89,7 +89,7 @@ redis:
 ## grpc 文档
 > proto文件: https://github.com/mangenotwork/extras/api/ShortLink_Proto/shortlink.proto
 
-> 生成pb.go: https://github.com/mangenotwork/extras/script/shortlink.sh
+> 生成pb.go: https://github.com/mangenotwork/extras/script/shortlink_pb.sh
 
 
 ## 编译

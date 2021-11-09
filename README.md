@@ -31,7 +31,7 @@
 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/ImgHelper)
 
 #### WordHelper 文字处理服务
-> 重名验证， 分词， 自动生成姓名， 网名， 查询邮编， 查询旅游景点， 城市id查询， 拼音， 诗人查询， 诗词查询， 成语查询;
+> 分词， OCR, 翻译, 加密解密, 文本内容的领域信息, 文本相似度, 彩票开奖, 拼音, 标签提取,
 > 提供 http/s, grpc api
 
 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/WordHelper)
