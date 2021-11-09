@@ -61,6 +61,14 @@ func StartTcpServer(){
 			client = wsClient
 
 			go func(){
+
+				defer func() {
+					if v := recover(); v != nil {
+						log.Println("捕获了一个异常：", v)
+					}
+					_=conn.Close()
+				}()
+
 				recv := make([]byte, 1024*10)
 				for {
 					n, err := conn.Read(recv)

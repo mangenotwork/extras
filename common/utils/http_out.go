@@ -84,16 +84,23 @@ func (m *HttpOutBody) JsonStr() (string,error) {
 }
 
 // GetUrlArg 获取URL的GET参数
-func GetUrlArg(r *http.Request,name string)string{
+func GetUrlArg(r *http.Request, name string) string {
 	var arg string
 	values := r.URL.Query()
 	arg=values.Get(name)
 	return arg
 }
 
-func GetUrlArgInt64(r *http.Request,name string)int64{
+func GetUrlArgInt64(r *http.Request, name string) int64 {
 	var arg string
 	values := r.URL.Query()
 	arg=values.Get(name)
 	return Str2Int64(arg)
+}
+
+func GetUrlArgInt(r *http.Request, name string) int {
+	var arg string
+	values := r.URL.Query()
+	arg=values.Get(name)
+	return Str2Int(arg)
 }

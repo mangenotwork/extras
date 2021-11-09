@@ -19,6 +19,7 @@ func Router() *http.ServeMux {
 	mux.Handle("/hello", m(http.HandlerFunc(handler.Hello)))
 	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
 
+	mux.Handle("/fenci/jieba",  m(http.HandlerFunc(handler.JieBaFenCi)))
 
 	return mux
 }
