@@ -3,7 +3,7 @@
 cd ../apps/BlockWord/
 
 # app name
-AppName=block-word
+AppName=blockword
 
 # app version
 VERSION=0.0.3

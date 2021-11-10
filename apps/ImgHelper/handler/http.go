@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"github.com/mangenotwork/extras/apps/ImgHelper/service"
 	"github.com/mangenotwork/extras/common/utils"
+	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"log"
 	"net/http"
 )
@@ -63,4 +67,47 @@ func WatermarkTxt(w http.ResponseWriter, r *http.Request) {
 // 添加水印 - 图片水印   WatermarkImg
 func WatermarkImg(w http.ResponseWriter, r *http.Request) {
 
+}
+
+type ImageInfoBody struct {
+	Name string `json:"name"`
+	Size int64 `json:"size"`
+	Type string `json:"type"`
+	Width int `json:"width"`
+	Height int `json:"height"`
+	Dpi string `json:"dpi"`
+	IsEXIF bool `json:"is_exif"`
+}
+
+func ImageInfo(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	img, str, err := image.Decode(file)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	b := img.Bounds()
+	width := b.Max.X
+	height := b.Max.Y
+
+	imgInfo := ImageInfoBody{
+		Name: handler.Filename,
+		Size: handler.Size,
+		Type: str,
+		Width: width,
+		Height: height,
+		Dpi: fmt.Sprintf("%d*%d dpi", width, height),
+		IsEXIF: false,
+	}
+
+	if ok := service.NewExifData().ProcessExifStream(file); ok == nil {
+		imgInfo.IsEXIF = true
+	}
+
+	utils.OutSucceedBody(w, imgInfo)
 }

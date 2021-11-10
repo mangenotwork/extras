@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # app name
-ENV AppName=word-helper
+ENV AppName=wordhelper
 
 
 # mkdir directory
@@ -11,7 +11,7 @@ RUN mkdir -p /app/logs
 COPY ${AppName} /app/
 
 # copy configs file to image
-COPY conf /app/configs
+COPY configs /app/configs
 
 # add timezone
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
@@ -26,8 +26,8 @@ WORKDIR /app
 VOLUME /app/logs
 
 # port
-EXPOSE 1271
-EXPOSE 1272
+EXPOSE 11271
+EXPOSE 11272
 
 LABEL maintainer = "2912882908@qq.com"
 

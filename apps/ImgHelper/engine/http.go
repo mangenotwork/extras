@@ -38,6 +38,7 @@ func Router() *http.ServeMux {
 	mux.Handle("/watermark/img", m(http.HandlerFunc(handler.WatermarkImg)))
 
 	// 图片信息获取
+	mux.Handle("/image/info", m(http.HandlerFunc(handler.ImageInfo)))
 
 	// 图片压缩
 

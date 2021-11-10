@@ -24,11 +24,10 @@
 - v0.1.12 [WordHelper] Ocr接口
 - v0.1.13 [WordHelper] 翻译接口, 文档更新
 - v0.1.14 [WordHelper] pdf内容提取
-
+- v0.1.15 [ImgHelper] 图片细节信息 exif
 > Todo
-- v0.1.15 [ImgHelper] 图片详情信息
-- v0.1.16 
-- v0.1.17 
+- v0.1.16 [WordHelper] md转html
+- v0.1.17 [WordHelper] html转md
 - v0.1.18 
 - v0.1.19 
 - v0.1.20 [Push] 指定设备强制断开
@@ -44,6 +43,8 @@
 [ImgHelper] 生成文字图片, 含水印
 [Push] 获取设备在线情况
 
+> 研究
+文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 
 
 > v0.2
 - v0.2.1

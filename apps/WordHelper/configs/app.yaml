@@ -4,9 +4,9 @@ app:
 
 httpServer:
   open: true
-  prod: 1271
+  prod: 11271
 
 grpcServer:
   open: true
-  prod: 1272
+  prod: 11272
   log: true
