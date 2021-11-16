@@ -1,6 +1,10 @@
 package handler
 
 import (
+	"crypto/md5"
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/mangenotwork/extras/apps/WordHelper/service"
 	"github.com/mangenotwork/extras/apps/WordHelper/service/pdf"
@@ -165,3 +169,287 @@ func PDFExtractionTable(w http.ResponseWriter, r *http.Request) {
 	utils.OutSucceedBody(w, data)
 }
 
+type EncryptParam struct {
+	Str string `json:"str"`
+	Key string `json:"key"`
+	Iv string `json:"iv"`
+}
+
+type DecryptParam struct {
+	Str string `json:"str"`
+	Key string `json:"key"`
+	Iv string `json:"iv"`
+}
+
+// AES
+func AESCBCEncrypt(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &EncryptParam{}
+	_=decoder.Decode(&params)
+	rse, err := service.NewAES("cbc", []byte(params.Iv)).Encrypt([]byte(params.Str), []byte(params.Key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, base64.StdEncoding.EncodeToString(rse))
+}
+
+func AESCBCDecrypt(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &DecryptParam{}
+	_=decoder.Decode(&params)
+	decoded, err := base64.StdEncoding.DecodeString(params.Str)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	rse, err := service.NewAES("cbc", []byte(params.Iv)).Decrypt(decoded, []byte(params.Key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func AESECBEncrypt(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &EncryptParam{}
+	_=decoder.Decode(&params)
+	rse, err := service.NewAES("ecb").Encrypt([]byte(params.Str), []byte(params.Key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, base64.StdEncoding.EncodeToString(rse))
+}
+
+func AESECBDecrypt(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &DecryptParam{}
+	_=decoder.Decode(&params)
+	decoded, err := base64.StdEncoding.DecodeString(params.Str)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	rse, err := service.NewAES("ecb").Decrypt(decoded, []byte(params.Key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func AESCFBEncrypt(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &EncryptParam{}
+	_=decoder.Decode(&params)
+	rse, err := service.NewAES("cfb").Encrypt([]byte(params.Str), []byte(params.Key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, base64.StdEncoding.EncodeToString(rse))
+}
+
+func AESCFBDecrypt(w http.ResponseWriter, r *http.Request) {
+	decoder:=json.NewDecoder(r.Body)
+	params := &DecryptParam{}
+	_=decoder.Decode(&params)
+	decoded, err := base64.StdEncoding.DecodeString(params.Str)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	rse, err := service.NewAES("cfb").Decrypt(decoded, []byte(params.Key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func AESCTREncrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	iv := utils.GetUrlArg(r, "iv")
+	rse, err := service.NewAES("ctr", []byte(iv)).Encrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func AESCTRDecrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	iv := utils.GetUrlArg(r, "iv")
+	rse, err := service.NewAES("ctr", []byte(iv)).Decrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+// DES
+func DESCBCEncrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	iv := utils.GetUrlArg(r, "iv")
+	rse, err := service.NewDES("cbc", []byte(iv)).Encrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESCBCDecrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	iv := utils.GetUrlArg(r, "iv")
+	rse, err := service.NewDES("cbc", []byte(iv)).Decrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESECBEncrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	rse, err := service.NewDES("ecb").Encrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESECBDecrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	rse, err := service.NewDES("ecb").Decrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESCFBEncrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	rse, err := service.NewDES("cfb").Encrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESCFBDecrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	rse, err := service.NewDES("cfb").Decrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESCTREncrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	iv := utils.GetUrlArg(r, "iv")
+	rse, err := service.NewDES("ctr", []byte(iv)).Encrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func DESCTRDecrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	iv := utils.GetUrlArg(r, "iv")
+	rse, err := service.NewDES("ctr", []byte(iv)).Decrypt([]byte(str), []byte(key))
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(rse))
+}
+
+func MD516(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	h := md5.New()
+	h.Write([]byte(str))
+	utils.OutSucceedBody(w, hex.EncodeToString(h.Sum(nil))[8:24])
+}
+
+func MD532(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	h := md5.New()
+	h.Write([]byte(str))
+	utils.OutSucceedBody(w, hex.EncodeToString(h.Sum(nil)))
+}
+
+func Base64Encrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	utils.OutSucceedBody(w, base64.StdEncoding.EncodeToString([]byte(str)))
+}
+
+func Base64Decrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	decoded, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(decoded))
+}
+
+func Base64UrlEncrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	utils.OutSucceedBody(w, base64.URLEncoding.EncodeToString([]byte(str)))
+}
+
+func Base64UrlDecrypt(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	decoded, err := base64.URLEncoding.DecodeString(str)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, string(decoded))
+}
+
+func HmacMD5(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	utils.OutSucceedBody(w, service.HmacMD5(str,key))
+}
+
+func HmacSHA1(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	utils.OutSucceedBody(w, service.HmacSHA1(str,key))
+}
+
+func HmacSHA256(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	utils.OutSucceedBody(w, service.HmacSHA256(str,key))
+}
+
+func HmacSHA512(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	key := utils.GetUrlArg(r, "key")
+	utils.OutSucceedBody(w, service.HmacSHA512(str,key))
+}

@@ -25,10 +25,10 @@
 - v0.1.13 [WordHelper] 翻译接口, 文档更新
 - v0.1.14 [WordHelper] pdf内容提取
 - v0.1.15 [ImgHelper] 图片细节信息 exif
+- v0.1.16 [WordHelper] 加密解密
 > Todo
-- v0.1.16 [WordHelper] md转html
 - v0.1.17 [WordHelper] html转md
-- v0.1.18 
+- v0.1.18 [WordHelper] md转html
 - v0.1.19 
 - v0.1.20 [Push] 指定设备强制断开
 - v0.1.21 [Push] 设备拉取离线推送
@@ -38,7 +38,6 @@
 - v0.1.25 [ShortLink] 新增查看短链接,修改短链接,删除短链接
 - v0.1.26 [Push] 测试,改Bug,g更新文档
 
-[WordHelper] 加密解密
 [ImgHelper] 添加水印 
 [ImgHelper] 生成文字图片, 含水印
 [Push] 获取设备在线情况

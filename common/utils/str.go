@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
@@ -125,4 +126,13 @@ func stringValue(v reflect.Value, indent int, buf *bytes.Buffer) {
 		}
 		_,_= fmt.Fprintf(buf, format, v.Interface())
 	}
+}
+
+// P2E panic -> error
+func P2E() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("Panic error: %v", r)
+		}
+	}()
 }
