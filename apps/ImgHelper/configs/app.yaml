@@ -10,3 +10,5 @@ grpcServer:
   open: true
   prod: 1262
   log: true
+
+ttf: /ttf/Alibaba-PuHuiTi-Heavy.ttf

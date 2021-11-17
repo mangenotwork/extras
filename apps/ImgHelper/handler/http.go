@@ -169,5 +169,23 @@ func ImageCompress(w http.ResponseWriter, r *http.Request) {
 		levelInt = 1
 	}
 	out := service.ImgCompress(img, width/levelInt, 0, str)
+
+	_,_=w.Write(out)
+}
+
+func Txt2Img(w http.ResponseWriter, r *http.Request) {
+	txt := r.FormValue("txt")
+	fontSize := r.FormValue("font_size")
+	fontSizeInt := utils.Str2Int(fontSize)
+	dpi := r.FormValue("dpi")
+	dpiInt := utils.Str2Int(dpi)
+	spacing := r.FormValue("spacing")
+	spacingInt := utils.Str2Int(spacing)
+	outType := r.FormValue("out_type")
+	out, err := service.Txt2Img(txt, fontSizeInt, dpiInt, spacingInt, outType)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
 	_,_=w.Write(out)
 }

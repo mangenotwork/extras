@@ -42,5 +42,8 @@ func Router() *http.ServeMux {
 	mux.Handle("/watermark/img", m(http.HandlerFunc(handler.WatermarkLogo)))  // - 图片水印
 	mux.Handle("/watermark/logo", m(http.HandlerFunc(handler.WatermarkLogo))) // - logo水印
 
+	// 生成文字图片, 应用场景: 文章转图片
+	mux.Handle("/txt2img", m(http.HandlerFunc(handler.Txt2Img)))
+
 	return mux
 }

@@ -2,10 +2,6 @@ package service
 
 import (
 	"bytes"
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
-	"golang.org/x/image/math/fixed"
 	"image"
 	"image/color"
 	"image/draw"
@@ -19,14 +15,22 @@ import (
 	"strconv"
 	"strings"
 	"unicode/utf8"
+
+	"golang.org/x/image/font"
+	"golang.org/x/image/math/fixed"
+
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"github.com/mangenotwork/extras/common/conf"
 )
 
 var fontTTF *truetype.Font
 
-func init() {
+func FontTTFInit() {
 	log.Println("加载字体")
 	workPath, _ := os.Getwd()
-	fontBytes, err := ioutil.ReadFile(workPath+"/ttf/Alibaba-PuHuiTi-Heavy.ttf")
+	log.Println(workPath + conf.Arg.TTF)
+	fontBytes, err := ioutil.ReadFile(workPath + conf.Arg.TTF)
 	if err != nil {
 		log.Println(err)
 	}
@@ -115,7 +119,7 @@ func hex2rgb(str string) color.Color {
 	return color.RGBA{A: 255, R: uint8(r), G: uint8(g), B: uint8(b)}
 }
 
-func WatermarkLogo(imgFile, logoFile multipart.File) (outByte []byte, err error){
+func WatermarkLogo(imgFile, logoFile multipart.File) (outByte []byte, err error) {
 	logoImg, _, err := image.Decode(logoFile)
 	if err != nil {
 		return
@@ -144,3 +148,61 @@ func WatermarkLogo(imgFile, logoFile multipart.File) (outByte []byte, err error)
 	outByte = out.Bytes()
 	return
 }
+
+// outType  png, jpg; 默认png
+func Txt2Img(txt string, fontSize, dpi, spacing int, outType string) (outByte []byte, err error) {
+	if fontSize <= 0 {
+		fontSize = 16
+	}
+	if dpi <= 0 {
+		dpi = 72
+	}
+	if spacing <= 0 {
+		spacing = 2
+	}
+	fg, bg := image.Black, image.White
+
+	txtList := strings.Split(txt,"\n")
+	max := 0
+	for _,v := range txtList {
+		if utf8.RuneCountInString(v) > max {
+			max = utf8.RuneCountInString(v)
+		}
+	}
+
+	rgba := image.NewRGBA(image.Rect(0, 0, max*fontSize+20, len(txtList)*fontSize*2+20))
+	draw.Draw(rgba, rgba.Bounds(), bg, image.ZP, draw.Src)
+	c := freetype.NewContext()
+	c.SetDPI(float64(dpi))
+	c.SetFont(fontTTF)
+	c.SetFontSize(float64(fontSize))
+	c.SetClip(rgba.Bounds())
+	c.SetDst(rgba)
+	c.SetSrc(fg)
+	c.SetHinting(font.HintingNone)
+
+	pt := freetype.Pt(10, 10+int(c.PointToFixed(float64(fontSize))>>6))
+	for _, s := range txtList {
+		_, err = c.DrawString(s, pt)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		pt.Y += c.PointToFixed(float64(fontSize) * float64(spacing))
+	}
+
+	out := new(bytes.Buffer)
+	switch outType {
+	case "png","PNG":
+		_=png.Encode(out, rgba)
+	case "jpg", "jpeg", "JPG", "JPEG":
+		_=jpeg.Encode(out, rgba, nil)
+	case "gif", "GIF":
+		_=gif.Encode(out, rgba, nil)
+	default:
+		_=png.Encode(out, rgba)
+	}
+	outByte = out.Bytes()
+	return
+}
+

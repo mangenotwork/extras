@@ -26,6 +26,7 @@ type Configs struct {
 	Rabbit *Rabbit `yaml:"rabbit"`
 	Kafka *Kafka `yaml:"kafka"`
 	Mongo *Mongo `yaml:"mongo"`
+	TTF string `yaml:"ttf"`
 }
 
 type App struct {

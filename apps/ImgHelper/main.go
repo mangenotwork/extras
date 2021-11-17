@@ -11,6 +11,7 @@ func main(){
 	log.Println(utils.Logo)
 	log.Println("Starting img helper http server")
 	conf.InitConf()
+	engine.StartInitialization()
 	engine.StartJobServer()
 
 	if conf.Arg.HttpServer.Open {
