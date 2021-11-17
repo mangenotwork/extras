@@ -31,17 +31,16 @@ func Router() *http.ServeMux {
 	// 识别条形码  BarcodeRecognition
 	mux.Handle("/barcode/recognition", m(http.HandlerFunc(handler.BarcodeRecognition)))
 
-	// 添加水印 - 文字水印   WatermarkTxt
-	mux.Handle("/watermark/txt", m(http.HandlerFunc(handler.WatermarkTxt)))
-
-	// 添加水印 - 图片水印   WatermarkImg
-	mux.Handle("/watermark/img", m(http.HandlerFunc(handler.WatermarkImg)))
-
 	// 图片信息获取
 	mux.Handle("/image/info", m(http.HandlerFunc(handler.ImageInfo)))
 
 	// 图片压缩
 	mux.Handle("/image/compress", m(http.HandlerFunc(handler.ImageCompress)))
+
+	// 图片添加水印
+	mux.Handle("/watermark/txt", m(http.HandlerFunc(handler.WatermarkTxt)))   // - 文字水印
+	mux.Handle("/watermark/img", m(http.HandlerFunc(handler.WatermarkLogo)))  // - 图片水印
+	mux.Handle("/watermark/logo", m(http.HandlerFunc(handler.WatermarkLogo))) // - logo水印
 
 	return mux
 }

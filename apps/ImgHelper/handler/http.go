@@ -61,12 +61,49 @@ func BarcodeRecognition(w http.ResponseWriter, r *http.Request) {
 
 // 添加水印 - 文字水印   WatermarkTxt
 func WatermarkTxt(w http.ResponseWriter, r *http.Request) {
-
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	txt := r.FormValue("txt")
+	if len(txt) < 1 {
+		utils.OutErrBody(w, 2001, fmt.Errorf("txt is null"))
+		return
+	}
+	color := r.FormValue("color")
+	fontSize := r.FormValue("font_size")
+	fontSizeInt := utils.Str2Int(fontSize)
+	dpi := r.FormValue("dpi")
+	dpiInt := utils.Str2Int(dpi)
+	position := r.FormValue("position")
+	positionInt := utils.Str2Int(position)
+	out, err := service.WatermarkTxt(file, txt, color, fontSizeInt, dpiInt, positionInt)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
 }
 
-// 添加水印 - 图片水印   WatermarkImg
-func WatermarkImg(w http.ResponseWriter, r *http.Request) {
-
+// 添加水印 - 图片水印   WatermarkLogo
+func WatermarkLogo(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	logo, _, err := r.FormFile("logo")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	out, err := service.WatermarkLogo(file, logo)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
 }
 
 type ImageInfoBody struct {
