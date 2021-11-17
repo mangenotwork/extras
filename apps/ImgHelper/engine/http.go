@@ -45,5 +45,8 @@ func Router() *http.ServeMux {
 	// 生成文字图片, 应用场景: 文章转图片
 	mux.Handle("/txt2img", m(http.HandlerFunc(handler.Txt2Img)))
 
+	// 图片合成gif
+	mux.Handle("/img2gif", m(http.HandlerFunc(handler.Img2Gif)))
+
 	return mux
 }

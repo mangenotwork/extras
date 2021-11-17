@@ -189,3 +189,14 @@ func Txt2Img(w http.ResponseWriter, r *http.Request) {
 	}
 	_,_=w.Write(out)
 }
+
+func Img2Gif(w http.ResponseWriter, r *http.Request) {
+	_= r.ParseMultipartForm(10 << 20)
+	files := r.MultipartForm.File["file"]
+	out, err := service.CompositeGif(files)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}
