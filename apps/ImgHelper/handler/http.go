@@ -111,3 +111,26 @@ func ImageInfo(w http.ResponseWriter, r *http.Request) {
 
 	utils.OutSucceedBody(w, imgInfo)
 }
+
+func ImageCompress(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	level := r.FormValue("level")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	img, str, err := image.Decode(file)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	b := img.Bounds()
+	width := b.Max.X
+	levelInt := utils.Str2Int(level)
+	if levelInt <= 0 {
+		levelInt = 1
+	}
+	out := service.ImgCompress(img, width/levelInt, 0, str)
+	_,_=w.Write(out)
+}

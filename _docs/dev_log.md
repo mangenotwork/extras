@@ -27,9 +27,9 @@
 - v0.1.15 [ImgHelper] 图片细节信息 exif
 - v0.1.16 [WordHelper] 加密解密
 - v0.1.17 [WordHelper] md转html
+- v0.1.18 [ImgHelper] 图片压缩
 
 > Todo
-- v0.1.18 [ImgHelper] 图片压缩
 - v0.1.19 [ImgHelper] 添加水印 
 - v0.1.20 [ImgHelper] 生成文字图片, 含水印
 - v0.1.21 [Push] 设备拉取离线推送

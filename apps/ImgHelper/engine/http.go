@@ -41,7 +41,7 @@ func Router() *http.ServeMux {
 	mux.Handle("/image/info", m(http.HandlerFunc(handler.ImageInfo)))
 
 	// 图片压缩
-
+	mux.Handle("/image/compress", m(http.HandlerFunc(handler.ImageCompress)))
 
 	return mux
 }
