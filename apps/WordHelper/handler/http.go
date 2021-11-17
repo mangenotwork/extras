@@ -453,3 +453,8 @@ func HmacSHA512(w http.ResponseWriter, r *http.Request) {
 	key := utils.GetUrlArg(r, "key")
 	utils.OutSucceedBody(w, service.HmacSHA512(str,key))
 }
+
+func Md2Html(w http.ResponseWriter, r *http.Request) {
+	str := utils.GetUrlArg(r, "str")
+	utils.OutSucceedBody(w, service.MarkdownToHTML(str))
+}

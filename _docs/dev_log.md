@@ -26,11 +26,12 @@
 - v0.1.14 [WordHelper] pdf内容提取
 - v0.1.15 [ImgHelper] 图片细节信息 exif
 - v0.1.16 [WordHelper] 加密解密
+- v0.1.17 [WordHelper] md转html
+
 > Todo
-- v0.1.17 [WordHelper] html转md
-- v0.1.18 [WordHelper] md转html
-- v0.1.19 
-- v0.1.20 [Push] 指定设备强制断开
+- v0.1.18 [ImgHelper] 图片压缩
+- v0.1.19 [ImgHelper] 添加水印 
+- v0.1.20 [ImgHelper] 生成文字图片, 含水印
 - v0.1.21 [Push] 设备拉取离线推送
 - v0.1.22 [Push] 设备接收推送的反馈
 - v0.1.23 [Push] 设备心跳,处理客户端心跳
@@ -38,18 +39,15 @@
 - v0.1.25 [ShortLink] 新增查看短链接,修改短链接,删除短链接
 - v0.1.26 [Push] 测试,改Bug,g更新文档
 
-[ImgHelper] 添加水印 
-[ImgHelper] 生成文字图片, 含水印
-[Push] 获取设备在线情况
-
-> 研究
-文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 
-
 > v0.2
-- v0.2.1
-- v0.2.2
+- v0.2.1 [Push] 指定设备强制断开
+- v0.2.2 [Push] 获取设备在线情况
 - v0.2.3
 - v0.2.4
 - v0.2.5
 - v0.2.6
 - v0.2.7
+
+> 研究
+- 文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 
+- [WordHelper] html转md

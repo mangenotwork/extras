@@ -73,6 +73,8 @@ func Router() *http.ServeMux {
 
 	// TODO: PBKDF2
 
+	// md 转 html
+	mux.Handle("doc/change/md2html", m(http.HandlerFunc(handler.Md2Html)))
 
 	return mux
 }
