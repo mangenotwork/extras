@@ -216,3 +216,18 @@ func ImgRevolve(w http.ResponseWriter, r *http.Request) {
 	}
 	_,_=w.Write(out)
 }
+
+func ImgCenter(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	out, err := service.ImgCenter(file)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}

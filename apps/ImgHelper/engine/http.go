@@ -51,5 +51,8 @@ func Router() *http.ServeMux {
 	// 图片旋转
 	mux.Handle("/img/revolve", m(http.HandlerFunc(handler.ImgRevolve)))
 
+	// 图片居中
+	mux.Handle("/img/center", m(http.HandlerFunc(handler.ImgCenter)))
+
 	return mux
 }
