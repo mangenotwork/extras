@@ -9,6 +9,7 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"log"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -219,12 +220,66 @@ func ImgRevolve(w http.ResponseWriter, r *http.Request) {
 
 func ImgCenter(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
-	defer file.Close()
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
+	defer file.Close()
 	out, err := service.ImgCenter(file)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}
+
+func ImgStitching(w http.ResponseWriter, r *http.Request) {
+	fileCount := r.FormValue("file_count")
+	count := utils.Str2Int(fileCount)
+	if count < 2 {
+		utils.OutErrBody(w, 2001, fmt.Errorf("图片少于两张"))
+		return
+	}
+
+	fileList := make([]multipart.File, 0, count)
+	for i:=0; i<count; i++ {
+		file, _, err := r.FormFile(fmt.Sprintf("file_%d", i+1))
+		if err != nil {
+			utils.OutErrBody(w, 2001, err)
+			return
+		}
+		fileList = append(fileList, file)
+		_=file.Close()
+	}
+
+	out, err := service.ImgStitching(fileList)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}
+
+func ImgSudoku(w http.ResponseWriter, r *http.Request) {
+	fileCount := r.FormValue("file_count")
+	count := utils.Str2Int(fileCount)
+	if count < 2 {
+		utils.OutErrBody(w, 2001, fmt.Errorf("图片少于两张"))
+		return
+	}
+
+	fileList := make([]multipart.File, 0, count)
+	for i:=0; i<count; i++ {
+		file, _, err := r.FormFile(fmt.Sprintf("file_%d", i+1))
+		if err != nil {
+			utils.OutErrBody(w, 2001, err)
+			return
+		}
+		fileList = append(fileList, file)
+		_=file.Close()
+	}
+
+	out, err := service.ImgStitchingSudoku(fileList)
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
 		return

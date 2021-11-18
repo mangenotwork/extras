@@ -54,5 +54,10 @@ func Router() *http.ServeMux {
 	// 图片居中
 	mux.Handle("/img/center", m(http.HandlerFunc(handler.ImgCenter)))
 
+	// 图片拼接
+	mux.Handle("/img/stitching", m(http.HandlerFunc(handler.ImgStitching)))
+	mux.Handle("/img/sudoku", m(http.HandlerFunc(handler.ImgSudoku)))  // 九宫格
+
+
 	return mux
 }
