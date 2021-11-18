@@ -55,9 +55,13 @@ func Router() *http.ServeMux {
 	mux.Handle("/img/center", m(http.HandlerFunc(handler.ImgCenter)))
 
 	// 图片拼接
-	mux.Handle("/img/stitching", m(http.HandlerFunc(handler.ImgStitching)))
+	mux.Handle("/img/stitching", m(http.HandlerFunc(handler.ImgStitching))) // 默认垂直拼接
 	mux.Handle("/img/sudoku", m(http.HandlerFunc(handler.ImgSudoku)))  // 九宫格
 
+	// 图片剪裁, 平均等份裁剪, 矩形裁剪, 圆形裁剪
+	//mux.Handle("/img/clipper", m(http.HandlerFunc(handler.ImgClipper)))
+	mux.Handle("/img/clipper/rect", m(http.HandlerFunc(handler.ImgClipperRectangle)))
+	mux.Handle("/img/clipper/round", m(http.HandlerFunc(handler.ImgClipperRound)))
 
 	return mux
 }

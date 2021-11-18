@@ -67,6 +67,7 @@ func WatermarkTxt(w http.ResponseWriter, r *http.Request) {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
+	defer file.Close()
 	txt := r.FormValue("txt")
 	if len(txt) < 1 {
 		utils.OutErrBody(w, 2001, fmt.Errorf("txt is null"))
@@ -94,6 +95,7 @@ func WatermarkLogo(w http.ResponseWriter, r *http.Request) {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
+	defer file.Close()
 	logo, _, err := r.FormFile("logo")
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
@@ -119,11 +121,11 @@ type ImageInfoBody struct {
 
 func ImageInfo(w http.ResponseWriter, r *http.Request) {
 	file, handler, err := r.FormFile("file")
-	defer file.Close()
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
+	defer file.Close()
 	img, str, err := image.Decode(file)
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
@@ -153,11 +155,11 @@ func ImageInfo(w http.ResponseWriter, r *http.Request) {
 func ImageCompress(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
 	level := r.FormValue("level")
-	defer file.Close()
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
+	defer file.Close()
 	img, str, err := image.Decode(file)
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
@@ -205,11 +207,11 @@ func Img2Gif(w http.ResponseWriter, r *http.Request) {
 func ImgRevolve(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
 	rType := r.FormValue("type")
-	defer file.Close()
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
+	defer func(){_=file.Close()}()
 	out, err := service.Revolve(file, rType)
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
@@ -286,3 +288,63 @@ func ImgSudoku(w http.ResponseWriter, r *http.Request) {
 	}
 	_,_=w.Write(out)
 }
+
+// 平均裁剪成多份 偶数份
+func ImgClipper(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	defer file.Close()
+
+	number := utils.Str2Int(r.FormValue("number"))
+	if number%2 != 0 {
+		utils.OutErrBody(w, 2001, fmt.Errorf("number 应该为偶数"))
+		return
+	}
+
+
+}
+
+// 按坐标矩形裁剪  x1,y1,x2,y2
+func ImgClipperRectangle(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	defer file.Close()
+	x1 := utils.Str2Int(r.FormValue("x1"))
+	y1 := utils.Str2Int(r.FormValue("y1"))
+	x2 := utils.Str2Int(r.FormValue("x2"))
+	y2 := utils.Str2Int(r.FormValue("y2"))
+
+	out, err := service.ClipperRectangle(file, x1, y1, x2, y2)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+
+}
+
+// 按坐标,半径圆形裁剪   x,y,r
+func ImgClipperRound(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	defer file.Close()
+	x := utils.Str2Int(r.FormValue("x"))
+	y := utils.Str2Int(r.FormValue("y"))
+	radius := utils.Str2Int(r.FormValue("r"))
+	out, err := service.ClipperRound(file, x, y, radius)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}
+
