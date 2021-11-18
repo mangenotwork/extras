@@ -48,5 +48,8 @@ func Router() *http.ServeMux {
 	// 图片合成gif
 	mux.Handle("/img2gif", m(http.HandlerFunc(handler.Img2Gif)))
 
+	// 图片旋转
+	mux.Handle("/img/revolve", m(http.HandlerFunc(handler.ImgRevolve)))
+
 	return mux
 }

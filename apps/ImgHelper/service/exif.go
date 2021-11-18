@@ -537,7 +537,8 @@ func (ex *ExifData) ProcessExifStream(f multipart.File) (err error){
 	tiff.SetData(data)
 	ifdList := tiff.GetIFDList()
 
-	ex.IfdData = make(map[string][]IfdEntries, len(ifdList)+3) // provision for SubIFD, GPSInfo, IOPInfo
+	// provision for SubIFD, GPSInfo, IOPInfo
+	ex.IfdData = make(map[string][]IfdEntries, len(ifdList)+3)
 
 	for k, v := range ifdList {
 		ifds := tiff.ProcessIFD(uint8(k), v, EXIF_TAGS)
@@ -553,7 +554,7 @@ func (ex *ExifData) ProcessExifStream(f multipart.File) (err error){
 				if ok {
 					val, ok := values[0].(uint32)
 					if ok {
-						subIfdOffset = uint32(val)
+						subIfdOffset = val
 					}
 				}
 			} else if v.Tag == EXIF_GPSINFO_TAG {
@@ -561,7 +562,7 @@ func (ex *ExifData) ProcessExifStream(f multipart.File) (err error){
 				if ok {
 					val, ok := values[0].(uint32)
 					if ok {
-						gpsInfoOffset = uint32(val)
+						gpsInfoOffset = val
 					}
 				}
 			}
@@ -570,7 +571,8 @@ func (ex *ExifData) ProcessExifStream(f multipart.File) (err error){
 		if subIfdOffset != 0 {
 			subIfd := tiff.ProcessIFD(2, subIfdOffset, EXIF_TAGS)
 			ex.IfdData[IfdSeqMap[2]] = subIfd
-			for _, v := range subIfd { // try to find SubIFD Interoperability Tag
+			// try to find SubIFD Interoperability Tag
+			for _, v := range subIfd {
 				if v.Tag == EXIF_IOP_TAG {
 					values, ok := v.Values.([]interface{})
 					if ok {

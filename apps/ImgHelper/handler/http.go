@@ -200,3 +200,19 @@ func Img2Gif(w http.ResponseWriter, r *http.Request) {
 	}
 	_,_=w.Write(out)
 }
+
+func ImgRevolve(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	rType := r.FormValue("type")
+	defer file.Close()
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	out, err := service.Revolve(file, rType)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}

@@ -31,12 +31,12 @@
 - v0.1.19 [ImgHelper] 添加水印, 文字与图片水印
 - v0.1.20 [ImgHelper] 生成文字图片, 应用场景: 文章转图片
 - v0.1.21 [ImgHelper] 图片合成gif
+- v0.1.22 [ImgHelper] 图片旋转
 
 > Todo
-- v0.1.22 [ImgHelper] 图片翻转
-- v0.1.23 [ImgHelper] 图片剪裁
+- v0.1.23 [ImgHelper] 图片居中(转为长宽一样的图片)
 - v0.1.24 [ImgHelper] 图片拼接
-- v0.1.25 
+- v0.1.25 [ImgHelper] 图片剪裁
 - v0.1.26 [ShortLink] 新增查看短链接,修改短链接,删除短链接
 
 > v0.2
