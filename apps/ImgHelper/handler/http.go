@@ -154,12 +154,12 @@ func ImageInfo(w http.ResponseWriter, r *http.Request) {
 
 func ImageCompress(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
-	level := r.FormValue("level")
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
 	defer file.Close()
+	level := r.FormValue("level")
 	img, str, err := image.Decode(file)
 	if err != nil {
 		utils.OutErrBody(w, 2001, err)
@@ -348,3 +348,17 @@ func ImgClipperRound(w http.ResponseWriter, r *http.Request) {
 	_,_=w.Write(out)
 }
 
+func ImgInvert(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	defer file.Close()
+	out, err := service.ImgInvert(file)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}

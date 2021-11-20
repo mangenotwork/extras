@@ -63,5 +63,8 @@ func Router() *http.ServeMux {
 	mux.Handle("/img/clipper/rect", m(http.HandlerFunc(handler.ImgClipperRectangle)))
 	mux.Handle("/img/clipper/round", m(http.HandlerFunc(handler.ImgClipperRound)))
 
+	// 图片色彩反转
+	mux.Handle("/img/invert", m(http.HandlerFunc(handler.ImgInvert)))
+
 	return mux
 }

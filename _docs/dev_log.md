@@ -35,12 +35,12 @@
 - v0.1.23 [ImgHelper] 图片居中(转为长宽一样的图片)
 - v0.1.24 [ImgHelper] 图片拼接
 - v0.1.25 [ImgHelper] 图片剪裁
-
-> Todo
 - v0.1.26 [Push] 测试,改Bug,更新文档
 
 > v0.2
 - v0.2.1 [ImgHelper] 图片色彩反转
+
+> Todo
 - v0.2.2 [ImgHelper] 图片灰化
 - v0.2.3 [ImgHelper] 图片转为字符画
 - v0.2.4 [ImgHelper] 图片透明
