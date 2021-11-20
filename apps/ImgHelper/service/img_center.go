@@ -153,3 +153,39 @@ func Img2Txt(file multipart.File) (outByte []byte, err error) {
 	return
 }
 
+func ImgAlpha(file multipart.File, percentage float64) (outByte []byte, err error) {
+	m, outType, err := image.Decode(file)
+	if err != nil {
+		return
+	}
+
+	bounds := m.Bounds()
+	dx := bounds.Dx()
+	dy := bounds.Dy()
+	newRgba := image.NewRGBA64(bounds)
+	for i := 0; i < dx; i++ {
+		for j := 0; j < dy; j++ {
+			colorRgb := m.At(i, j)
+			r, g, b, a := colorRgb.RGBA()
+			opacity := uint16(float64(a)*percentage)
+			//颜色模型转换，至关重要！
+			v := newRgba.ColorModel().Convert(color.NRGBA64{R: uint16(r), G: uint16(g), B: uint16(b), A: opacity})
+			//Alpha = 0: Full transparent
+			rr, gg, bb, aa := v.RGBA()
+			newRgba.SetRGBA64(i, j, color.RGBA64{R: uint16(rr), G: uint16(gg), B: uint16(bb), A: uint16(aa)})
+		}
+	}
+
+	out := new(bytes.Buffer)
+	switch outType {
+	case "png","PNG":
+		_=png.Encode(out, newRgba)
+	case "jpg", "jpeg", "JPG", "JPEG":
+		_=jpeg.Encode(out, newRgba, nil)
+	case "gif", "GIF":
+		_=gif.Encode(out, newRgba, nil)
+	}
+	outByte = out.Bytes()
+	return
+}
+

@@ -41,9 +41,9 @@
 - v0.2.1 [ImgHelper] 图片色彩反转
 - v0.2.2 [ImgHelper] 图片灰化
 - v0.2.3 [ImgHelper] 图片转为字符画
+- v0.2.4 [ImgHelper] 图片透明
 
 > Todo
-- v0.2.4 [ImgHelper] 图片透明
 - v0.2.5 [WordHelper] 分词,Ocr,翻译 Grpc 
 - v0.2.6 [WordHelper] pdf内容提取,加密解密,md转html Grpc
 - v0.2.7 

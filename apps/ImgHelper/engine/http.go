@@ -72,5 +72,8 @@ func Router() *http.ServeMux {
 	// 图片转为字符画
 	mux.Handle("/img2txt", m(http.HandlerFunc(handler.Img2Txt)))
 
+	// 图片透明
+	mux.Handle("/img/alpha", m(http.HandlerFunc(handler.ImgAlpha)))
+
 	return mux
 }

@@ -33,6 +33,15 @@ func Str2Int64(str string) int64 {
 	return 0
 }
 
+// Str2Float string -> float64
+func Str2Float64(str string) float64 {
+	v1, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		return 0
+	}
+	return v1
+}
+
 func Str2Bool(str string) bool {
 	for _, v := range []string{"0","f","F","FALSE","false","False","no","否"}{
 		if str == v {

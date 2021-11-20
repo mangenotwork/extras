@@ -394,3 +394,19 @@ func Img2Txt(w http.ResponseWriter, r *http.Request) {
 
 	_,_=w.Write(out)
 }
+
+func ImgAlpha(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	percentage := utils.Str2Float64(r.FormValue("percentage"))
+	defer file.Close()
+	out, err := service.ImgAlpha(file, percentage)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	_,_=w.Write(out)
+}
