@@ -39,9 +39,9 @@
 
 > v0.2
 - v0.2.1 [ImgHelper] 图片色彩反转
+- v0.2.2 [ImgHelper] 图片灰化
 
 > Todo
-- v0.2.2 [ImgHelper] 图片灰化
 - v0.2.3 [ImgHelper] 图片转为字符画
 - v0.2.4 [ImgHelper] 图片透明
 - v0.2.5 [WordHelper] 分词,Ocr,翻译 Grpc 

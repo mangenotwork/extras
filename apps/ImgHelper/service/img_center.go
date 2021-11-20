@@ -77,3 +77,39 @@ func ImgInvert(file multipart.File) (outByte []byte, err error) {
 	outByte = out.Bytes()
 	return
 }
+
+func ImgGray(file multipart.File) (outByte []byte, err error) {
+	m, outType, err := image.Decode(file)
+	if err != nil {
+		return
+	}
+
+	bounds := m.Bounds()
+	dx := bounds.Dx()
+	dy := bounds.Dy()
+	newRgba := image.NewRGBA(bounds)
+	for i := 0; i < dx; i++ {
+		for j := 0; j < dy; j++ {
+			colorRgb := m.At(i, j)
+			_, g, _, a := colorRgb.RGBA()
+			gUint8 := uint8(g >> 8)
+			aUint8 := uint8(a >> 8)
+			newRgba.SetRGBA(i, j, color.RGBA{gUint8, gUint8, gUint8, aUint8})
+		}
+	}
+
+	out := new(bytes.Buffer)
+	switch outType {
+	case "png","PNG":
+		_=png.Encode(out, newRgba)
+	case "jpg", "jpeg", "JPG", "JPEG":
+		_=jpeg.Encode(out, newRgba, nil)
+	case "gif", "GIF":
+		_=gif.Encode(out, newRgba, nil)
+	}
+	outByte = out.Bytes()
+	return
+}
+
+
+

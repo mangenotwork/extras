@@ -66,5 +66,8 @@ func Router() *http.ServeMux {
 	// 图片色彩反转
 	mux.Handle("/img/invert", m(http.HandlerFunc(handler.ImgInvert)))
 
+	// 图片灰化
+	mux.Handle("/img/gray", m(http.HandlerFunc(handler.ImgGray)))
+
 	return mux
 }
