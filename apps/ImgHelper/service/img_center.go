@@ -2,6 +2,7 @@ package service
 
 import (
 	"bytes"
+	"github.com/nfnt/resize"
 	"image"
 	"image/color"
 	"image/gif"
@@ -111,5 +112,44 @@ func ImgGray(file multipart.File) (outByte []byte, err error) {
 	return
 }
 
+func Img2Txt(file multipart.File) (outByte []byte, err error) {
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return
+	}
+	// 改一下图片的尺寸
+	imgBounds := img.Bounds()
+	height := 50 //150
+	width := 80 //150
+	if imgBounds.Dy() < 150 {
+		height = imgBounds.Dy()
+	}
+	if imgBounds.Dx() < 150 {
+		width = imgBounds.Dx()
+	}
+	m := resize.Resize(uint(width), uint(height), img, resize.Lanczos3)
 
+	bounds := m.Bounds()
+	dx := bounds.Dx()
+	dy := bounds.Dy()
+	arr := []string{"M", "N", "H", "Q", "$", "O", "C", "?", "7", ">", "!", ":", "–", ";", "."}
+
+	out := new(bytes.Buffer)
+
+	for i := 0; i < dy; i++ {
+		for j := 0; j < dx; j++ {
+			colorRgb := m.At(j, i)
+			_, g, _, _ := colorRgb.RGBA()
+			avg := uint8(g >> 8)
+			num := avg / 18
+			out.WriteString(arr[num])
+			if j == dx-1 {
+				out.WriteString("\n")
+			}
+		}
+	}
+
+	outByte = out.Bytes()
+	return
+}
 

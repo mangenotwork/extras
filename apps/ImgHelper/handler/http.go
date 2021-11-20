@@ -377,3 +377,20 @@ func ImgGray(w http.ResponseWriter, r *http.Request) {
 	}
 	_,_=w.Write(out)
 }
+
+func Img2Txt(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	defer file.Close()
+	out, err := service.Img2Txt(file)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	_,_=w.Write(out)
+}

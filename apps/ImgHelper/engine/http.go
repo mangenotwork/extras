@@ -69,5 +69,8 @@ func Router() *http.ServeMux {
 	// 图片灰化
 	mux.Handle("/img/gray", m(http.HandlerFunc(handler.ImgGray)))
 
+	// 图片转为字符画
+	mux.Handle("/img2txt", m(http.HandlerFunc(handler.Img2Txt)))
+
 	return mux
 }
