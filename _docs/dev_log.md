@@ -42,11 +42,11 @@
 - v0.2.2 [ImgHelper] 图片灰化
 - v0.2.3 [ImgHelper] 图片转为字符画
 - v0.2.4 [ImgHelper] 图片透明
+- v0.2.5 [ServiceTable] 修改项目昵称,修改项目文档
 
 > Todo
-- v0.2.5 [WordHelper] 分词,Ocr,翻译 Grpc 
-- v0.2.6 [WordHelper] pdf内容提取,加密解密,md转html Grpc
-- v0.2.7 
+- v0.2.6 [ServiceTable] raft算法 - leader 选举
+- v0.2.7 [ServiceTable] 配置文件优化
 - v0.2.8 
 - v0.2.9 
 - v0.2.10 
@@ -65,6 +65,8 @@
 - [Push] 设备心跳,处理客户端心跳
 - [Push] 设备接收推送的反馈
 - [Push] 测试,改Bug,更新文档
+- [WordHelper] 分词,Ocr,翻译 Grpc 
+- [WordHelper] pdf内容提取,加密解密,md转html Grpc
 
 > 研究
 - 文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 

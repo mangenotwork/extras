@@ -36,10 +36,10 @@
 
 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/WordHelper)
 
-#### ConfigCenter 配置中心服务
-> 提供配置信息服务,配置中心
+#### ServiceTable 配置中心, 发现注册服务 
+> 提供配置信息服务,配置中心, 可以应用于发现注册服务
 
->  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/ConfigCenter)
+>  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/ServiceTable)
 
 #### IM 即时聊天功能服务
 > 即时聊天功能; 提供 websocket, tcp, udp

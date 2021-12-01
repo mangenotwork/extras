@@ -3,6 +3,7 @@ module github.com/mangenotwork/extras/apps/BlockWord
 go 1.15
 
 replace github.com/mangenotwork/extras/common => ../../common
+replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
 
 require (
 	github.com/garyburd/redigo v1.6.2
