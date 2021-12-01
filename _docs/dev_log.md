@@ -43,9 +43,9 @@
 - v0.2.3 [ImgHelper] 图片转为字符画
 - v0.2.4 [ImgHelper] 图片透明
 - v0.2.5 [ServiceTable] 修改项目昵称,修改项目文档
+- v0.2.6 [ServiceTable] raft算法 - leader 选举
 
 > Todo
-- v0.2.6 [ServiceTable] raft算法 - leader 选举
 - v0.2.7 [ServiceTable] 配置文件优化
 - v0.2.8 
 - v0.2.9 
