@@ -1,38 +1,74 @@
 package raft
 
 import (
-	"bufio"
+	"bytes"
 	"io"
 	"log"
 	"os"
+	"strings"
+
+	"github.com/mangenotwork/extras/common/utils"
 )
 
-// 读取 log.data 到内存
-// 没有 log.data 则创建
-func LogDataToMemory(){
+/* 日志
+
+每个节点存储自己的日志副本(log[])，每条日志记录包含：
+
+索引：该记录在日志中的位置
+任期号：该记录首次被创建时的任期号
+命令
+
+*/
+
+type LogData struct {
+	Index int64
+	Term string // 任期号
+	Command string
+}
+
+func NewLogData(command string) *LogData {
+	Index++
+	log.Println("Index = ", Index)
+	return &LogData{
+		Index : Index,
+		Term : MyAddr,
+		Command : command,
+	}
+}
+
+func (data *LogData) ToStr() string {
+	var buffer bytes.Buffer
+	buffer.WriteString(utils.Any2String(data.Index))
+	buffer.WriteString("&")
+	buffer.WriteString(data.Term)
+	buffer.WriteString("&")
+	buffer.WriteString(data.Command)
+	buffer.WriteString("\n")
+	return buffer.String()
+}
+
+func (data *LogData) ToObj(str string){
+	strList := strings.Split(str, "&")
+	if len(strList) == 3 {
+		data.Index = utils.Str2Int64(strList[0])
+		data.Term = strList[1]
+		data.Command = strList[2]
+	}
+}
+
+// 追加写入日志
+func (data *LogData) Write(){
 	fileName := "log.data"
 
 	var f *os.File
 	var err error
 
-	if checkFileExist(fileName) {  //文件存在
-		f, err = os.OpenFile(fileName, os.O_APPEND, 0666) //打开文件
+	if utils.CheckFileExist(fileName) {  //文件存在
+		f, err = os.OpenFile(fileName, os.O_APPEND|os.O_RDWR, 0666) //打开文件
 		if err != nil{
 			log.Println("file open fail", err)
 			return
 		}
-		// 读取文件
-		defer f.Close()
-
-		br := bufio.NewReader(f)
-		for {
-			a, _, c := br.ReadLine()
-			if c == io.EOF {
-				break
-			}
-			log.Println(string(a))
-		}
-
 	}else {  //文件不存在
 		f, err = os.Create(fileName) //创建文件
 		if err != nil {
@@ -41,24 +77,16 @@ func LogDataToMemory(){
 		}
 	}
 
-}
+	strTest := data.ToStr()
 
-func SetTestData(){
-
-	data := &LogData{
-		Index : 1,
-		Term : "aaaaa",
-		Command : "add aaaaa",
+	//将文件写进去
+	n, err1 := io.WriteString(f, strTest)
+	if err1 != nil {
+		log.Println("write error", err1)
+		return
 	}
-	data.Wait()
+	log.Println("写入的字节数是：", n)
 
-	data.Index = 2
-	data.Term = "bbbbb"
-	data.Command = "add bbbbb"
-	data.Wait()
 
-	data.Index = 3
-	data.Term = "ccccc"
-	data.Command = "add ccccc"
-	data.Wait()
+	_=f.Close()
 }

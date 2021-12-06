@@ -46,14 +46,26 @@
 - v0.2.6 [ServiceTable] raft算法 - leader 选举
 - v0.2.7 [ServiceTable] 配置文件优化
 - v0.2.8 [ServiceTable] 设计数据存储方案
+- v0.2.9 [ServiceTable] 数据结构集合
 
 > Todo
-- v0.2.9 [ServiceTable] 数据结构集合
 - v0.2.10 [ServiceTable] 数据结构k/v
 - v0.2.11 [ServiceTable] 前缀key查找
-- v0.2.12 
-- v0.2.13 
-- v0.2.14 
+- v0.2.12 [ServiceTableClient] init project
+- v0.2.13 [ServiceTable] 数据结构集合 - 分布式一致性
+- v0.2.14 [ServiceTable] 数据结构k/v - 分布式一致性
+- v0.2.15 [ServiceTableClient] 请求设计
+- v0.2.16 [ServiceTableClient] 数据结构集合
+- v0.2.17 [ServiceTableClient] 数据结构k/v
+- v0.2.18 [ServiceTableClient] 租约
+- v0.2.19 
+- v0.2.20
+- v0.2.21
+- v0.2.22
+- v0.2.23
+- v0.2.24
+- v0.2.25
+- v0.2.26
 
 
 > 预计

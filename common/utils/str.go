@@ -145,3 +145,15 @@ func P2E() {
 		}
 	}()
 }
+
+//切片去除空元素
+func SliceDelNullString(sli []string) []string {
+	rse := make([]string, 0)
+	for _,v := range sli {
+		if v != "" {
+			rse = append(rse, v)
+		}
+	}
+	return rse
+}
+

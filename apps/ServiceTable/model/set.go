@@ -1,6 +1,9 @@
 package model
 
 import (
+	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
+	"github.com/mangenotwork/extras/common/utils"
+	"strings"
 	"sync"
 	"time"
 )
@@ -33,6 +36,11 @@ func SetAdd(key string, value []string) {
 		SetData[key].Add(v)
 	}
 }
+func SetAddAt(key string, value []string) {
+	SetAdd(key, value)
+	// 存日志
+	raft.NewLogData("SetAdd "+key+" "+strings.Join(value, ",")).Write()
+}
 
 // Command : SetAddExpire key value timeUnix
 // 集合添加数据并指定过期时间
@@ -43,6 +51,10 @@ func SetAddExpire(key, value string, timeUnix int64) {
 	}
 	SetData[key].AddExpire(value, timeUnix)
 }
+func SetAddExpireAt(key, value string, timeUnix int64) {
+	SetAddExpire(key, value, timeUnix)
+	raft.NewLogData("SetAddExpire "+key+" "+value+" "+utils.Any2String(timeUnix)).Write()
+}
 
 // Command : SetValueExpire key value timeUnix
 // 指定集合数据过期时间
@@ -52,6 +64,13 @@ func SetValueExpire(key, value string, timeUnix int64) int {
 		return 0
 	}
 	return SetData[key].Expire(value, timeUnix)
+}
+func SetValueExpireAt(key, value string, timeUnix int64) int {
+	rse := SetValueExpire(key, value, timeUnix)
+	if rse == 1 {
+		raft.NewLogData("SetValueExpire "+key+" "+value+" "+utils.Any2String(timeUnix)).Write()
+	}
+	return rse
 }
 
 // Command : SetGet key
@@ -72,15 +91,30 @@ func SetDel(key string) int {
 	}
 	return 0
 }
+func SetDelAt(key string) int {
+	rse := SetDel(key)
+	if rse == 1 {
+		raft.NewLogData("SetDel "+key).Write()
+	}
+	return rse
+}
 
 // Command : SetDelValue key value
 // 删除指定集合的元素
 func SetDelValue(key, value string) int {
 	if s, ok := SetData[key]; ok {
 		s.Delete(value)
+		raft.NewLogData("SetDelValue "+key+" "+value).Write()
 		return 1
 	}
 	return 0
+}
+func SetDelValueAt(key, value string) int {
+	rse := SetDelValue(key, value)
+	if rse == 1 {
+		raft.NewLogData("SetDelValue "+key+" "+value).Write()
+	}
+	return rse
 }
 
 type set struct {
@@ -119,11 +153,14 @@ func (s set) Delete(key string) {
 // 过期的不取
 func (s set) All() []string {
 	t := time.Now().Unix()
-	rse := make([]string, len(s.data))
+	rse := make([]string, 0)
 	for k, _ := range s.data {
 		exp := s.expire[k]
 		if exp == -1 || exp - t > 0 {
 			rse = append(rse, k)
+		}else{
+			// 删除过期
+			s.Delete(k)
 		}
 	}
 	return rse

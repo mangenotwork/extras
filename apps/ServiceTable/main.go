@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/mangenotwork/extras/apps/ServiceTable/engine"
-	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
-	"github.com/mangenotwork/extras/common/conf"
-	"github.com/mangenotwork/extras/common/utils"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/mangenotwork/extras/apps/ServiceTable/engine"
+	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
+	"github.com/mangenotwork/extras/apps/ServiceTable/service"
+	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 func main(){
@@ -25,7 +27,7 @@ func main(){
 		engine.StartRpcServer()
 	}
 
-	raft.InitRaft()
+	service.InitRaft()
 	go func() {
 		raft.StartCluster()
 	}()
