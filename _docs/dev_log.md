@@ -45,9 +45,9 @@
 - v0.2.5 [ServiceTable] 修改项目昵称,修改项目文档
 - v0.2.6 [ServiceTable] raft算法 - leader 选举
 - v0.2.7 [ServiceTable] 配置文件优化
+- v0.2.8 [ServiceTable] 设计数据存储方案
 
 > Todo
-- v0.2.8 [ServiceTable] 设计数据存储方案
 - v0.2.9 [ServiceTable] 数据结构集合
 - v0.2.10 [ServiceTable] 数据结构k/v
 - v0.2.11 [ServiceTable] 前缀key查找

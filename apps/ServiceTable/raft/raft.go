@@ -324,6 +324,7 @@ func (data LogData) ToStr() string {
 	buffer.WriteString(data.Term)
 	buffer.WriteString("&")
 	buffer.WriteString(data.Command)
+	buffer.WriteString("\n")
 	return buffer.String()
 }
 
@@ -345,7 +346,7 @@ func (data LogData) Wait(){
 	var err error
 
 	if checkFileExist(fileName) {  //文件存在
-		f, err = os.OpenFile(fileName, os.O_APPEND, 0666) //打开文件
+		f, err = os.OpenFile(fileName, os.O_APPEND|os.O_RDWR, 0666) //打开文件
 		if err != nil{
 			log.Println("file open fail", err)
 			return
