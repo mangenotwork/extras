@@ -27,6 +27,7 @@ type Configs struct {
 	Kafka *Kafka `yaml:"kafka"`
 	Mongo *Mongo `yaml:"mongo"`
 	TTF string `yaml:"ttf"`
+	Cluster *Cluster `yaml:"cluster"`
 }
 
 type App struct {
@@ -99,6 +100,13 @@ type Mongo struct {
 	Host string `yaml:"host"`
 	User string `yaml:"user"`
 	Password string `yaml:"password"`
+}
+
+// 集群使用 主要用于 ServiceTable
+type Cluster struct {
+	Open bool `yaml:"open"`
+	MyAddr string `yaml:"myAddr"`
+	InitCluster string `yaml:"initCluster"`
 }
 
 // 读取yaml文件

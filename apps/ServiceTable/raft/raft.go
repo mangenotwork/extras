@@ -1,10 +1,14 @@
 package raft
 
 import (
+	"bytes"
+	"github.com/mangenotwork/extras/common/conf"
 	"github.com/mangenotwork/extras/common/utils"
+	"io"
 	"log"
 	"math/rand"
 	"net"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -13,15 +17,22 @@ import (
 // 全局变量
 var (
 	rafter *Raft
-	MyAddr = "192.168.0.9:12226"
-	cluster = []string{"192.168.0.9:12221", "192.168.0.9:12222", "192.168.0.9:12223", "192.168.0.9:12224", "192.168.0.9:12225",  "192.168.0.9:12226"}
-	electionTime = 5 // follower -> candidate 的最大时间, 单位秒
-	heartBeatTime = 1 // leader 发送心跳周期
+	MyAddr string
+	cluster []string
+	IsCluster bool // 是否集群
 	once sync.Once
-	IsCluster = true // 是否集群
 	ClusterTable map[string]*net.UDPAddr // 集群表
 	ClusterTableLock sync.Mutex  // 集群锁
+
+	electionTime = 5 // follower -> candidate 的最大时间, 单位秒
+	heartBeatTime = 1 // leader 发送心跳周期
 )
+
+func InitRaft(){
+	MyAddr = conf.Arg.Cluster.MyAddr
+	cluster = strings.Split(conf.Arg.Cluster.InitCluster, ";")
+	IsCluster = conf.Arg.Cluster.Open
+}
 
 type Raft struct {
 	Conn *net.UDPConn
@@ -134,6 +145,7 @@ func read() {
 		log.Printf("receive %s from <%s>  leader = %s \n", data[:n], remoteAddr, rafter.leader)
 		cmd := string(data[:n])
 
+		// 收到拉票的消息
 		if cmd == "拉票" {
 			log.Println("remoteAddr = ", remoteAddr, "要你给他投票", "我的状态 = ", rafter.state, rafter.votedFor )
 
@@ -153,19 +165,23 @@ func read() {
 
 		}
 
+		// 收到竞选结束的消息
 		if cmd == "结束竞选" {
 			rafter.beElection <- false
 		}
 
+		// 收到选票
 		if cmd == "给你投票" {
 			rafter.electCh <- true
 		}
 
+		// 公布新的leader
 		if strings.Index(cmd, "leader") != -1{
 			log.Println("有新的leader = ", cmd)
 			rafter.state = 0 // 有新的leader,当前节点就是follower状态
 		}
 
+		// 来自leader的心跳
 		if cmd == "心跳" {
 			rafter.leader = remoteAddr.String() // 来自 leader 的心跳
 			rafter.heartBeat <- true
@@ -234,7 +250,7 @@ func (rf *Raft) depiao(){
 }
 
 func electionEnd(be bool){
-	// 被告知别人已当选，那么自行切换到follower
+	// 没竞选上的自行切换到follower
 	if !be {
 		log.Println("竞选失败, 别人已当选")
 		rafter.state = 0
@@ -245,6 +261,7 @@ func electionEnd(be bool){
 	rafter.state = 3
 	// 给所有节点宣布
 	for _, v := range ClusterTable {
+		// TODO 日志复制
 		_=send([]byte("leader:"+rafter.myAddr), v)
 	}
 
@@ -283,3 +300,81 @@ func canvass(){
 	}
 }
 
+
+/* 日志
+
+每个节点存储自己的日志副本(log[])，每条日志记录包含：
+
+索引：该记录在日志中的位置
+任期号：该记录首次被创建时的任期号
+命令
+
+*/
+
+type LogData struct {
+	Index int64
+	Term string // 任期号
+	Command string
+}
+
+func (data LogData) ToStr() string {
+	var buffer bytes.Buffer
+	buffer.WriteString(utils.Any2String(data.Index))
+	buffer.WriteString("&")
+	buffer.WriteString(data.Term)
+	buffer.WriteString("&")
+	buffer.WriteString(data.Command)
+	return buffer.String()
+}
+
+func (data LogData) ToObj(str string){
+	strList := strings.Split(str, "&")
+
+	if len(strList) == 3 {
+		data.Index = utils.Str2Int64(strList[0])
+		data.Term = strList[1]
+		data.Command = strList[2]
+	}
+}
+
+// 追加写入日志
+func (data LogData) Wait(){
+	fileName := "log.data"
+
+	var f *os.File
+	var err error
+
+	if checkFileExist(fileName) {  //文件存在
+		f, err = os.OpenFile(fileName, os.O_APPEND, 0666) //打开文件
+		if err != nil{
+			log.Println("file open fail", err)
+			return
+		}
+	}else {  //文件不存在
+		f, err = os.Create(fileName) //创建文件
+		if err != nil {
+			log.Println("file create fail")
+			return
+		}
+	}
+
+	strTest := data.ToStr()
+
+	//将文件写进去
+	n, err1 := io.WriteString(f, strTest)
+	if err1 != nil {
+		log.Println("write error", err1)
+		return
+	}
+	log.Println("写入的字节数是：", n)
+
+	_=f.Close()
+}
+
+func checkFileExist(fileName string) bool {
+	_, err := os.Stat(fileName)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
+}

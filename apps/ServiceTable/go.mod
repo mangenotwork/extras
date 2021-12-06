@@ -1,4 +1,4 @@
-module github.com/mangenotwork/extras/apps/ConfigCenter
+module github.com/mangenotwork/extras/apps/ServiceTable
 
 go 1.15
 

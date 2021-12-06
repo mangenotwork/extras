@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"github.com/mangenotwork/extras/apps/ConfigCenter/handler"
+	"github.com/mangenotwork/extras/apps/ServiceTable/handler"
 	"github.com/mangenotwork/extras/common/middleware"
 	"github.com/mangenotwork/extras/common/utils"
 	"net/http"
