@@ -42,15 +42,15 @@
 - v0.2.2 [ImgHelper] 图片灰化
 - v0.2.3 [ImgHelper] 图片转为字符画
 - v0.2.4 [ImgHelper] 图片透明
-- v0.2.5 [ServiceTable] 修改项目昵称,修改项目文档
-- v0.2.6 [ServiceTable] raft算法 - leader 选举
+- v0.2.5 [ServiceTable] 由 ConfigCenter 改为 ServiceTable
+- v0.2.6 [ServiceTable] 实现raft算法 - leader 选举
 - v0.2.7 [ServiceTable] 配置文件优化
 - v0.2.8 [ServiceTable] 设计数据存储方案
 - v0.2.9 [ServiceTable] 数据结构集合
+- v0.2.10 [ServiceTable] key增删查基于前缀树实现
 
 > Todo
-- v0.2.10 [ServiceTable] 数据结构k/v
-- v0.2.11 [ServiceTable] 前缀key查找
+- v0.2.11 [ServiceTable] 数据结构k/v
 - v0.2.12 [ServiceTableClient] init project
 - v0.2.13 [ServiceTable] 数据结构集合 - 分布式一致性
 - v0.2.14 [ServiceTable] 数据结构k/v - 分布式一致性

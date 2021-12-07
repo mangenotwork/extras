@@ -24,7 +24,7 @@ func SetAdd(w http.ResponseWriter, r *http.Request) {
 
 // Command : SetAddExpire key value timeUnix
 // 集合添加数据并指定过期时间
-func SetAddExpire(w http.ResponseWriter, r *http.Request){
+func SetAddExpire(w http.ResponseWriter, r *http.Request) {
 	key := utils.GetUrlArg(r, "key")
 	value := utils.GetUrlArg(r, "value")
 	timeUnix := utils.GetUrlArgInt64(r, "time")
@@ -35,7 +35,7 @@ func SetAddExpire(w http.ResponseWriter, r *http.Request){
 
 // Command : SetValueExpire key value timeUnix
 // 指定集合数据过期时间
-func SetValueExpire(w http.ResponseWriter, r *http.Request){
+func SetValueExpire(w http.ResponseWriter, r *http.Request) {
 	key := utils.GetUrlArg(r, "key")
 	value := utils.GetUrlArg(r, "value")
 	timeUnix := utils.GetUrlArgInt64(r, "time")
@@ -46,7 +46,7 @@ func SetValueExpire(w http.ResponseWriter, r *http.Request){
 
 // Command : SetGet key
 // 获取集合所有数据
-func SetGet(w http.ResponseWriter, r *http.Request){
+func SetGet(w http.ResponseWriter, r *http.Request) {
 	key := utils.GetUrlArg(r, "key")
 	rse := model.SetGet(key)
 	utils.OutSucceedBodyJsonP(w, rse)
@@ -55,7 +55,7 @@ func SetGet(w http.ResponseWriter, r *http.Request){
 
 // Command : SetDel key
 // 删除指定集合
-func SetDel(w http.ResponseWriter, r *http.Request){
+func SetDel(w http.ResponseWriter, r *http.Request) {
 	key := utils.GetUrlArg(r, "key")
 	rse := model.SetDelAt(key)
 	utils.OutSucceedBodyJsonP(w, rse)
@@ -64,10 +64,36 @@ func SetDel(w http.ResponseWriter, r *http.Request){
 
 // Command : SetDelValue key value
 // 删除指定集合的元素
-func SetDelValue(w http.ResponseWriter, r *http.Request){
+func SetDelValue(w http.ResponseWriter, r *http.Request) {
 	key := utils.GetUrlArg(r, "key")
 	value := utils.GetUrlArg(r, "value")
 	rse := model.SetDelValueAt(key, value)
+	utils.OutSucceedBodyJsonP(w, rse)
+	return
+}
+
+// key 是否存在
+// Command : KeyHas key
+func KeyHas(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	rse := model.Key.Has(key)
+	utils.OutSucceedBodyJsonP(w, rse)
+	return
+}
+
+// key 模糊查询
+// Command : KeyLike key
+func KeyLike(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	rse := model.Key.Like(key)
+	utils.OutSucceedBodyJsonP(w, rse)
+	return
+}
+
+// key 列表
+// Command : KeyAll
+func KeyAll(w http.ResponseWriter, r *http.Request) {
+	rse := model.Key.GetAll()
 	utils.OutSucceedBodyJsonP(w, rse)
 	return
 }

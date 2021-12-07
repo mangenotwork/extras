@@ -39,5 +39,15 @@ func Router() *http.ServeMux {
 	// 删除指定集合的元素
 	mux.Handle("/set/value", m(http.HandlerFunc(handler.SetDelValue)))
 
+	// key 是否存在
+	// Command : KeyHas key
+	mux.Handle("/key/has", m(http.HandlerFunc(handler.KeyHas)))
+	// key 模糊查询
+	// Command : KeyLike key
+	mux.Handle("/key/like", m(http.HandlerFunc(handler.KeyLike)))
+	// key 列表
+	// Command : KeyAll
+	mux.Handle("/key/all", m(http.HandlerFunc(handler.KeyAll)))
+
 	return mux
 }

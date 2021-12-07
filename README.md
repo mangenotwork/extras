@@ -36,8 +36,8 @@
 
 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/WordHelper)
 
-#### ServiceTable 配置中心, 发现注册服务 
-> 提供配置信息服务,配置中心, 可以应用于发现注册服务
+#### ServiceTable 分布式数据表主要用于配置中心, 发现注册服务 
+> 轻量级分布式数据表, 主要用于配置中心, 发现注册服务; 参考raft算法 
 
 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/ServiceTable)
 

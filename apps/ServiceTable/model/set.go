@@ -34,6 +34,7 @@ func SetAdd(key string, value []string) {
 	}
 	for _, v := range value {
 		SetData[key].Add(v)
+		Key.Insert(key, "set")
 	}
 }
 func SetAddAt(key string, value []string) {
@@ -50,6 +51,9 @@ func SetAddExpire(key, value string, timeUnix int64) {
 		SetData[key] = newSet()
 	}
 	SetData[key].AddExpire(value, timeUnix)
+	if timeUnix > time.Now().Unix() {
+		Key.Insert(key, "set")
+	}
 }
 func SetAddExpireAt(key, value string, timeUnix int64) {
 	SetAddExpire(key, value, timeUnix)
@@ -63,7 +67,8 @@ func SetValueExpire(key, value string, timeUnix int64) int {
 	if _,ok := SetData[key]; !ok {
 		return 0
 	}
-	return SetData[key].Expire(value, timeUnix)
+	rse := SetData[key].Expire(value, timeUnix)
+	return rse
 }
 func SetValueExpireAt(key, value string, timeUnix int64) int {
 	rse := SetValueExpire(key, value, timeUnix)
@@ -87,6 +92,7 @@ func SetGet(key string) []string {
 func SetDel(key string) int {
 	if _, ok := SetData[key]; ok {
 		delete(SetData, key)
+		Key.Remove(key)
 		return 1
 	}
 	return 0
@@ -96,7 +102,7 @@ func SetDelAt(key string) int {
 	if rse == 1 {
 		raft.NewLogData("SetDel "+key).Write()
 	}
-	return rse
+	return SetDel(key)
 }
 
 // Command : SetDelValue key value
@@ -104,7 +110,6 @@ func SetDelAt(key string) int {
 func SetDelValue(key, value string) int {
 	if s, ok := SetData[key]; ok {
 		s.Delete(value)
-		raft.NewLogData("SetDelValue "+key+" "+value).Write()
 		return 1
 	}
 	return 0

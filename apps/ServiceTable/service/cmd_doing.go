@@ -2,15 +2,14 @@ package service
 
 import (
 	"bufio"
-	"io"
-	"log"
-	"os"
-	"strings"
-
 	"github.com/mangenotwork/extras/apps/ServiceTable/model"
 	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
 	"github.com/mangenotwork/extras/common/conf"
 	"github.com/mangenotwork/extras/common/utils"
+	"io"
+	"log"
+	"os"
+	"strings"
 )
 
 func InitRaft(){
