@@ -48,9 +48,9 @@
 - v0.2.8 [ServiceTable] 设计数据存储方案
 - v0.2.9 [ServiceTable] 数据结构集合
 - v0.2.10 [ServiceTable] key增删查基于前缀树实现
+- v0.2.11 [ServiceTable] 数据结构k/v
 
 > Todo
-- v0.2.11 [ServiceTable] 数据结构k/v
 - v0.2.12 [ServiceTableClient] init project
 - v0.2.13 [ServiceTable] 数据结构集合 - 分布式一致性
 - v0.2.14 [ServiceTable] 数据结构k/v - 分布式一致性

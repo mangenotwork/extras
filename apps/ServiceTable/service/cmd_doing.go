@@ -17,6 +17,7 @@ func InitRaft(){
 	raft.Cluster = strings.Split(conf.Arg.Cluster.InitCluster, ";")
 	raft.IsCluster = conf.Arg.Cluster.Open
 	model.InitSetData()
+	model.InitMapData()
 }
 
 
@@ -118,6 +119,44 @@ func CommandDo(cmdStr string) {
 		key := cmdArg[1]
 		value := cmdArg[2]
 		model.SetDelValue(key, value)
+
+	case "KVAdd":
+		// Command : KVAdd key value
+		if l < 3 {
+			return
+		}
+		key := cmdArg[1]
+		value := cmdArg[2]
+		log.Println("Command : KVAdd key value")
+		model.KVAdd(key, value)
+
+	case "KVAddExpire":
+		// Command : KVAddExpire key value expire
+		if l < 4 {
+			return
+		}
+		key := cmdArg[1]
+		value := cmdArg[2]
+		expire := cmdArg[3]
+		model.KVAddExpire(key, value, utils.Str2Int64(expire))
+
+	case "KVExpire":
+		// Command : KVExpire key expire
+		if l < 3 {
+			return
+		}
+		key := cmdArg[1]
+		expire := cmdArg[2]
+		model.KVExpire(key, utils.Str2Int64(expire))
+
+	case "KVDel":
+		// Command : KVDel key
+		if l < 2 {
+			return
+		}
+		key := cmdArg[1]
+		model.KVDel(key)
+
 
 	}
 }

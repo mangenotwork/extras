@@ -1,3 +1,5 @@
 1&192.168.0.9:12221&SetAdd a 1,2
 2&192.168.0.9:12221&SetValueExpire a 1 1638778890
 3&192.168.0.9:12221&SetAdd a 1,2
+4&192.168.0.9:12221&KVAdd a1 adasdasdasd
+5&192.168.0.9:12221&KVAdd a1dsd adasdasdasd

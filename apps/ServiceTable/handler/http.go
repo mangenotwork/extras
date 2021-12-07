@@ -98,3 +98,56 @@ func KeyAll(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// KV
+// 增,改
+// Command : KVAdd key value
+func KVAdd(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	value := utils.GetUrlArg(r, "value")
+	model.KVAddAt(key, value)
+	utils.OutSucceedBodyJsonP(w, "")
+	return
+}
+
+// Command : KVAddExpire key value expire
+func KVAddExpire(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	value := utils.GetUrlArg(r, "value")
+	expire := utils.GetUrlArgInt64(r, "expire")
+	model.KVAddExpireAt(key, value, expire)
+	utils.OutSucceedBodyJsonP(w, "")
+	return
+}
+
+// Command : KVExpire key expire
+func KVExpire(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	expire := utils.GetUrlArgInt64(r, "expire")
+	rse := model.KVExpireAt(key, expire)
+	utils.OutSucceedBodyJsonP(w, rse)
+	return
+}
+
+// 删
+// Command : KVDel key
+func KVDel(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	rse := model.KVDelAt(key)
+	utils.OutSucceedBodyJsonP(w, rse)
+	return
+}
+
+// 查
+// Command : KVGet key
+func KVGet(w http.ResponseWriter, r *http.Request) {
+	key := utils.GetUrlArg(r, "key")
+	is, rse := model.KVGet(key)
+	if !is {
+		utils.OutSucceedBodyJsonP(w, "没有这个key的数据")
+		return
+	}
+	utils.OutSucceedBodyJsonP(w, rse)
+	return
+}
+
+

@@ -19,6 +19,7 @@ func Router() *http.ServeMux {
 	mux.Handle("/hello", m(http.HandlerFunc(handler.Hello)))
 	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
 
+
 	// Set
 	// Command : SetAdd key value1,value2,
 	// 集合添加数据
@@ -39,6 +40,7 @@ func Router() *http.ServeMux {
 	// 删除指定集合的元素
 	mux.Handle("/set/value", m(http.HandlerFunc(handler.SetDelValue)))
 
+
 	// key 是否存在
 	// Command : KeyHas key
 	mux.Handle("/key/has", m(http.HandlerFunc(handler.KeyHas)))
@@ -48,6 +50,23 @@ func Router() *http.ServeMux {
 	// key 列表
 	// Command : KeyAll
 	mux.Handle("/key/all", m(http.HandlerFunc(handler.KeyAll)))
+
+
+	// KV
+	// 增,改
+	// Command : KVAdd key value
+	mux.Handle("/kv/add", m(http.HandlerFunc(handler.KVAdd)))
+	// Command : KVAddExpire key value expire
+	mux.Handle("/kv/addExpire", m(http.HandlerFunc(handler.KVAddExpire)))
+	// Command : KVExpire key expire
+	mux.Handle("/kv/expire", m(http.HandlerFunc(handler.KVExpire)))
+	// 删
+	// Command : KVDel key
+	mux.Handle("/kv/del", m(http.HandlerFunc(handler.KVDel)))
+	// 查
+	// Command : KVGet key
+	mux.Handle("/kv/get", m(http.HandlerFunc(handler.KVGet)))
+
 
 	return mux
 }
