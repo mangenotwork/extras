@@ -20,7 +20,6 @@ func RedisConn() *redis.Pool {
 }
 
 func newRedisClient() *redis.Pool {
-
 	redisConf := conf.Arg.Redis
 	p := &redis.Pool{
 		MaxIdle:     redisConf.MaxIdle,

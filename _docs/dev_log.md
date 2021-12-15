@@ -51,9 +51,9 @@
 - v0.2.11 [ServiceTable] 数据结构k/v
 - v0.2.12 [ServiceTableClient] init project
 - v0.2.13 [rpc] 新增rpc链路日志
+- v0.2.14 [rpc] 新增rpc基于etcd的负载均衡
 
 > Todo
-- v0.2.14 [rpc] 新增rpc基于etcd的负载均衡
 - v0.2.15 [ServiceTableClient] 请求设计
 - v0.2.16 [ServiceTableClient] 数据结构集合
 - v0.2.17 [ServiceTableClient] 数据结构k/v

@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"runtime"
 	"strings"
 	"time"
 
 	"github.com/mangenotwork/extras/common/utils"
-	"github.com/zituocn/gow/lib/logy"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc"
 )
@@ -41,6 +41,7 @@ func unaryInterceptorClient(ctx context.Context, method string, req, reply inter
 			break
 		}
 	}
+	_, file, line, _ := runtime.Caller(3)
 	md, _ := metadata.FromOutgoingContext(ctx)
 	clientName := getValue(md, "clientname")
 	serviceName := getValue(md, "servicename")
@@ -48,21 +49,23 @@ func unaryInterceptorClient(ctx context.Context, method string, req, reply inter
 	startTime := time.Now()
 	err := invoker(ctx, method, req, reply, cc, opts...)
 	if err != nil {
-		log.Print("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
+		fmt.Printf("[GRPC ERROR] %s->%s(%v) | id:%s | %s | %s:%d| err = %v",
 			clientName,
 			serviceName,
 			cc.Target(),
 			requestId,
 			method,
+			file, line,
 			err)
 	} else {
-		log.Print("[GRPC] %v | %s->%s(%v) | id:%s | %s ",
+		log.Printf("[GRPC] %v | %s->%s(%v) | id:%s | %s |  %s:%d",
 			time.Now().Sub(startTime),
 			clientName,
 			serviceName,
 			cc.Target(),
 			requestId,
-			method)
+			method,
+			file, line)
 	}
 
 	return err
@@ -134,7 +137,7 @@ type discovery struct {
 
 // DiscoveryArg 创建发现服务对象参数
 type ClientArg struct {
-	ServerAddr  string
+	ServiceAddr  string
 	EtcdAddr    string
 	ClientName  string
 	ServiceName string
@@ -153,6 +156,7 @@ func NewClient(dis ClientArg) (*discovery, error) {
 	}
 
 	return &discovery{
+		serverAddr: dis.ServiceAddr,
 		etcdAddr: etcdAddr,
 		clientName: dis.ClientName,
 		serviceName: dis.ServiceName,
@@ -167,7 +171,7 @@ func NewClient(dis ClientArg) (*discovery, error) {
 // Conn
 func (c *discovery) Conn() (client *grpc.ClientConn, ctx context.Context, err error) {
 	client, err = newClient(c.serverAddr)
-	ctx = context.Background()
+	ctx = setCtx(c.serviceName, c.clientName, c.reqFuncName, client)
 	return
 }
 
@@ -196,12 +200,7 @@ func (c *discovery) Min() (client *grpc.ClientConn, ctx context.Context, err err
 
 	// 使用GetMinKey方式需要执行GetMinKeyCallBack
 	_=etcdConn.GetMinKeyCallBack(grpcIPKey)
-	if c.isLog {
-		ctx = setCtx(c.serviceName, c.clientName, c.reqFuncName, client)
-	} else {
-		ctx = context.Background()
-	}
-
+	ctx = setCtx(c.serviceName, c.clientName, c.reqFuncName, client)
 	return
 }
 
@@ -220,12 +219,7 @@ func (c *discovery) Rand() (client *grpc.ClientConn, ctx context.Context, err er
 		c.times++
 		return c.Rand()
 	}
-
-	if c.isLog {
-		ctx = setCtx(c.serviceName, c.clientName, c.reqFuncName, client)
-	} else {
-		ctx = context.Background()
-	}
+	ctx = setCtx(c.serviceName, c.clientName, c.reqFuncName, client)
 	return
 }
 

@@ -3,10 +3,12 @@ package grpc
 import (
 	"context"
 	"fmt"
+	"github.com/mangenotwork/extras/common/utils"
 	"log"
 	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -105,7 +107,7 @@ func (m *Server) register() {
 		return
 	}
 
-	ip, err := GetIp()
+	ip, err := utils.GetIp()
 	if err != nil {
 		log.Println("[RPC] grpc服务注册失败, 获取本机ip失败, err = "+err.Error())
 		return
@@ -143,6 +145,7 @@ func (m *Server) register() {
 // unaryInterceptor  中间件打印日志
 func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	startTime := time.Now()
+
 	pr, _ := peer.FromContext(ctx)
 	md, _ := metadata.FromIncomingContext(ctx)
 	clientName := getValue(md, "clientname")
@@ -150,7 +153,7 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	requestId := getValue(md, "requestid")
 	m, err := handler(ctx, req)
 	if err != nil {
-		log.Print("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
+		log.Printf("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
 			clientName,
 			serviceName,
 			pr.Addr.String(),
@@ -158,7 +161,7 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 			info.FullMethod,
 			err)
 	} else {
-		log.Print("[GRPC] %v | %s(%v)->%s |id:%s | %s ",
+		log.Printf("[GRPC] %v | %s(%v)->%s |id:%s | %s ",
 			time.Now().Sub(startTime),
 			clientName,
 			pr.Addr.String(),
@@ -227,4 +230,24 @@ func getValue(md metadata.MD, key string) string {
 		}
 	}
 	return ""
+}
+
+// byte2int  byte -> int
+func byte2int(b []byte) int {
+	str := string(b)
+	if i, err := strconv.Atoi(str); err == nil {
+		return i
+	}
+	return 0
+}
+
+// serverNameKey 处理 serviceName 为 serverNameKey提供给注册服务使用
+func serverNameKey(serviceName string) string {
+	if string(serviceName[0]) != "/" {
+		serviceName = "/"+serviceName
+	}
+	if string(serviceName[len(serviceName)-1]) != "/" {
+		serviceName = serviceName + "/"
+	}
+	return serviceName
 }

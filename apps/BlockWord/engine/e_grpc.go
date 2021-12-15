@@ -4,26 +4,23 @@ import (
 	"github.com/mangenotwork/extras/apps/BlockWord/handler"
 	"github.com/mangenotwork/extras/apps/BlockWord/proto"
 	"github.com/mangenotwork/extras/common/conf"
-	"google.golang.org/grpc"
+	"github.com/mangenotwork/extras/common/grpc"
+	"github.com/mangenotwork/extras/common/utils"
 	"log"
-	"net"
 )
 
 func StartRpcServer(){
 	go func() {
-		listen, err := net.Listen("tcp", ":"+conf.Arg.GrpcServer.Prod)
+		g, err := grpc.NewServer(grpc.ServerArg{
+			IP: "",
+			Port: utils.Str2Int(conf.Arg.GrpcServer.Prod),
+			Name: "BlockWord",
+		})
 		if err != nil {
 			panic(err)
 		}
-		grpcServer := grpc.NewServer()
-		proto.RegisterMessageRPCServer(grpcServer, &handler.GRPCService{})
-		log.Println("Starting block word grpc server -> ", conf.Arg.GrpcServer.Prod)
-		err = grpcServer.Serve(listen)
-		if err != nil {
-			panic(err)
-		}
-
+		proto.RegisterMessageRPCServer(g.Server, &handler.GRPCService{})
+		g.Run()
+		log.Print("[RPC] Listening and serving TCP on %d", g.Port)
 	}()
 }
-
-
