@@ -110,3 +110,16 @@ func ID64() (int64, error) {
 	currWoker.InitIdWorker(1000, 2)
 	return currWoker.NextId()
 }
+
+func IDStr() string {
+	currWoker := &IdWorker{}
+	err := currWoker.InitIdWorker(1000, 2)
+	if err != nil {
+		return ""
+	}
+	id, err := currWoker.NextId()
+	if err != nil {
+		return ""
+	}
+	return Int642Str(id)
+}

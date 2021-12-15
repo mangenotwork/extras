@@ -50,25 +50,27 @@
 - v0.2.10 [ServiceTable] key增删查基于前缀树实现
 - v0.2.11 [ServiceTable] 数据结构k/v
 - v0.2.12 [ServiceTableClient] init project
+- v0.2.13 [rpc] 新增rpc链路日志
 
 > Todo
-- v0.2.13 [ServiceTable] 数据结构集合 - 分布式一致性
-- v0.2.14 [ServiceTable] 数据结构k/v - 分布式一致性
+- v0.2.14 [rpc] 新增rpc基于etcd的负载均衡
 - v0.2.15 [ServiceTableClient] 请求设计
 - v0.2.16 [ServiceTableClient] 数据结构集合
 - v0.2.17 [ServiceTableClient] 数据结构k/v
 - v0.2.18 [ServiceTableClient] 租约
 - v0.2.19 
-- v0.2.20
-- v0.2.21
-- v0.2.22
-- v0.2.23
-- v0.2.24
-- v0.2.25
-- v0.2.26
+- v0.2.20 
+- v0.2.21 
+- v0.2.22 
+- v0.2.23 
+- v0.2.24 
+- v0.2.25 
+- v0.2.26 
 
 
 > 预计
+- [ServiceTable] 数据结构集合 - 分布式一致性
+- [ServiceTable] 数据结构k/v - 分布式一致性
 - [ShortLink] 新增查看短链接,修改短链接,删除短链接
 - [Push] 指定设备强制断开
 - [Push] 获取设备在线情况
@@ -83,3 +85,4 @@
 > 研究
 - 文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 
 - [WordHelper] html转md
+
