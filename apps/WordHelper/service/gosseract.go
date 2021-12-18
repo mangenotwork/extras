@@ -19,6 +19,7 @@ package service
 
 import (
 	gs "github.com/otiai10/gosseract/v2"
+	"log"
 )
 
 func GetOCRVersion() string {
@@ -38,5 +39,6 @@ func OCR(imgData []byte, lang string) (string, error){
 	defer client.Close()
 	client.SetImageFromBytes(imgData)
 	text, err := client.Text()
+	log.Println("ocr err = ", err)
 	return text, err
 }

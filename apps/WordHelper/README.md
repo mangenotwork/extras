@@ -25,6 +25,9 @@ grpcServer:
   log: true
 ```
 
+### OCR安装
+
+
 ## Http接口文档
 
 #### [get] /fenci/jieba

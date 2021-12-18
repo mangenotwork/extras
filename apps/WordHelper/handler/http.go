@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -59,6 +60,40 @@ func GetOCRLanguages(w http.ResponseWriter, r *http.Request) {
 
 func GetOCRVersion(w http.ResponseWriter, r *http.Request) {
 	utils.OutSucceedBody(w, service.GetOCRVersion())
+}
+
+// OCRBase64Img 识别base64 的图片
+func OCRBase64Img(w http.ResponseWriter, r *http.Request) {
+	lang := r.FormValue("lang")
+	base64img := r.FormValue("base64img")
+
+	b, _ := regexp.MatchString(`^data:\s*image\/(\w+);base64,`, base64img)
+	if b {
+		re, _ := regexp.Compile(`^data:\s*image\/(\w+);base64,`)
+		//allData := re.FindAllSubmatch([]byte(base64img), 2)
+		//log.Print(allData)
+		base64img = re.ReplaceAllString(base64img, "")
+	}
+	log.Print(base64img)
+	// Base64 Standard Decoding
+	sDec, err := base64.StdEncoding.DecodeString(base64img)
+	if err != nil {
+		fmt.Printf("Error decoding string: %s ", err.Error())
+		return
+	}
+
+	file := "./a.png"
+	err = ioutil.WriteFile(file, sDec, 0666)
+	if err != nil {
+		log.Println(err)
+	}
+
+	jg, err := service.OCR(sDec, lang)
+	if err != nil {
+		utils.OutErrBody(w, 2001, err)
+		return
+	}
+	utils.OutSucceedBody(w, jg)
 }
 
 /*

@@ -26,6 +26,7 @@ func Router() *http.ServeMux {
 	mux.Handle("/ocr", m(http.HandlerFunc(handler.OCR)))
 	mux.Handle("/ocr/languages", m(http.HandlerFunc(handler.GetOCRLanguages)))
 	mux.Handle("/ocr/version", m(http.HandlerFunc(handler.GetOCRVersion)))
+	mux.Handle("/ocr/base64", m(http.HandlerFunc(handler.OCRBase64Img))) // 识别base64图片
 
 	// 翻译
 	mux.Handle("/fanyi", m(http.HandlerFunc(handler.FanYi)))
