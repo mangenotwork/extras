@@ -5,6 +5,7 @@ go 1.15
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
 
 require (
+	github.com/mangenotwork/extras/common v0.0.0-00010101000000-000000000000
 	github.com/coreos/etcd v3.3.27+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
@@ -15,7 +16,6 @@ require (
 	github.com/gomodule/redigo v1.8.5 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/mangenotwork/extras/common v0.0.0-00010101000000-000000000000
 	github.com/zituocn/gow v1.0.9 // indirect
 	go.etcd.io/etcd v3.3.27+incompatible // indirect
 	go.mongodb.org/mongo-driver v1.7.3 // indirect

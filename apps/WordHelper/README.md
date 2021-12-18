@@ -25,8 +25,31 @@ grpcServer:
   log: true
 ```
 
-### OCR安装
+### tesseract-ocr 安装
+- tesserocr GitHub：https://github.com/sirfz/tesserocr
+- tesserocr PyPI：https://pypi.python.org/pypi/tesserocr
+- tesseract下载地址：http://digi.bib.uni-mannheim.de/tesseract
+- tesseract GitHub：https://github.com/tesseract-ocr/tesseract
+- tesseract语言包：https://github.com/tesseract-ocr/tessdata
+- tesseract文档：https://github.com/tesseract-ocr/tesseract/wiki/Documentation
+- 下载词典: https://tesseract-ocr.github.io/tessdoc/Data-Files  
+```
+# Ubuntu、Debian和Deepin
+$ sudo apt-get install -y tesseract-ocr libtesseract-dev libleptonica-dev
 
+# CentOS、Red Hat
+$ yum install -y tesseract
+
+# 查看支持的语言：
+$ tesseract --list-langs
+
+# Ubuntu、Debian和Deepin 安装语言包
+$ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr/share/tesseract-ocr/tessdata
+
+# 在CentOS和Red Hat系统下的迁移命令如下：
+$ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr/share/tesseract/tessdata
+  
+```
 
 ## Http接口文档
 
@@ -100,6 +123,25 @@ grpcServer:
     "timestamp": 1636428522,
     "msg": "succeed",
     "data": "预 分 配 切 片 和 际 射 #\n\n尝 试 皑 终 预 免 分 配 切 片 和 映 射 。 如 果 您 知 遵 要 兆 骋 放 置 的 元 素 数 春 , 请 使 用 诚 知 识 ! 这 春 着 改 善 了 武 类 代 团 的 运 迟 。\n将 此 视 为 微 化 , 但 是 , 始 终 这 样 做 是 一 积 很 好 的 横 式 , 因 为 它 不 会 增 加 太 多 复 杂 伯 。 性 能 方 面 , 它 仅 与 具 有 大 数 组\n的 关 镰 代 团 路 径 根 关 。\n\n注 意 ; 这 是 团 为 , 在 非 常 简 单 的 视 图 中 ,Go 运 行 时 分 配 当 前 大 小 的 2 俘 。 因 此 , 如 果 您 期 望 有 数 百 万 个 元 袁 ,Go\n将 ppend 在 两 者 之 闰 进 行 多 次 分 配 , 而 不 是 在 您 迹 行 预 分 配 时 只 进 行 一 次 分 配"
+}
+```
+
+---
+
+##### [post] /ocr/base64
+> 传入base64图片进行识别
+
+参数(from-data)
+- base64img 被识别图片的base64
+- lang 识别的词语库,默认是chi_sim
+
+返回
+```json
+{
+    "code": 0,
+    "timestamp": 1636428522,
+    "msg": "succeed",
+    "data": "18778"
 }
 ```
 

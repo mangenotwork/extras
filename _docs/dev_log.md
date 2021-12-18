@@ -53,13 +53,13 @@
 - v0.2.13 [rpc] 新增rpc链路日志
 - v0.2.14 [rpc] 新增rpc基于etcd的负载均衡
 - v0.2.15 [WordHelper] 新增base64图片的识别
+- v0.2.16 [WordHelper] OCR安装的文档
 
 > Todo
-- v0.2.16 [WordHelper] OCR安装的文档
-- v0.2.17 [ServiceTableClient] 数据结构k/v
-- v0.2.18 [ServiceTableClient] 租约
-- v0.2.19 [ServiceTableClient] 请求设计
-- v0.2.20 [ServiceTableClient] 数据结构集合
+- v0.2.17 
+- v0.2.18 
+- v0.2.19 
+- v0.2.20 
 - v0.2.21 
 - v0.2.22 
 - v0.2.23 
@@ -69,6 +69,10 @@
 - v0.3.1
 
 > 预计
+- [ServiceTableClient] 请求设计
+- [ServiceTableClient] 数据结构集合
+- [ServiceTableClient] 租约
+- [ServiceTableClient] 数据结构k/v
 - [ServiceTable] 数据结构集合 - 分布式一致性
 - [ServiceTable] 数据结构k/v - 分布式一致性
 - [ShortLink] 新增查看短链接,修改短链接,删除短链接
@@ -81,6 +85,7 @@
 - [Push] 测试,改Bug,更新文档
 - [WordHelper] 分词,Ocr,翻译 Grpc 
 - [WordHelper] pdf内容提取,加密解密,md转html Grpc
+- [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
 
 > 研究
 - 文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 
