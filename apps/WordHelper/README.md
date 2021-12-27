@@ -44,7 +44,7 @@ $ yum install -y tesseract
 $ tesseract --list-langs
 
 # Ubuntu、Debian和Deepin 安装语言包
-$ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr/share/tesseract-ocr/tessdata
+$ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr/share/tesserac t-ocr/tessdata
 
 # 在CentOS和Red Hat系统下的迁移命令如下：
 $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr/share/tesseract/tessdata

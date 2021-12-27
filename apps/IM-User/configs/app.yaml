@@ -1,0 +1,13 @@
+app:
+  name: IM-User
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 29127
+
+grpcServer:
+  open: true
+  prod: 29128
+  log: true
+

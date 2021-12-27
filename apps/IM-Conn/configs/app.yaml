@@ -1,0 +1,21 @@
+app:
+  name: IM-Conn
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 29121
+
+grpcServer:
+  open: true
+  prod: 29122
+  log: true
+
+tcpServer:
+  open: true
+  prod: 29123
+
+udpServer:
+  open: true
+  prod: 29124
+

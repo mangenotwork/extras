@@ -82,6 +82,8 @@ func OCRBase64Img(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sDec = service.Huihua(sDec)
+
 	file := "./a.png"
 	err = ioutil.WriteFile(file, sDec, 0666)
 	if err != nil {

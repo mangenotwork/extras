@@ -1,0 +1,13 @@
+app:
+  name: IM-Msg
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 29125
+
+grpcServer:
+  open: true
+  prod: 29126
+  log: true
+
