@@ -57,16 +57,25 @@
 - v0.2.17 [IM-*] 文件结构初始化
 - v0.2.18 [common] 增加日志
 - v0.2.19 [common] 升级grpc和etcd版本
+- v0.2.20 [LogCenter] 日志中心 文件结构初始化
 
 > Todo
-- v0.2.20 
-- v0.2.21 
-- v0.2.22 
-- v0.2.23 
-- v0.2.24 
-- v0.2.25 
-- v0.2.26 
-- v0.3.1 
+- v0.2.21 [LogCenter] 收集日志
+- v0.2.22 [common] 日志库上报日志
+- v0.2.23 [LogCenter] 日志存储到文件
+- v0.2.24 [common] 自定义http日志并上报
+- v0.2.25 [common] 自定义grpc日志并上报
+- v0.2.26 [LogCenter] 日志存储到 Boltdb
+- v0.3.1  [LogCenter] 增加UI
+- v0.3.2
+- v0.3.3
+- v0.3.4
+- v0.3.5
+- v0.3.6
+- v0.3.7
+- v0.3.8
+- v0.3.9
+- v0.3.10
 
 > 预计
 - [ServiceTableClient] 请求设计

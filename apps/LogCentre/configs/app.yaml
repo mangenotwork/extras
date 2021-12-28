@@ -1,0 +1,11 @@
+app:
+  name: LogCentre
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 22222
+
+udpServer:
+  open: true
+  prod: 22223

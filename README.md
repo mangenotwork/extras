@@ -44,6 +44,16 @@
 #### IM 即时聊天功能服务
 > 即时聊天功能; 提供 websocket, tcp, udp
 
+- IM-Conn 提供连接与网络通讯 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/IM-Conn)
+- IM-Msg  提供消息业务 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/IM-Msg)
+- IM-User 提供用户业务 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/IM-User)
+- IM-Test 测试 >  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/IM-Test)
+
+#### LogCenter  日志中心,收集微服务日志
+> 日志中心,收集微服务日志,可以监控微服务的http请求日志,grpc请求日志与链路日志等等; 简化运维工作
+
+>  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/LogCenter)
+
 #### 
 
 
