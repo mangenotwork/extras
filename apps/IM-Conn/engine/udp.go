@@ -1,9 +1,11 @@
 package engine
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 func StartUDP(){
 	go func() {
-		log.Println("StartUDP")
+		logger.Info("StartUDP")
 	}()
 }

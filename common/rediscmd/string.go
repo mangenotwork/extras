@@ -1,114 +1,79 @@
 package rediscmd
 
 import (
-	"log"
-
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // 获取String value
-func Get(key string) string {
+func Get(key string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "GET", key)
-	res, err := redis.String(rc.Do("GET", key))
-	if err != nil {
-		log.Println("GET error", err.Error())
-	}
-	log.Println(res)
-	return res
+	logger.Info("执行redis : ", "GET", key)
+	res, err = redis.String(rc.Do("GET", key))
+	return
 }
 
 // 新建String
-func SET(key string, value interface{}) error {
+func SET(key string, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SET", key, value)
-	res, err := rc.Do("SET", key, value)
-	if err != nil {
-		log.Println("SET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "SET", key, value)
+	_, err = rc.Do("SET", key, value)
+	return
 }
 
 // 新建String 含有时间
-func SETEX(key string, ttl int64, value interface{}) error {
+func SETEX(key string, ttl int64, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SETEX", key, ttl, value)
-	res, err := rc.Do("SETEX", key, ttl, value)
-	if err != nil {
-		log.Println("SET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "SETEX", key, ttl, value)
+	_, err = rc.Do("SETEX", key, ttl, value)
+	return
 }
 
 // PSETEX key milliseconds value
 // 这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位。
-func PSETEX(key string, ttl int64, value interface{}) error {
+func PSETEX(key string, ttl int64, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "PSETEX", key, ttl, value)
-	res, err := rc.Do("PSETEX", key, ttl, value)
-	if err != nil {
-		log.Println("SET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "PSETEX", key, ttl, value)
+	_, err = rc.Do("PSETEX", key, ttl, value)
+	return
 }
 
 // SETNX key value
 // 将 key 的值设为 value ，当且仅当 key 不存在。
 // 若给定的 key 已经存在，则 SETNX 不做任何动作。
-func SETNX(key string, value interface{}) error {
+func SETNX(key string, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SETNX", key, value)
-	res, err := rc.Do("SETNX", key, value)
-	if err != nil {
-		log.Println("SET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "SETNX", key, value)
+	_, err = rc.Do("SETNX", key, value)
+	return
 }
 
 // SETRANGE key offset value
 // 用 value 参数覆写(overwrite)给定 key 所储存的字符串值，从偏移量 offset 开始。
 // 不存在的 key 当作空白字符串处理。
-func SETRANGE(key string, offset int64, value interface{}) error {
+func SETRANGE(key string, offset int64, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SETRANGE", key, offset, value)
-	res, err := rc.Do("SETRANGE", key, offset, value)
-	if err != nil {
-		log.Println("SET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "SETRANGE", key, offset, value)
+	_, err = rc.Do("SETRANGE", key, offset, value)
+	return
 }
 
 // APPEND key value
 // 如果 key 已经存在并且是一个字符串， APPEND 命令将 value 追加到 key 原来的值的末尾。
 // 如果 key 不存在， APPEND 就简单地将给定 key 设为 value ，就像执行 SET key value 一样。
-func APPEND(key string, value interface{}) error {
+func APPEND(key string, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "APPEND", key, value)
-	res, err := redis.String(rc.Do("APPEND", key, value))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "APPEND", key, value)
+	_, err = redis.String(rc.Do("APPEND", key, value))
+	return
 }
 
 // SETBIT key offset value
@@ -141,12 +106,8 @@ func StringBITOP() {}
 func DECR(key string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "DECR", key)
+	logger.Info("执行redis : ", "DECR", key)
 	res, err = redis.Int64(rc.Do("DECR", key))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = -1
-	}
 	return
 }
 
@@ -155,12 +116,8 @@ func DECR(key string) (res int64, err error) {
 func DECRBY(key, decrement string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "DECRBY", key, decrement)
+	logger.Info("执行redis : ", "DECRBY", key, decrement)
 	res, err = redis.Int64(rc.Do("DECRBY", key, decrement))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = -1
-	}
 	return
 }
 
@@ -169,12 +126,8 @@ func DECRBY(key, decrement string) (res int64, err error) {
 func GETRANGE(key string, start, end int64) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "GETRANGE", key, start, end)
+	logger.Info("执行redis : ", "GETRANGE", key, start, end)
 	res, err = redis.String(rc.Do("GETRANGE", key, start, end))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = ""
-	}
 	return
 }
 
@@ -184,12 +137,8 @@ func GETRANGE(key string, start, end int64) (res string, err error) {
 func GETSET(key string, value interface{}) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "GETSET", key, value)
+	logger.Info("执行redis : ", "GETSET", key, value)
 	res, err = redis.String(rc.Do("GETSET", key, value))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = ""
-	}
 	return
 }
 
@@ -200,12 +149,8 @@ func GETSET(key string, value interface{}) (res string, err error) {
 func INCR(key string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "INCR", key)
+	logger.Info("执行redis : ", "INCR", key)
 	res, err = redis.Int64(rc.Do("INCR", key))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = -1
-	}
 	return
 }
 
@@ -214,12 +159,8 @@ func INCR(key string) (res int64, err error) {
 func INCRBY(key, increment string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "INCRBY", key, increment)
+	logger.Info("执行redis : ", "INCRBY", key, increment)
 	res, err = redis.Int64(rc.Do("INCRBY", key, increment))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = -1
-	}
 	return
 }
 
@@ -228,12 +169,8 @@ func INCRBY(key, increment string) (res int64, err error) {
 func INCRBYFLOAT(key, increment float64) (res float64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "INCRBYFLOAT", key, increment)
+	logger.Info("执行redis : ", "INCRBYFLOAT", key, increment)
 	res, err = redis.Float64(rc.Do("INCRBYFLOAT", key, increment))
-	if err != nil {
-		log.Println("SET error", err.Error())
-		res = -1
-	}
 	return
 }
 
@@ -247,11 +184,8 @@ func MGET(keys []interface{}) (res []string, err error) {
 	for _, value := range keys {
 		args = args.Add(value)
 	}
-	log.Println("执行redis : ", "MGET", args)
+	logger.Info("执行redis : ", "MGET", args)
 	res, err = redis.Strings(rc.Do("MGET", args))
-	if err != nil {
-		log.Println("SET error", err.Error())
-	}
 	return
 }
 
@@ -266,12 +200,8 @@ func MSET(data []interface{}) (err error) {
 	for _, value := range data {
 		args = args.Add(value)
 	}
-	log.Println("执行redis : ", "MSET", args)
-	res, err := rc.Do("MSET", args)
-	if err != nil {
-		log.Println("SET error", err.Error())
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "MSET", args)
+	_, err = rc.Do("MSET", args)
 	return
 }
 
@@ -286,12 +216,8 @@ func MSETNX(data []interface{}) (err error) {
 	for _, value := range data {
 		args = args.Add(value)
 	}
-	log.Println("执行redis : ", "MSETNX", args)
-	res, err := rc.Do("MSETNX", args)
-	if err != nil {
-		log.Println("SET error", err.Error())
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "MSETNX", args)
+	_, err = rc.Do("MSETNX", args)
 	return
 }
 

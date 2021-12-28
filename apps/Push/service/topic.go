@@ -5,14 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/mq"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/rediscmd"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
-	"log"
-	"time"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func NewTopic(topicName string) (err error) {
@@ -61,7 +62,7 @@ func TopicSend(topicName, msg string) (err error) {
 	// 记录推送数据
 	_, err = conn.GetMongoCollection("mange_push", topicName).InsertOne(context.TODO(), TopicMsgData{msg, mqMsg.SendTime});
 	if err != nil {
-		log.Println("记录推送数据 错误: ", err)
+		logger.Error("记录推送数据 错误: ", err)
 		return
 	}
 	return
@@ -81,11 +82,11 @@ func GetTopicSend(topicName string, page, limit int64) (data *GetTopicSendBody, 
 		List: make([]*TopicMsgData, 0),
 		Count: 0,
 	}
-	log.Println("topicName = ", topicName)
+	logger.Info("topicName = ", topicName)
 	collection := conn.GetMongoCollection("mange_push", topicName)
 	data.Count, err = collection.CountDocuments(context.Background(), bson.D{})
 	if err != nil {
-		log.Println("collection.CountDocuments err = ", err)
+		logger.Error("collection.CountDocuments err = ", err)
 		return
 	}
 	if page < 1 {
@@ -101,7 +102,7 @@ func GetTopicSend(topicName string, page, limit int64) (data *GetTopicSendBody, 
 	findOptions.SetSort(bson.D{{"send_time", -1}}) // 排序  1 正序;  -1 逆序
 	cur, err := collection.Find(context.TODO(), bson.D{}, findOptions)
 	if err != nil {
-		log.Println("collection.Find err = ", err)
+		logger.Error("collection.Find err = ", err)
 		return
 	}
 	for cur.Next(context.TODO()) {
@@ -109,12 +110,12 @@ func GetTopicSend(topicName string, page, limit int64) (data *GetTopicSendBody, 
 		var elem TopicMsgData
 		err := cur.Decode(&elem)
 		if err != nil {
-			log.Println(err)
+			logger.Error(err)
 		}
 		data.List = append(data.List, &elem)
 	}
 	if err := cur.Err(); err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 	// Close the cursor once finished
 	_=cur.Close(context.TODO())

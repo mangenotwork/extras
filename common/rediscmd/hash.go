@@ -1,23 +1,21 @@
 package rediscmd
 
 import (
-	"log"
-
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
-
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // 获取Hash value
 func HGETALL(key string) map[string]string {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HGETALL", key)
+	logger.Info("执行redis : ", "HGETALL", key)
 	res, err := redis.StringMap(rc.Do("HGETALL", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
-	log.Println(res)
+	logger.Info(res)
 	return res
 }
 
@@ -27,12 +25,12 @@ func HGETALL(key string) map[string]string {
 func HSET(key, field string, value interface{}) string {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HSET", key, field, value)
+	logger.Info("执行redis : ", "HSET", key, field, value)
 	res, err := redis.String(rc.Do("HSET", key, field, value))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
-	log.Println(res)
+	logger.Info(res)
 	return res
 }
 
@@ -46,19 +44,18 @@ func HMSET(key string, values []interface{}) error {
 	defer rc.Close()
 	args := redis.Args{}.Add(key)
 	for _, value := range values {
-		log.Println(value)
 		for k, v := range value.(map[string]interface{}) {
 			args = args.Add(k)
 			args = args.Add(v)
 		}
 	}
-	log.Println("执行redis : ", "HMSET", args)
+	logger.Info("执行redis : ", "HMSET", args)
 	res, err := rc.Do("HMSET", args...)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return err
 	}
-	log.Println(res)
+	logger.Info(res)
 	return nil
 }
 
@@ -68,13 +65,13 @@ func HMSET(key string, values []interface{}) error {
 func HSETNX(key, field string, value interface{}) error {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HSETNX", key, field, value)
+	logger.Info("执行redis : ", "HSETNX", key, field, value)
 	res, err := rc.Do("HSETNX", key, field, value)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return err
 	}
-	log.Println(res)
+	logger.Info(res)
 	return nil
 }
 
@@ -87,13 +84,13 @@ func HDEL(key string, fields []string) error {
 	for _, v := range fields {
 		args = args.Add(v)
 	}
-	log.Println("执行redis : ", "HDEL", args)
+	logger.Info("执行redis : ", "HDEL", args)
 	res, err := rc.Do("HDEL", args)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return err
 	}
-	log.Println(res)
+	logger.Info(res)
 	return nil
 }
 
@@ -102,16 +99,16 @@ func HDEL(key string, fields []string) error {
 func HEXISTS(key, fields string) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HEXISTS", key, fields)
+	logger.Info("执行redis : ", "HEXISTS", key, fields)
 	res, err := redis.Int(rc.Do("HEXISTS", key, fields))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return false
 	}
 	if res == 0 {
 		return false
 	}
-	log.Println(res)
+	logger.Info(res)
 	return true
 }
 
@@ -120,13 +117,13 @@ func HEXISTS(key, fields string) bool {
 func HGET(key, fields string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HGET", key, fields)
+	logger.Info("执行redis : ", "HGET", key, fields)
 	res, err = redis.String(rc.Do("HGET", key, fields))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
+	logger.Info(res)
 	return
 }
 
@@ -138,13 +135,13 @@ func HGET(key, fields string) (res string, err error) {
 func HINCRBY(key, field string, increment int64) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HINCRBY", key, field, increment)
+	logger.Info("执行redis : ", "HINCRBY", key, field, increment)
 	res, err = redis.Int64(rc.Do("HINCRBY", key, field, increment))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
+	logger.Info(res)
 	return
 }
 
@@ -155,13 +152,13 @@ func HINCRBY(key, field string, increment int64) (res int64, err error) {
 func HINCRBYFLOAT(key, field string, increment float64) (res float64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HINCRBYFLOAT", key, field, increment)
+	logger.Info("执行redis : ", "HINCRBYFLOAT", key, field, increment)
 	res, err = redis.Float64(rc.Do("HINCRBYFLOAT", key, field, increment))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
+	logger.Info(res)
 	return
 }
 
@@ -170,13 +167,11 @@ func HINCRBYFLOAT(key, field string, increment float64) (res float64, err error)
 func HKEYS(key string) (res []string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HKEYS", key)
+	logger.Info("执行redis : ", "HKEYS", key)
 	res, err = redis.Strings(rc.Do("HKEYS", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
 		return
 	}
-	log.Println(res)
 	return
 }
 
@@ -185,13 +180,13 @@ func HKEYS(key string) (res []string, err error) {
 func HLEN(key string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HLEN", key)
+	logger.Info("执行redis : ", "HLEN", key)
 	res, err = redis.Int64(rc.Do("HLEN", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
+	logger.Info(res)
 	return
 }
 
@@ -205,13 +200,13 @@ func HMGET(key string, fields []string) (res []string, err error) {
 	for _, v := range fields {
 		args = args.Add(v)
 	}
-	log.Println("执行redis : ", "HMGET", args)
+	logger.Info("执行redis : ", "HMGET", args)
 	res, err = redis.Strings(rc.Do("HMGET", args))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
+	logger.Info(res)
 	return
 }
 
@@ -220,13 +215,12 @@ func HMGET(key string, fields []string) (res []string, err error) {
 func HashHVALS(key string) (res []string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "HVALS", key)
+	logger.Info("执行redis : ", "HVALS", key)
 	res, err = redis.Strings(rc.Do("HVALS", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
 	return
 }
 

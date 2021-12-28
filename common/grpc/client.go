@@ -3,14 +3,14 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"log"
 	"runtime"
 	"strings"
 	"time"
 
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 var (
@@ -49,7 +49,7 @@ func unaryInterceptorClient(ctx context.Context, method string, req, reply inter
 	startTime := time.Now()
 	err := invoker(ctx, method, req, reply, cc, opts...)
 	if err != nil {
-		fmt.Printf("[GRPC ERROR] %s->%s(%v) | id:%s | %s | %s:%d| err = %v",
+		logger.Error("[GRPC ERROR] %s->%s(%v) | id:%s | %s | %s:%d| err = %v",
 			clientName,
 			serviceName,
 			cc.Target(),
@@ -58,7 +58,7 @@ func unaryInterceptorClient(ctx context.Context, method string, req, reply inter
 			file, line,
 			err)
 	} else {
-		log.Printf("[GRPC] %v | %s->%s(%v) | id:%s | %s |  %s:%d",
+		logger.Info("[GRPC] %v | %s->%s(%v) | id:%s | %s |  %s:%d",
 			time.Now().Sub(startTime),
 			clientName,
 			serviceName,
@@ -78,13 +78,13 @@ type wrappedStreamClient struct {
 
 // RecvMsg
 func (w *wrappedStreamClient) RecvMsg(m interface{}) error {
-	log.Println("Receive a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
+	logger.Info("Receive a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
 	return w.ClientStream.RecvMsg(m)
 }
 
 // SendMsg
 func (w *wrappedStreamClient) SendMsg(m interface{}) error {
-	log.Println("Send a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
+	logger.Info("Send a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
 	return w.ClientStream.SendMsg(m)
 }
 
@@ -212,7 +212,7 @@ func (c *discovery) Rand() (client *grpc.ClientConn, ctx context.Context, err er
 	NewEtcdCli(c.etcdAddr)
 	serviceNameKey := serverNameKey(c.serviceName)
 	grpcIP, _ := etcdConn.GetRandKey(serviceNameKey)
-	log.Println("grpcIP = ", grpcIP)
+	logger.Info("grpcIP = ", grpcIP)
 	client, err = newClient(grpcIP)
 	if err != nil || client == nil {
 		time.Sleep(c.retryTime) // 连不上可能是服务还在启动中, 等待50ms从新获取

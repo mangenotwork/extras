@@ -1,10 +1,9 @@
 package rediscmd
 
 import (
-	"log"
-
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // SMEMBERS key
@@ -13,45 +12,36 @@ import (
 func SMEMBERS(key string) []interface{} {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SMEMBERS", key)
+	logger.Info("执行redis : ", "SMEMBERS", key)
 	res, err := redis.Values(rc.Do("SMEMBERS", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
-	log.Println(res)
 	return res
 }
 
 func SMEMBERSString(key string) []string {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SMEMBERS", key)
+	logger.Info("执行redis : ", "SMEMBERS", key)
 	res, err := redis.Strings(rc.Do("SMEMBERS", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
-	log.Println(res)
 	return res
 }
 
 // 新创建Set  将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。
-func SADD(key string, values []interface{}) error {
+func SADD(key string, values []interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	args := redis.Args{}.Add(key)
 	for _, value := range values {
 		args = args.Add(value)
 	}
-	log.Println("执行redis : ", "SADD", args)
-	res, err := rc.Do("SADD", args...)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		//key已经存在
-		//WRONGTYPE Operation against a key holding the wrong kind of value
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "SADD", args)
+	_, err = rc.Do("SADD", args...)
+	return
 }
 
 // SCARD key
@@ -59,13 +49,8 @@ func SADD(key string, values []interface{}) error {
 func SCARD(key string) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SCARD", key)
-	res, err := redis.Int64(rc.Do("SCARD", key))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "SCARD", key)
+	_, err = redis.Int64(rc.Do("SCARD", key))
 	return
 }
 
@@ -79,13 +64,8 @@ func SDIFF(keys []string) (res []interface{}, err error) {
 	for _, key := range keys {
 		args = args.Add(key)
 	}
-	log.Println("执行redis : ", "SDIFF", args)
+	logger.Info("执行redis : ", "SDIFF", args)
 	res, err = redis.Values(rc.Do("SDIFF", args))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -100,13 +80,8 @@ func SDIFFSTORE(key string, keys []string) (res []interface{}, err error) {
 	for _, key := range keys {
 		args = args.Add(key)
 	}
-	log.Println("执行redis : ", "SDIFFSTORE", args)
+	logger.Info("执行redis : ", "SDIFFSTORE", args)
 	res, err = redis.Values(rc.Do("SDIFFSTORE", args))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -120,13 +95,8 @@ func SINTER(keys []string) (res []interface{}, err error) {
 	for _, key := range keys {
 		args = args.Add(key)
 	}
-	log.Println("执行redis : ", "SINTER", args)
+	logger.Info("执行redis : ", "SINTER", args)
 	res, err = redis.Values(rc.Do("SINTER", args))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -141,13 +111,8 @@ func SINTERSTORE(key string, keys []string) (res []interface{}, err error) {
 	for _, key := range keys {
 		args = args.Add(key)
 	}
-	log.Println("执行redis : ", "SINTERSTORE", args)
+	logger.Info("执行redis : ", "SINTERSTORE", args)
 	res, err = redis.Values(rc.Do("SINTERSTORE", args))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -156,21 +121,19 @@ func SINTERSTORE(key string, keys []string) (res []interface{}, err error) {
 // 返回值:
 // 如果 member 元素是集合的成员，返回 1 。
 // 如果 member 元素不是集合的成员，或 key 不存在，返回 0 。
-func SISMEMBER(key string, value interface{}) (resdata bool, err error) {
+func SISMEMBER(key string, value interface{}) (resData bool, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SISMEMBER", key, value)
-	resdata = false
+	logger.Info("执行redis : ", "SISMEMBER", key, value)
+	resData = false
 	res, err := redis.Int64(rc.Do("SISMEMBER", key, value))
 	if err != nil {
-		log.Println("GET error", err.Error())
 		return
 	}
 	if res == 1 {
-		resdata = true
+		resData = true
 		return
 	}
-	log.Println(res)
 	return
 }
 
@@ -182,21 +145,19 @@ func SISMEMBER(key string, value interface{}) (resdata bool, err error) {
 // 当 destination 集合已经包含 member 元素时， SMOVE 命令只是简单地将 source 集合中的 member 元素删除。
 // 当 source 或 destination 不是集合类型时，返回一个错误。
 // 返回值: 成功移除，返回 1 。失败0
-func SMOVE(key, destination string, member interface{}) (resdata bool, err error) {
+func SMOVE(key, destination string, member interface{}) (resData bool, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SMOVE", key, destination, member)
-	resdata = false
+	logger.Info("执行redis : ", "SMOVE", key, destination, member)
+	resData = false
 	res, err := redis.Int64(rc.Do("SMOVE", key, destination, member))
 	if err != nil {
-		log.Println("GET error", err.Error())
 		return
 	}
 	if res == 1 {
-		resdata = true
+		resData = true
 		return
 	}
-	log.Println(res)
 	return
 }
 
@@ -205,13 +166,11 @@ func SMOVE(key, destination string, member interface{}) (resdata bool, err error
 func SPOP(key string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SPOP", key)
+	logger.Info("执行redis : ", "SPOP", key)
 	res, err = redis.String(rc.Do("SPOP", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
 		return
 	}
-	log.Println(res)
 	return
 }
 
@@ -222,13 +181,11 @@ func SPOP(key string) (res string, err error) {
 func SRANDMEMBER(key string, count int64) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SRANDMEMBER", key, count)
+	logger.Info("执行redis : ", "SRANDMEMBER", key, count)
 	res, err = redis.Values(rc.Do("SRANDMEMBER", key, count))
 	if err != nil {
-		log.Println("GET error", err.Error())
 		return
 	}
-	log.Println(res)
 	return
 }
 
@@ -241,13 +198,8 @@ func SREM(key string, member []interface{}) (err error) {
 	for _, v := range member {
 		args = args.Add(v)
 	}
-	log.Println("执行redis : ", "SREM", args)
-	res, err := rc.Do("SREM", args)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "SREM", args)
+	_, err = rc.Do("SREM", args)
 	return
 }
 
@@ -256,13 +208,8 @@ func SREM(key string, member []interface{}) (err error) {
 func SREMOne(key string, member interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "SREM", key, member)
-	res, err := rc.Do("SREM", key, member)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "SREM", key, member)
+	_, err = rc.Do("SREM", key, member)
 	return
 }
 
@@ -275,13 +222,8 @@ func SUNION(keys []string) (res []interface{}, err error) {
 	for _, v := range keys {
 		args = args.Add(v)
 	}
-	log.Println("执行redis : ", "SUNION", args)
+	logger.Info("执行redis : ", "SUNION", args)
 	res, err = redis.Values(rc.Do("SUNION", args))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -294,13 +236,8 @@ func SUNIONSTORE(key string, keys []string) (res []interface{}, err error) {
 	for _, v := range keys {
 		args = args.Add(v)
 	}
-	log.Println("执行redis : ", "SUNIONSTORE", args)
+	logger.Info("执行redis : ", "SUNIONSTORE", args)
 	res, err = redis.Values(rc.Do("SUNIONSTORE", args))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 

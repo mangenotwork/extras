@@ -1,22 +1,20 @@
 package rediscmd
 
 import (
-	"log"
-
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // 获取List value
 func LRANGEAll(key string) []interface{} {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LRANGE", key, 0, -1)
+	logger.Info("执行redis : ", "LRANGE", key, 0, -1)
 	res, err := redis.Values(rc.Do("LRANGE", key, 0, -1))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
-	log.Println(res)
 	return res
 }
 
@@ -25,32 +23,22 @@ func LRANGEAll(key string) []interface{} {
 func LRANGE(key string, start, stop int64) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LRANGE", key, start, stop)
+	logger.Info("执行redis : ", "LRANGE", key, start, stop)
 	res, err = redis.Values(rc.Do("LRANGE", key, start, stop))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
 // 新创建list 将一个或多个值 value 插入到列表 key 的表头
-func LPUSH(key string, values []interface{}) error {
+func LPUSH(key string, values []interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	args := redis.Args{}.Add(key)
 	for _, value := range values {
 		args = args.Add(value)
 	}
-	log.Println("执行redis : ", "LPUSH", args)
-	res, err := rc.Do("LPUSH", args...)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "LPUSH", args)
+	_, err = rc.Do("LPUSH", args...)
+	return
 }
 
 // RPUSH key value [value ...]
@@ -58,21 +46,16 @@ func LPUSH(key string, values []interface{}) error {
 // 如果有多个 value 值，那么各个 value 值按从左到右的顺序依次插入到表尾：比如对一个空列表 mylist 执行
 // RPUSH mylist a b c ，得出的结果列表为 a b c ，等同于执行命令 RPUSH mylist a 、 RPUSH mylist b 、 RPUSH mylist c 。
 // 新创建List  将一个或多个值 value 插入到列表 key 的表尾(最右边)。
-func RPUSH(key string, values []interface{}) error {
+func RPUSH(key string, values []interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	args := redis.Args{}.Add(key)
 	for _, value := range values {
 		args = args.Add(value)
 	}
-	log.Println("执行redis : ", "RPUSH", args)
-	res, err := rc.Do("RPUSH", args)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "RPUSH", args)
+	_, err = rc.Do("RPUSH", args)
+	return
 }
 
 // BLPOP key [key ...] timeout
@@ -95,13 +78,8 @@ func BRPOPLPUSH() {}
 func LINDEX(key string, index int64) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LINDEX", key, index)
+	logger.Info("执行redis : ", "LINDEX", key, index)
 	res, err = redis.String(rc.Do("LINDEX", key, index))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -118,13 +96,8 @@ func LINSERT(direction bool, key, pivot, value string) (err error) {
 	if direction {
 		directionStr = "BEFORE"
 	}
-	log.Println("执行redis : ", "LINSERT", key, directionStr, pivot, value)
-	res, err := rc.Do("LINSERT", key, directionStr, pivot, value)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "LINSERT", key, directionStr, pivot, value)
+	_, err = rc.Do("LINSERT", key, directionStr, pivot, value)
 	return
 }
 
@@ -134,13 +107,8 @@ func LINSERT(direction bool, key, pivot, value string) (err error) {
 func LLEN(key string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LLEN", key)
+	logger.Info("执行redis : ", "LLEN", key)
 	res, err = redis.Int64(rc.Do("LLEN", key))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -149,13 +117,8 @@ func LLEN(key string) (res int64, err error) {
 func LPOP(key string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LPOP", key)
+	logger.Info("执行redis : ", "LPOP", key)
 	res, err = redis.String(rc.Do("LPOP", key))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -165,13 +128,8 @@ func LPOP(key string) (res string, err error) {
 func LPUSHX(key string, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LPUSHX", key, value)
-	res, err := rc.Do("LPUSHX", key, value)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "LPUSHX", key, value)
+	_, err = rc.Do("LPUSHX", key, value)
 	return
 }
 
@@ -184,13 +142,8 @@ func LPUSHX(key string, value interface{}) (err error) {
 func LREM(key string, count int64, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LREM", key, count, value)
-	res, err := rc.Do("LREM", key, count, value)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "LREM", key, count, value)
+	_, err = rc.Do("LREM", key, count, value)
 	return
 }
 
@@ -200,13 +153,8 @@ func LREM(key string, count int64, value interface{}) (err error) {
 func LSET(key string, index int64, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LSET", key, index, value)
-	res, err := rc.Do("LSET", key, index, value)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "LSET", key, index, value)
+	_, err = rc.Do("LSET", key, index, value)
 	return
 }
 
@@ -216,13 +164,8 @@ func LSET(key string, index int64, value interface{}) (err error) {
 func LTRIM(key string, start, stop int64) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "LTRIM", key, start, stop)
-	res, err := rc.Do("LTRIM", key, start, stop)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "LTRIM", key, start, stop)
+	_, err = rc.Do("LTRIM", key, start, stop)
 	return
 }
 
@@ -231,13 +174,8 @@ func LTRIM(key string, start, stop int64) (err error) {
 func RPOP(key string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "RPOP", key)
+	logger.Info("执行redis : ", "RPOP", key)
 	res, err = redis.String(rc.Do("RPOP", key))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -253,13 +191,8 @@ func RPOP(key string) (res string, err error) {
 func RPOPLPUSH(key, destination string) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "RPOPLPUSH", key, destination)
+	logger.Info("执行redis : ", "RPOPLPUSH", key, destination)
 	res, err = redis.String(rc.Do("RPOPLPUSH", key, destination))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -268,12 +201,7 @@ func RPOPLPUSH(key, destination string) (res string, err error) {
 func RPUSHX(key string, value interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "RPUSHX", key, value)
-	res, err := rc.Do("RPUSHX", key, value)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "RPUSHX", key, value)
+	_, err = rc.Do("RPUSHX", key, value)
 	return
 }

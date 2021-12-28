@@ -2,12 +2,13 @@ package engine
 
 import (
 	"encoding/json"
+	"net"
+
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/service"
 	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
-	"log"
-	"net"
 )
 
 func UDPSend(addr *net.UDPAddr, b []byte){
@@ -18,7 +19,7 @@ func UDPSend(addr *net.UDPAddr, b []byte){
 
 func StartUdpServer(){
 	go func() {
-		log.Println("StartUdpServer")
+		logger.Info("StartUdpServer")
 		var err error
 
 		// 监听
@@ -27,10 +28,10 @@ func StartUdpServer(){
 			Port: utils.Str2Int(conf.Arg.UdpServer.Prod),
 		})
 		if err != nil {
-			log.Println(err)
+			logger.Error(err)
 			return
 		}
-		log.Printf("Local: <%s> \n", model.UDPListener.LocalAddr().String())
+		logger.Info("Local: <%s> \n", model.UDPListener.LocalAddr().String())
 
 		// 读取数据
 		data := make([]byte, 10240)
@@ -44,9 +45,10 @@ func StartUdpServer(){
 
 			n, remoteAddr, err := model.UDPListener.ReadFromUDP(data)
 			if err != nil {
-				log.Printf("error during read: %s", err)
+				logger.Error("error during read: %s", err)
 			}
-			log.Printf("<%s> %s\n", remoteAddr, data[:n])
+
+			logger.Info("<%s> %s\n", remoteAddr, data[:n])
 			//_, err = UDPListener.WriteToUDP([]byte("world"), remoteAddr)
 			//if err != nil {
 			//	log.Printf(err.Error())
@@ -57,7 +59,7 @@ func StartUdpServer(){
 
 			if n > 0 && n < 10241 {
 				data := data[:n]
-				log.Println(string(data))
+				logger.Info(string(data))
 				cmdData := &model.CmdData{}
 				jsonErr := json.Unmarshal(data, &cmdData)
 				if jsonErr != nil {

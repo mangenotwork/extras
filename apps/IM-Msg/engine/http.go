@@ -1,9 +1,11 @@
 package engine
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 func StartHTTP(){
 	go func() {
-		log.Println("StartHTTP")
+		logger.Info("StartHTTP")
 	}()
 }

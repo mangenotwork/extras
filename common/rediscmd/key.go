@@ -2,11 +2,11 @@ package rediscmd
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // 获取所有的key
@@ -35,7 +35,7 @@ func GetALLKeys(matchValue string) (ksyList map[string]int) {
 			}
 		}
 	}
-	log.Println("ksyList= ", ksyList)
+	logger.Info("ksyList= ", ksyList)
 	return
 }
 
@@ -44,10 +44,10 @@ func GetALLKeys(matchValue string) (ksyList map[string]int) {
 func addGetKey(ksyList map[string]int, matchValue string, matchSplit string, conn redis.Conn, cursor string) (map[string]int, string) {
 	//count_number :一次10000
 	countNumber := "10000"
+	logger.Info("执行redis : ", "scan", cursor, "MATCH", matchValue, "COUNT", countNumber)
 	res, err := redis.Values(conn.Do("scan", cursor, "MATCH", matchValue, "COUNT", countNumber))
-	log.Println("执行redis : ", "scan", cursor, "MATCH", matchValue, "COUNT", countNumber)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
 	//获取	matchvalue 含有多少:
 	cfNumber := strings.Count(matchValue, ":")
@@ -107,7 +107,7 @@ func SearchKeys(matchValue string) (ksyList map[string]int) {
 			}
 		}
 	}
-	log.Println("ksyList= ", ksyList)
+	logger.Info("ksyList= ", ksyList)
 	return
 }
 
@@ -115,10 +115,10 @@ func SearchKeys(matchValue string) (ksyList map[string]int) {
 func addSearchKey(ksyList map[string]int, matchValue string, conn redis.Conn, cursor string) (map[string]int, string) {
 	//count_number :一次10000
 	countNumber := "10000"
+	logger.Info("执行redis : ", "scan", cursor, "MATCH", matchValue, "COUNT", countNumber)
 	res, err := redis.Values(conn.Do("scan", cursor, "MATCH", matchValue, "COUNT", countNumber))
-	log.Println("执行redis : ", "scan", cursor, "MATCH", matchValue, "COUNT", countNumber)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
 	//获取新的游标
 	newCursor := string(res[0].([]byte))
@@ -153,10 +153,10 @@ func GetAllKeyName() ([]interface{}, int) {
 
 func getAllKey(conn redis.Conn, cursor string) ([]interface{}, string) {
 	countNumber := "10000"
+	logger.Info("执行redis : ", "scan", cursor, "MATCH", "*", "COUNT", countNumber)
 	res, err := redis.Values(conn.Do("scan", cursor, "MATCH", "*", "COUNT", countNumber))
-	log.Println("执行redis : ", "scan", cursor, "MATCH", "*", "COUNT", countNumber)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
 	return res[1].([]interface{}), string(res[0].([]byte))
 }
@@ -171,12 +171,11 @@ func GetKeyInfo(key string) {
 func GetKeyType(key string) string {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "TYPE", key)
+	logger.Info("执行redis : ", "TYPE", key)
 	res, err := redis.String(rc.Do("TYPE", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		return ""
 	}
-	log.Println(res)
 	return res
 }
 
@@ -184,12 +183,12 @@ func GetKeyType(key string) string {
 func GetKeyTTL(key string) int64 {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "TTL", key)
+	logger.Info("执行redis : ", "TTL", key)
 	res, err := redis.Int64(rc.Do("TTL", key))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
+		return 0
 	}
-	log.Println(res)
 	return res
 }
 
@@ -197,10 +196,10 @@ func GetKeyTTL(key string) int64 {
 func EXISTS(key string) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("[Execute redis command]: ", "EXISTS", key)
+	logger.Info("[Execute redis command]: ", "EXISTS", key)
 	data, err := redis.String(rc.Do("DUMP", key))
 	if err != nil || data == "0" {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return false
 	}
 	return true
@@ -210,10 +209,10 @@ func EXISTS(key string) bool {
 func RenameKey(key, newName string) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("[Execute redis command]: ", "RENAME", key, newName)
+	logger.Info("[Execute redis command]: ", "RENAME", key, newName)
 	_, err := rc.Do("RENAME", key, newName)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return false
 	}
 	return true
@@ -223,10 +222,10 @@ func RenameKey(key, newName string) bool {
 func UpdateKeyTTL(key string, ttlValue int64) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("[Execute redis command]: ", "EXPIRE", key, ttlValue)
+	logger.Info("[Execute redis command]: ", "EXPIRE", key, ttlValue)
 	_, err := rc.Do("EXPIRE", key, ttlValue)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return false
 	}
 	return true
@@ -236,10 +235,10 @@ func UpdateKeyTTL(key string, ttlValue int64) bool {
 func EXPIREATKey(key string, date int64) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("[Execute redis command]: ", "EXPIREAT", key, date)
+	logger.Info("[Execute redis command]: ", "EXPIREAT", key, date)
 	_, err := rc.Do("EXPIREAT", key, date)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Info("GET error", err.Error())
 		return false
 	}
 	return true
@@ -249,10 +248,10 @@ func EXPIREATKey(key string, date int64) bool {
 func DELKey(key string) bool {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("[Execute redis command]: ", "DEL", key)
+	logger.Info("[Execute redis command]: ", "DEL", key)
 	_, err := rc.Do("DEL", key)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return false
 	}
 	return true

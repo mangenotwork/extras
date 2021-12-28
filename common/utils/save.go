@@ -7,8 +7,9 @@ import (
 	"encoding/gob"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
+
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // GobEncodeStr 将数据gob序列化存储到文件
@@ -17,7 +18,7 @@ func GobEncodeStr(data string) []byte {
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(data)
 	if err != nil {
-		log.Fatal("encode error:", err)
+		logger.Error("encode error:", err)
 	}
 	return buf.Bytes()
 }
@@ -27,7 +28,7 @@ func GobDecoder(data []byte) (res string) {
 	dec := gob.NewDecoder(buf)
 	err := dec.Decode(&res)
 	if err != nil {
-		log.Fatal("decode error:", err)
+		logger.Error("decode error:", err)
 	}
 	return
 }
@@ -79,13 +80,13 @@ func FileWrite(fileName string, data []byte)  {
 		//f, err = os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND, 0666)
 		err = os.Remove(fileName)
 		if err != nil{
-			log.Println("file open fail : ", err)
+			logger.Error("file open fail : ", err)
 			return
 		}
 	}
 	f, err = os.Create(fileName)
 	if err != nil {
-		log.Println("file create fail : ", err)
+		logger.Error("file create fail : ", err)
 		return
 	}
 	defer f.Close()

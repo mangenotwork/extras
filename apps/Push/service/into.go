@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/mangenotwork/extras/apps/Push/model"
-	"log"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 func Into(client model.Client, deviceId string) (device *model.Device) {
@@ -28,11 +28,11 @@ func Into(client model.Client, deviceId string) (device *model.Device) {
 func Interactive(data *model.CmdData, client model.Client) (device *model.Device){
 	switch data.Cmd {
 	case "Auth":
-		log.Println("Auth")
+		logger.Info("Auth")
 		// 设备认证
 		if deviceData,ok := data.Data.(map[string]interface{})["device"]; ok {
 			if deviceId, yes := deviceData.(string); yes && len(deviceId)>0 {
-				log.Println("device id = ", deviceId)
+				logger.Info("device id = ", deviceId)
 				device = Into(client, deviceId)
 			}
 		}
@@ -41,7 +41,7 @@ func Interactive(data *model.CmdData, client model.Client) (device *model.Device
 		// 订阅 TopicJoin
 		if topicData,ok := data.Data.(map[string]interface{})["topic"]; ok {
 			if topic, yes := topicData.(string); yes && len(topic)>0 {
-				log.Println("topic = ", topic)
+				logger.Info("topic = ", topic)
 				err := device.SubTopic(client, topic)
 				if err != nil {
 					client.SendMessage(err.Error())
@@ -55,7 +55,7 @@ func Interactive(data *model.CmdData, client model.Client) (device *model.Device
 		// 取消订阅 TopicCancel
 		if topicData,ok := data.Data.(map[string]interface{})["topic"]; ok {
 			if topic, yes := topicData.(string); yes && len(topic)>0 {
-				log.Println("topic = ", topic)
+				logger.Info("topic = ", topic)
 				err := device.CancelTopic(topic)
 				if err != nil {
 					client.SendMessage(err.Error())

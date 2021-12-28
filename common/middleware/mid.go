@@ -1,13 +1,14 @@
 package middleware
 
 import (
-	"golang.org/x/time/rate"
-	"log"
 	"net"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/mangenotwork/extras/common/logger"
+	"golang.org/x/time/rate"
 )
 
 // Base Http基础中间件,日志
@@ -34,7 +35,7 @@ func Base(next http.Handler) http.Handler {
 		start := time.Now()
 		ip := GetIP(r)
 		next.ServeHTTP(w, r)
-		log.Printf("[%s] %s %s %v", ip, r.Method, r.URL.Path, time.Since(start))
+		logger.Info("[%s] %s %s %v", ip, r.Method, r.URL.Path, time.Since(start))
 	})
 }
 
@@ -50,13 +51,13 @@ func ReqLimit(ipv *IpVisitor, nextHeader http.Handler) http.Handler {
 		if !ipv.IsWhiteList(ip) {
 			limiter := ipv.GetVisitor(ip)
 			if limiter.AllowN(time.Now(), 1) == false {
-				log.Println("ip限流")
+				logger.Info("ip限流")
 				http.Error(w, http.StatusText(429), http.StatusTooManyRequests)
 				return
 			}
 		}
 		nextHeader.ServeHTTP(w, r)
-		log.Printf("[%s] %s %s %v", ip, r.Method, r.URL.Path, time.Since(start))
+		logger.Info("[%s] %s %s %v", ip, r.Method, r.URL.Path, time.Since(start))
 	})
 }
 

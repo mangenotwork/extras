@@ -2,15 +2,16 @@ package handler
 
 import (
 	"fmt"
-	"github.com/mangenotwork/extras/apps/ImgHelper/service"
-	"github.com/mangenotwork/extras/common/utils"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
-	"log"
 	"mime/multipart"
 	"net/http"
+
+	"github.com/mangenotwork/extras/apps/ImgHelper/service"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +52,7 @@ func Barcode(w http.ResponseWriter, r *http.Request) {
 
 // 识别二维码  QRCodeRecognition
 func QRCodeRecognition(w http.ResponseWriter, r *http.Request) {
-	log.Println(r)
+	logger.Info(r)
 
 }
 

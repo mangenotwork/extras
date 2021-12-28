@@ -3,10 +3,12 @@ package conn
 import (
 	"errors"
 	"fmt"
-	"github.com/garyburd/redigo/redis"
-	"github.com/mangenotwork/extras/common/conf"
 	"sync"
 	"time"
+
+	"github.com/garyburd/redigo/redis"
+	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 var _redisConn *redis.Pool

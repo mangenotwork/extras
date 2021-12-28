@@ -2,11 +2,12 @@ package conf
 
 import (
 	"encoding/json"
-	yaml "gopkg.in/yaml.v3"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/mangenotwork/extras/common/logger"
+	yaml "gopkg.in/yaml.v3"
 )
 
 var Arg Configs
@@ -121,7 +122,7 @@ func InitConf(){
 	if !fileExists(appConfigPath) {
 		panic("【启动失败】 未找到配置文件!")
 	}
-	log.Println("[启动]读取配置文件:", appConfigPath)
+	logger.Info("[启动]读取配置文件:", appConfigPath)
 	//读取yaml文件到缓存中
 	config, err := ioutil.ReadFile(appConfigPath)
 	if err != nil {
@@ -133,7 +134,7 @@ func InitConf(){
 	}
 
 	b,_ := json.Marshal(Arg)
-	log.Println("[conf arg] ", string(b))
+	logger.Info("[conf arg] ", string(b))
 
 }
 

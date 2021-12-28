@@ -3,8 +3,7 @@ package mq
 import (
 	"fmt"
 	"github.com/mangenotwork/extras/common/conf"
-	"log"
-
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/streadway/amqp"
 )
 
@@ -12,7 +11,7 @@ type MQRabbitService struct {
 }
 
 func (m *MQRabbitService) newProducer() string {
-	log.Println("amqp://"+conf.Arg.Rabbit.User+":"+conf.Arg.Rabbit.Password+"@"+conf.Arg.Rabbit.Addr)
+	logger.Info("amqp://"+conf.Arg.Rabbit.User+":"+conf.Arg.Rabbit.Password+"@"+conf.Arg.Rabbit.Addr)
 	return "amqp://"+conf.Arg.Rabbit.User+":"+conf.Arg.Rabbit.Password+"@"+conf.Arg.Rabbit.Addr
 }
 
@@ -20,21 +19,21 @@ func (m *MQRabbitService) newProducer() string {
 func (m *MQRabbitService) Producer(topic string, data []byte) {
 	mq, err := newRabbitMQPubSub(topic, m.newProducer())
 	if err != nil {
-		log.Println("[rabbit]无法连接到队列")
+		logger.Error("[rabbit]无法连接到队列")
 		return
 	}
 
-	log.Println(fmt.Sprintf("[生产消息] topic : %s -->  %s", topic, string(data)))
+	logger.Info(fmt.Sprintf("[生产消息] topic : %s -->  %s", topic, string(data)))
 	err = mq.publishPub(data)
 	if err != nil {
-		log.Println("[生产消息] 失败 ： " + err.Error())
+		logger.Error("[生产消息] 失败 ： " + err.Error())
 	}
 }
 
 func (m *MQRabbitService) Consumer(topic string, ch chan []byte, f func(b []byte)) {
 	mh, err := newRabbitMQPubSub(topic, m.newProducer())
 	if err != nil {
-		log.Println("[rabbit]无法连接到队列")
+		logger.Error("[rabbit]无法连接到队列")
 		return
 	}
 	msg := mh.registryReceiveSub()
@@ -48,7 +47,7 @@ func (m *MQRabbitService) Consumer(topic string, ch chan []byte, f func(b []byte
 		}
 	}(msg)
 
-	log.Println("[Rabbit] %v started", topic)
+	logger.Info("[Rabbit] %v started", topic)
 }
 
 type rabbitMQ struct {
@@ -73,12 +72,12 @@ func newRabbitMQ(queueName, exchange, key, mqUrl string) (*rabbitMQ, error) {
 	//创建rabbitMq连接
 	mq.conn, err = amqp.Dial(mq.MqUrl)
 	if err != nil {
-		log.Println("创建连接错误！", err)
+		logger.Error("创建连接错误！", err)
 		return nil, err
 	}
 	mq.channel, err = mq.conn.Channel()
 	if err != nil {
-		log.Println("获取channel失败", err)
+		logger.Error("获取channel失败", err)
 	}
 	return mq, err
 }
@@ -107,7 +106,7 @@ func (r *rabbitMQ) publishSimple(message []byte) (err error) {
 		nil, //额外参数
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare a queue", err)
+		logger.Error("[Rabbit] failed to declare a queue", err)
 	}
 
 	//2.发送消息到队列中
@@ -121,7 +120,7 @@ func (r *rabbitMQ) publishSimple(message []byte) (err error) {
 			Body: message, //消息
 		})
 	if err != nil {
-		log.Println("[Rabbit] publish 消息失败", err)
+		logger.Error("[Rabbit] publish 消息失败", err)
 	}
 	return
 }
@@ -145,7 +144,7 @@ func (r *rabbitMQ) registryConsumeSimple() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 	//接收消息
 	msg, err = r.channel.Consume(
@@ -163,7 +162,7 @@ func (r *rabbitMQ) registryConsumeSimple() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 	return
 }
@@ -183,7 +182,7 @@ func newRabbitMQPubSub(exchangeName, mqUrl string) (*rabbitMQ, error) {
 	//获取channel
 	mq.channel, err = mq.conn.Channel()
 	if err != nil {
-		log.Println("[Rabbit] failed to open a channel!", err)
+		logger.Error("[Rabbit] failed to open a channel!", err)
 	}
 	return mq, err
 }
@@ -201,7 +200,7 @@ func (r *rabbitMQ) publishPub(message []byte) (err error) {
 		nil, //参数
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare an exchange ",err)
+		logger.Error("[Rabbit] failed to declare an exchange ",err)
 	}
 
 	//2 发送消息
@@ -230,7 +229,7 @@ func (r *rabbitMQ) registryReceiveSub() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare an exchange ",err)
+		logger.Error("[Rabbit] failed to declare an exchange ",err)
 	}
 
 	//2试探性创建队列，创建队列
@@ -243,7 +242,7 @@ func (r *rabbitMQ) registryReceiveSub() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] Failed to declare a queue ", err)
+		logger.Error("[Rabbit] Failed to declare a queue ", err)
 	}
 
 	//绑定队列到exchange中
@@ -273,11 +272,11 @@ func newRabbitMQTopic(exchange, routingKey, mqUrl string) (*rabbitMQ, error) {
 	var err error
 	mq.conn, err = amqp.Dial(mq.MqUrl)
 	if err != nil {
-		log.Println("[Rabbit] failed to connect rabbitMq! ", err)
+		logger.Error("[Rabbit] failed to connect rabbitMq! ", err)
 	}
 	mq.channel, err = mq.conn.Channel()
 	if err != nil {
-		log.Println("[Rabbit] failed to open a channel ", err)
+		logger.Error("[Rabbit] failed to open a channel ", err)
 	}
 	return mq, err
 }
@@ -294,7 +293,7 @@ func (r *rabbitMQ) publishTopic(message []byte) (err error) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare an exchange ",err)
+		logger.Error("[Rabbit] failed to declare an exchange ",err)
 	}
 
 	//2发送信息
@@ -326,7 +325,7 @@ func (r *rabbitMQ) registryReceiveTopic() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare an exchange ",err)
+		logger.Error("[Rabbit] failed to declare an exchange ",err)
 	}
 
 	//2试探性创建队列，创建队列
@@ -339,7 +338,7 @@ func (r *rabbitMQ) registryReceiveTopic() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] Failed to declare a queue ", err)
+		logger.Error("[Rabbit] Failed to declare a queue ", err)
 	}
 
 	//绑定队列到exchange中
@@ -368,11 +367,11 @@ func newRabbitMQRouting(exchange, routingKey, mqUrl string) (*rabbitMQ, error) {
 	var err error
 	rabbitMQ.conn, err = amqp.Dial(rabbitMQ.MqUrl)
 	if err != nil {
-		log.Println("[Rabbit] failed   to connect rabbitMq! ", err)
+		logger.Error("[Rabbit] failed   to connect rabbitMq! ", err)
 	}
 	rabbitMQ.channel, err = rabbitMQ.conn.Channel()
 	if err != nil {
-		log.Println("[Rabbit] failed to open a channel; ", err)
+		logger.Error("[Rabbit] failed to open a channel; ", err)
 	}
 	return rabbitMQ, err
 }
@@ -389,7 +388,7 @@ func (r *rabbitMQ) publishRouting(message []byte) (err error) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare an exchange ",err)
+		logger.Error("[Rabbit] failed to declare an exchange ",err)
 	}
 
 	//发送信息
@@ -417,7 +416,7 @@ func (r *rabbitMQ) registryReceiveRouting() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] failed to declare an exchange ",err)
+		logger.Error("[Rabbit] failed to declare an exchange ",err)
 	}
 
 	//2试探性创建队列，创建队列
@@ -430,7 +429,7 @@ func (r *rabbitMQ) registryReceiveRouting() (msg <-chan amqp.Delivery) {
 		nil,
 	)
 	if err != nil {
-		log.Println("[Rabbit] Failed to declare a queue ", err)
+		logger.Error("[Rabbit] Failed to declare a queue ", err)
 	}
 
 	//绑定队列到exchange中

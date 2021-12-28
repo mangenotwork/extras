@@ -2,16 +2,17 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
+	"net/http"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/service"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/middleware"
 	"github.com/mangenotwork/extras/common/utils"
-	"log"
-	"net/http"
-	"time"
-	"errors"
 )
 
 var upGrader = websocket.Upgrader{
@@ -39,7 +40,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 	deviceId := utils.GetUrlArg(r, "device")
 	conn, err := upGrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("websocket upgrade error:%v", err)
+		logger.Error("websocket upgrade error:%v", err)
 		return
 	}
 	str := `
@@ -59,15 +60,15 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 	}else{
 		device = service.Into(client, deviceId)
 	}
-	log.Println("[连接日志] 连接成功. 用时 = ", time.Now().Sub(st))
-	log.Println("RemoteAddr = ", conn.RemoteAddr(), " | LocalAddr = ", conn.LocalAddr())
+	logger.Info("[连接日志] 连接成功. 用时 = ", time.Now().Sub(st))
+	logger.Info("RemoteAddr = ", conn.RemoteAddr(), " | LocalAddr = ", conn.LocalAddr())
 
 	for {
 		_, data, err := conn.ReadMessage()
 		if err != nil {
 			// 释放客户端连接
 			if device != nil {
-				log.Println("释放客户端连接")
+				logger.Info("释放客户端连接")
 				device.OffLine() // 下线记录
 				delete(model.AllWsClient, deviceId)
 				device.Discharge("ws") // 连接离开topic,group
@@ -75,7 +76,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 			_=conn.Close()
 			return
 		}
-		log.Println(data)
+		logger.Info(data)
 		if len(data) < 1 {
 			continue
 		}
@@ -85,7 +86,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 			_=conn.WriteMessage(websocket.BinaryMessage, model.CmdDataMsg("非法数据格式"))
 			continue
 		}
-		log.Println(cmdData)
+		logger.Info(cmdData)
 		device = service.Interactive(cmdData, client)
 	}
 

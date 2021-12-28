@@ -10,6 +10,8 @@ import (
 	"mime/multipart"
 	"os"
 	"strings"
+
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 const EXIF_HEADER_READ_SIZE = 12
@@ -210,7 +212,7 @@ type TiffInterface interface {
 }
 
 func debug(s string) {
-	log.Println(s)
+	logger.Info(s)
 }
 
 // GetExifData checks the byte stream header to match EXIF metadata

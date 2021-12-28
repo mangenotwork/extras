@@ -3,8 +3,6 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"github.com/mangenotwork/extras/common/utils"
-	"log"
 	"net"
 	"os"
 	"os/signal"
@@ -13,9 +11,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
-	"google.golang.org/grpc"
 )
 
 // Server GRPC Server struct
@@ -91,7 +91,7 @@ func (m *Server) Run() {
 	go func() {
 		err := m.Server.Serve(m.Listener)
 		if err != nil {
-			log.Println("[RPC] failed to listen:%v", err)
+			logger.Error("[RPC] failed to listen:%v", err)
 		}
 	}()
 
@@ -103,18 +103,18 @@ func (m *Server) Run() {
 // Register 将grpc服务信息注册到etcd
 func (m *Server) register() {
 	if len(m.Name) < 1 {
-		log.Println("[RPC] grpc服务注册失败, 未设置服务名称. ")
+		logger.Error("[RPC] grpc服务注册失败, 未设置服务名称. ")
 		return
 	}
 
 	ip, err := utils.GetIp()
 	if err != nil {
-		log.Println("[RPC] grpc服务注册失败, 获取本机ip失败, err = "+err.Error())
+		logger.Error("[RPC] grpc服务注册失败, 获取本机ip失败, err = "+err.Error())
 		return
 	}
 
 	if len(m.EtcdAddr) < 1 {
-		log.Println("[RPC] grpc服务注册失败, etcd地址为空;")
+		logger.Error("[RPC] grpc服务注册失败, etcd地址为空;")
 		return
 	}
 
@@ -124,7 +124,7 @@ func (m *Server) register() {
 	if err != nil {
 		panic("[致命启动错误] 服务注册失败 err = " + err.Error())
 	} else {
-		log.Println("[grpc服务注册] Register Succeed; key = ", key)
+		logger.Error("[grpc服务注册] Register Succeed; key = ", key)
 	}
 
 	ch := make(chan os.Signal, 1)
@@ -153,7 +153,7 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	requestId := getValue(md, "requestid")
 	m, err := handler(ctx, req)
 	if err != nil {
-		log.Printf("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
+		logger.Error("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
 			clientName,
 			serviceName,
 			pr.Addr.String(),
@@ -161,7 +161,7 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 			info.FullMethod,
 			err)
 	} else {
-		log.Printf("[GRPC] %v | %s(%v)->%s |id:%s | %s ",
+		logger.Info("[GRPC] %v | %s(%v)->%s |id:%s | %s ",
 			time.Now().Sub(startTime),
 			clientName,
 			pr.Addr.String(),
@@ -179,13 +179,13 @@ type wrappedStream struct {
 
 // RecvMsg
 func (w *wrappedStream) RecvMsg(m interface{}) error {
-	log.Println("Receive a message (Type: %T) at %s", m, time.Now().Format(time.RFC3339))
+	logger.Info("Receive a message (Type: %T) at %s", m, time.Now().Format(time.RFC3339))
 	return w.ServerStream.RecvMsg(m)
 }
 
 // SendMsg
 func (w *wrappedStream) SendMsg(m interface{}) error {
-	log.Println("Send a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
+	logger.Info("Send a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
 	return w.ServerStream.SendMsg(m)
 }
 
@@ -205,7 +205,7 @@ func streamInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamS
 	}
 	err := handler(srv, newWrappedStream(ss))
 	if err != nil {
-		log.Println("RPC failed with error %v", err)
+		logger.Error("RPC failed with error %v", err)
 	}
 	return err
 }

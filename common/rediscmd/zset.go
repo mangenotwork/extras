@@ -1,22 +1,20 @@
 package rediscmd
 
 import (
-	"log"
-
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 //获取ZSet value 返回集合 有序集成员的列表。
 func ZRANGEALL(key string) []interface{} {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZRANGE", key, 0, -1, "WITHSCORES")
+	logger.Info("执行redis : ", "ZRANGE", key, 0, -1, "WITHSCORES")
 	res, err := redis.Values(rc.Do("ZRANGE", key, 0, -1, "WITHSCORES"))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 	}
-	log.Println(res)
 	return res
 }
 
@@ -26,12 +24,8 @@ func ZRANGEALL(key string) []interface{} {
 func ZRANGE(key string, start, stop int64) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZRANGE", key, start, stop, "WITHSCORES")
+	logger.Info("执行redis : ", "ZRANGE", key, start, stop, "WITHSCORES")
 	res, err = redis.Values(rc.Do("ZRANGE", key, start, stop, "WITHSCORES"))
-	if err != nil {
-		log.Println("GET error", err.Error())
-	}
-	log.Println(res)
 	return
 }
 
@@ -42,35 +36,25 @@ func ZRANGE(key string, start, stop int64) (res []interface{}, err error) {
 func ZREVRANGE(key string, start, stop int64) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZREVRANGE", key, start, stop, "WITHSCORES")
+	logger.Info("执行redis : ", "ZREVRANGE", key, start, stop, "WITHSCORES")
 	res, err = redis.Values(rc.Do("ZREVRANGE", key, start, stop, "WITHSCORES"))
-	if err != nil {
-		log.Println("GET error", err.Error())
-	}
-	log.Println(res)
 	return
 }
 
 //新创建ZSet 将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
-func ZADD(key string, values []interface{}) error {
+func ZADD(key string, values []interface{}) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 	args := redis.Args{}.Add(key)
 	for _, value := range values {
-		log.Println(value)
 		for k, v := range value.(map[string]interface{}) {
 			args = args.Add(v)
 			args = args.Add(k)
 		}
 	}
-	log.Println("执行redis : ", "ZADD", args)
-	res, err := rc.Do("ZADD", args...)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "ZADD", args)
+	_, err = rc.Do("ZADD", args...)
+	return
 }
 
 // ZCARD key
@@ -78,13 +62,8 @@ func ZADD(key string, values []interface{}) error {
 func ZCARD(key string) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZCARD", key)
+	logger.Info("执行redis : ", "ZCARD", key)
 	res, err = redis.Int64(rc.Do("ZCARD", key))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -93,13 +72,8 @@ func ZCARD(key string) (res int64, err error) {
 func ZCOUNT(key string, min, max int64) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZCOUNT", key, min, max)
+	logger.Info("执行redis : ", "ZCOUNT", key, min, max)
 	res, err = redis.Int64(rc.Do("ZCOUNT", key, min, max))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -110,13 +84,8 @@ func ZCOUNT(key string, min, max int64) (res int64, err error) {
 func ZINCRBY(key, member string, increment int64) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZINCRBY", key, increment, member)
+	logger.Info("执行redis : ", "ZINCRBY", key, increment, member)
 	res, err = redis.String(rc.Do("ZINCRBY", key, increment, member))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -132,26 +101,16 @@ func ZINCRBY(key, member string, increment int64) (res string, err error) {
 func ZRANGEBYSCORE(key string, min, max, offset, count int64) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZRANGEBYSCORE", key, min, max, offset, count)
+	logger.Info("执行redis : ", "ZRANGEBYSCORE", key, min, max, offset, count)
 	res, err = redis.Values(rc.Do("ZRANGEBYSCORE", key, min, max, offset, count))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
 func ZRANGEBYSCOREALL(key string) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZRANGEBYSCORE", key, "-inf", "+inf")
+	logger.Info("执行redis : ", "ZRANGEBYSCORE", key, "-inf", "+inf")
 	res, err = redis.Values(rc.Do("ZRANGEBYSCORE", key, "-inf", "+inf"))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -161,26 +120,16 @@ func ZRANGEBYSCOREALL(key string) (res []interface{}, err error) {
 func ZREVRANGEBYSCORE(key string, min, max, offset, count int64) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZREVRANGEBYSCORE", key, min, max, offset, count)
+	logger.Info("执行redis : ", "ZREVRANGEBYSCORE", key, min, max, offset, count)
 	res, err = redis.Values(rc.Do("ZREVRANGEBYSCORE", key, min, max, offset, count))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
 func ZREVRANGEBYSCOREALL(key string) (res []interface{}, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZREVRANGEBYSCORE", key, "-inf", "+inf")
+	logger.Info("执行redis : ", "ZREVRANGEBYSCORE", key, "-inf", "+inf")
 	res, err = redis.Values(rc.Do("ZREVRANGEBYSCORE", key, "-inf", "+inf"))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -190,13 +139,8 @@ func ZREVRANGEBYSCOREALL(key string) (res []interface{}, err error) {
 func ZRANK(key string, member interface{}) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZRANK", key, member)
+	logger.Info("执行redis : ", "ZRANK", key, member)
 	res, err = redis.Int64(rc.Do("ZRANK", key, member))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -209,14 +153,9 @@ func ZREM(key string, member []interface{}) (err error) {
 	for _, v := range member {
 		args = args.Add(v)
 	}
-	log.Println("执行redis : ", "ZREM", args)
-	res, err := rc.Do("ZREM", args...)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return err
-	}
-	log.Println(res)
-	return nil
+	logger.Info("执行redis : ", "ZREM", args)
+	_, err = rc.Do("ZREM", args...)
+	return
 }
 
 // ZREMRANGEBYRANK key start stop
@@ -225,13 +164,8 @@ func ZREM(key string, member []interface{}) (err error) {
 func ZREMRANGEBYRANK(key string, start, stop int64) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZREMRANGEBYRANK", key, start, stop)
-	res, err := redis.Int64(rc.Do("ZREMRANGEBYRANK", key, start, stop))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "ZREMRANGEBYRANK", key, start, stop)
+	_, err = redis.Int64(rc.Do("ZREMRANGEBYRANK", key, start, stop))
 	return
 }
 
@@ -240,13 +174,8 @@ func ZREMRANGEBYRANK(key string, start, stop int64) (err error) {
 func ZREMRANGEBYSCORE(key string, min, max int64) (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZREMRANGEBYSCORE", key, min, max)
-	res, err := rc.Do("ZREMRANGEBYSCORE", key, min, max)
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
+	logger.Info("执行redis : ", "ZREMRANGEBYSCORE", key, min, max)
+	_, err = rc.Do("ZREMRANGEBYSCORE", key, min, max)
 	return
 }
 
@@ -257,13 +186,8 @@ func ZREMRANGEBYSCORE(key string, min, max int64) (err error) {
 func ZREVRANK(key string, member interface{}) (res int64, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZREVRANK", key, member)
+	logger.Info("执行redis : ", "ZREVRANK", key, member)
 	res, err = redis.Int64(rc.Do("ZREVRANK", key, member))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 
@@ -272,13 +196,8 @@ func ZREVRANK(key string, member interface{}) (res int64, err error) {
 func ZSCORE(key string, member interface{}) (res string, err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
-	log.Println("执行redis : ", "ZSCORE", key, member)
+	logger.Info("执行redis : ", "ZSCORE", key, member)
 	res, err = redis.String(rc.Do("ZSCORE", key, member))
-	if err != nil {
-		log.Println("GET error", err.Error())
-		return
-	}
-	log.Println(res)
 	return
 }
 

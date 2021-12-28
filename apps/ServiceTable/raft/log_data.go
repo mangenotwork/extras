@@ -3,10 +3,10 @@ package raft
 import (
 	"bytes"
 	"io"
-	"log"
 	"os"
 	"strings"
 
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
 )
 
@@ -28,7 +28,7 @@ type LogData struct {
 
 func NewLogData(command string) *LogData {
 	Index++
-	log.Println("Index = ", Index)
+	logger.Info("Index = ", Index)
 	return &LogData{
 		Index : Index,
 		Term : MyAddr,
@@ -66,13 +66,13 @@ func (data *LogData) Write(){
 	if utils.CheckFileExist(fileName) {  //文件存在
 		f, err = os.OpenFile(fileName, os.O_APPEND|os.O_RDWR, 0666) //打开文件
 		if err != nil{
-			log.Println("file open fail", err)
+			logger.Error("file open fail", err)
 			return
 		}
 	}else {  //文件不存在
 		f, err = os.Create(fileName) //创建文件
 		if err != nil {
-			log.Println("file create fail")
+			logger.Error("file create fail")
 			return
 		}
 	}
@@ -82,10 +82,10 @@ func (data *LogData) Write(){
 	//将文件写进去
 	n, err1 := io.WriteString(f, strTest)
 	if err1 != nil {
-		log.Println("write error", err1)
+		logger.Error("write error", err1)
 		return
 	}
-	log.Println("写入的字节数是：", n)
+	logger.Info("写入的字节数是：", n)
 
 
 	_=f.Close()

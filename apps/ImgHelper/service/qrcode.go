@@ -3,15 +3,15 @@ package service
 import (
 	"bytes"
 	"fmt"
-	"github.com/boombuler/barcode"
-	"github.com/boombuler/barcode/code128"
-	"github.com/nfnt/resize"
-	"github.com/skip2/go-qrcode"
 	"image"
 	"image/png"
-	"log"
 	"os"
 
+	"github.com/boombuler/barcode"
+	"github.com/boombuler/barcode/code128"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/nfnt/resize"
+	"github.com/skip2/go-qrcode"
 	qrcodereco "github.com/tuotoo/qrcode"
 )
 
@@ -37,17 +37,17 @@ func Barcode(value string) ([]byte, error) {
 func QRCodeRecognition() {
 	fi, err := os.Open("qrcode.png") // 默认到$GOPATH/src/ 下找
 	if err != nil {
-		log.Println(err.Error())
+		logger.Error(err.Error())
 		return
 	}
 	defer fi.Close()
 
 	qrmatrix, err := qrcodereco.Decode(fi)
 	if err != nil {
-		log.Println(err.Error())
+		logger.Error(err.Error())
 		return
 	}
-	log.Println(qrmatrix.Content)
+	logger.Info(qrmatrix.Content)
 }
 
 func ImageResize(src image.Image, w, h int) image.Image {

@@ -1,11 +1,12 @@
 package model
 
 import (
-	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
-	"github.com/mangenotwork/extras/common/utils"
-	"log"
 	"sync"
 	"time"
+
+	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 /*
@@ -94,9 +95,9 @@ func KVDelAt(key string) int {
 // 查
 // Command : KVGet key
 func KVGet(key string) (bool, string) {
-	log.Println("KVGet", KVData[key])
+	logger.Info("KVGet", KVData[key])
 	if v,ok := KVData[key]; ok {
-		log.Println(v)
+		logger.Info(v)
 		if v.Expire < 0 || v.Expire > time.Now().Unix() {
 			return true,v.Value
 		} else {

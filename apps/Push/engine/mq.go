@@ -5,11 +5,11 @@ import (
 	"github.com/mangenotwork/extras/apps/Push/model"
 	//jsoniter "github.com/json-iterator/go"
 	"github.com/mangenotwork/extras/apps/Push/mq"
-	"log"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 func StartMqServer(){
-	log.Println("StartMqServer  启动消费者")
+	logger.Info("StartMqServer  启动消费者")
 
 	go func() {
 		var e = make(chan []byte)
@@ -24,11 +24,11 @@ func StartMqServer(){
 
 // sendMessage 实现消息发送业务
 func sendMessage(b []byte) {
-	log.Println("消费消息 : ", string(b))
+	logger.Info("消费消息 : ", string(b))
 	sendData := &mq.MQMsg{}
 	err := json.Unmarshal(b, &sendData)
 	if err != nil {
-		log.Println("序列化错误")
+		logger.Error("序列化错误")
 		return
 	}
 	if topic, ok := model.TopicMap[sendData.Topic]; ok {
@@ -38,11 +38,11 @@ func sendMessage(b []byte) {
 
 // deviceDo 设备操作
 func deviceDo(b []byte) {
-	log.Println("消费消息 : ", string(b))
+	logger.Info("消费消息 : ", string(b))
 	deviceData := &mq.MQDevice{}
 	err := json.Unmarshal(b, &deviceData)
 	if err != nil {
-		log.Println("序列化错误")
+		logger.Error("序列化错误")
 		return
 	}
 	device := &model.Device{

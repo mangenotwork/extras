@@ -6,7 +6,7 @@ package model
 
 import (
 	"errors"
-	"log"
+	"github.com/mangenotwork/extras/common/logger"
 	"strings"
 	"time"
 )
@@ -165,7 +165,7 @@ func (t *Trie) BlockWord(text, replace string) (result, runTime string) {
 	}
 	result = string(left)
 	runTime = time.Since(startTime).String()
-	log.Println("time : ", runTime)
+	logger.Info("time : ", runTime)
 	return
 }
 

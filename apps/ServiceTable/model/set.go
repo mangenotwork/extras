@@ -1,11 +1,12 @@
 package model
 
 import (
-	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
-	"github.com/mangenotwork/extras/common/utils"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 /*

@@ -1,6 +1,8 @@
 package model
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 var Key = NewKeyTrie()
 
@@ -96,9 +98,9 @@ func (t *KeyTrie) Like(txt string) []*keyData {
 		}
 		node = node.children[runeChars[i]]
 	}
-	log.Println("输入值: ", string(runeChars))
+	logger.Info("输入值: ", string(runeChars))
 	likeGet(runeChars, node, &rse)
-	log.Println("rse = ", rse)
+	logger.Info("rse = ", rse)
 	return rse
 }
 
@@ -108,7 +110,7 @@ func likeGet(runeChars []rune, node *KeyNode, rse *[]*keyData) {
 			temp := runeChars
 			temp = append(temp, k)
 			if v.end {
-				log.Println("keyname = ", string(temp), "  | type = ", v.keyType)
+				logger.Info("keyname = ", string(temp), "  | type = ", v.keyType)
 				*rse = append(*rse, &keyData{
 					Key: string(temp),
 					KeyType: v.keyType,
@@ -124,7 +126,7 @@ func (t *KeyTrie) GetAll() []*keyData {
 	node := t.root
 	rse := make([]*keyData, 0)
 	likeGet([]rune(""), node, &rse)
-	log.Println("all = ", rse)
+	logger.Info("all = ", rse)
 	return rse
 }
 

@@ -2,12 +2,12 @@ package engine
 
 import (
 	"github.com/mangenotwork/extras/apps/Push/model"
-	"log"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 func StartJobServer(){
 	go func() {
-		log.Println("StartJobServer")
+		logger.Info("StartJobServer")
 
 		model.TopicMap = make(map[string]*model.Topic)
 

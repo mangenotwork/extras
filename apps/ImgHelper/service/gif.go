@@ -7,8 +7,9 @@ import (
 	"image/color/palette"
 	"image/draw"
 	"image/gif"
-	"log"
 	"mime/multipart"
+
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 func CompositeGif(file []*multipart.FileHeader) (outByte []byte, err error) {
@@ -21,7 +22,7 @@ func CompositeGif(file []*multipart.FileHeader) (outByte []byte, err error) {
 	for i,handler := range file{
 		fileName:=handler.Filename
 		fileSize:=handler.Size
-		log.Println(i, fileName, fileSize)
+		logger.Info(i, fileName, fileSize)
 		f, fErr := file[i].Open()
 		if fErr != nil {
 			err = fErr
@@ -29,7 +30,7 @@ func CompositeGif(file []*multipart.FileHeader) (outByte []byte, err error) {
 		}
 		g, _, err := image.Decode(f)
 		if err != nil {
-			log.Println(err)
+			logger.Error(err)
 		}
 		_ = f.Close()
 		cp :=  getPalette(g)

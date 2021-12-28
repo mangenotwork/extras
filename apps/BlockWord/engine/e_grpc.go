@@ -5,8 +5,8 @@ import (
 	"github.com/mangenotwork/extras/apps/BlockWord/proto"
 	"github.com/mangenotwork/extras/common/conf"
 	"github.com/mangenotwork/extras/common/grpc"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
-	"log"
 )
 
 func StartRpcServer(){
@@ -21,6 +21,6 @@ func StartRpcServer(){
 		}
 		proto.RegisterMessageRPCServer(g.Server, &handler.GRPCService{})
 		g.Run()
-		log.Print("[RPC] Listening and serving TCP on %d", g.Port)
+		logger.Info("[RPC] Listening and serving TCP on %d", g.Port)
 	}()
 }

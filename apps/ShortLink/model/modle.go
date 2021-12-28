@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
-	"log"
 )
 
 type ShortLink struct {
@@ -43,25 +43,25 @@ func (sl *ShortLink) Save() (err error) {
 	args = args.Add("OpenBlockList").Add(sl.OpenBlockList)
 	args = args.Add("OpenWhiteList").Add(sl.OpenWhiteList)
 
-	log.Println("执行redis : ", "HMSET", args)
+	logger.Info("执行redis : ", "HMSET", args)
 	res, err := rc.Do("HMSET", args...)
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
-	log.Println(res)
+	logger.Info(res)
 
 	if sl.OpenBlockList {
 		args := redis.Args{}.Add(fmt.Sprintf(ShortLinkBlockListKey, sl.Short))
 		for _, value := range sl.BlockList {
 			args = args.Add(value)
 		}
-		log.Println("执行redis : ", "SADD", args)
+		logger.Info("执行redis : ", "SADD", args)
 		res, err := rc.Do("SADD", args...)
 		if err != nil {
-			log.Println("GET error", err.Error())
+			logger.Error("GET error", err.Error())
 		}
-		log.Println(res)
+		logger.Info(res)
 	}
 
 	//whiteListKey := fmt.Sprintf(ShortLinkWhiteList, "/"+service.MustGenerate())
@@ -70,12 +70,12 @@ func (sl *ShortLink) Save() (err error) {
 		for _, value := range sl.WhiteList {
 			argsBlock = argsBlock.Add(value)
 		}
-		log.Println("执行redis : ", "SADD", argsBlock)
+		logger.Info("执行redis : ", "SADD", argsBlock)
 		res, err := rc.Do("SADD", argsBlock...)
 		if err != nil {
-			log.Println("GET error", err.Error())
+			logger.Error("GET error", err.Error())
 		}
-		log.Println(res)
+		logger.Info(res)
 	}
 
 	return
@@ -85,13 +85,13 @@ func (sl *ShortLink) Get(key string) error {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
 
-	log.Println("执行redis : ", "HGETALL", fmt.Sprintf(ShortLinkInfoKey, key))
+	logger.Info("执行redis : ", "HGETALL", fmt.Sprintf(ShortLinkInfoKey, key))
 	res, err := redis.StringMap(rc.Do("HGETALL", fmt.Sprintf(ShortLinkInfoKey, key)))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return err
 	}
-	log.Println(res)
+	logger.Info(res)
 	sl.Short = key
 	sl.Url = res["Url"]
 	sl.Expiration = utils.Str2Int64(res["Expiration"])
@@ -134,7 +134,7 @@ func (sl *ShortLink) IsBlockList(ip string) (resBool bool) {
 	defer rc.Close()
 	res, err := redis.Int64(rc.Do("SISMEMBER", fmt.Sprintf(ShortLinkBlockListKey, sl.Short), ip))
 	if err != nil {
-		log.Println("GET error", err.Error())
+		logger.Error("GET error", err.Error())
 		return
 	}
 	if res == 1 {

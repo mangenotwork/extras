@@ -8,8 +8,9 @@ import (
 	"image/gif"
 	"image/jpeg"
 	"image/png"
-	"log"
 	"mime/multipart"
+
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // 选用最大图片的宽度, 垂直依次拼接
@@ -76,7 +77,7 @@ func ImgStitchingSudoku(fileList []multipart.File) (outByte []byte, err error) {
 		}
 		imgList = append(imgList, img)
 	}
-	//log.Println(height, width, outType)
+	//logger.Info(height, width, outType)
 
 	td := 2
 	if len(fileList) >= 9 {
@@ -86,7 +87,7 @@ func ImgStitchingSudoku(fileList []multipart.File) (outByte []byte, err error) {
 		td = 4
 	}
 	tr := len(fileList)/td
-	log.Println("td, tr = ", td, tr)
+	logger.Info("td, tr = ", td, tr)
 	rgba := image.NewRGBA(image.Rect(0, 0, td*width, tr*height))
 
 	x := 0

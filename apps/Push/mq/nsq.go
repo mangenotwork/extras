@@ -2,10 +2,10 @@ package mq
 
 import (
 	"fmt"
-	"github.com/mangenotwork/extras/common/utils"
-	"log"
 
 	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 	gnsq "github.com/nsqio/go-nsq"
 )
 
@@ -25,13 +25,13 @@ func (m *MQNsqService) newProducer(addr string) (*gnsq.Producer, error) {
 func (m *MQNsqService) Producer(topic string, data []byte) {
 	client, err := m.newProducer(conf.Arg.Nsq.Producer)
 	if err != nil {
-		log.Println("[nsq]无法连接到队列")
+		logger.Error("[nsq]无法连接到队列")
 		return
 	}
-	log.Println(fmt.Sprintf("[生产消息] topic : %s -->  %s", topic, string(data)))
+	logger.Info(fmt.Sprintf("[生产消息] topic : %s -->  %s", topic, string(data)))
 	err = client.Publish(topic, data)
 	if err != nil {
-		log.Println("[生产消息] 失败 ： " + err.Error())
+		logger.Error("[生产消息] 失败 ： " + err.Error())
 	}
 }
 
@@ -40,7 +40,7 @@ func (m *MQNsqService) Consumer(topic string, ch chan []byte, f func(b []byte)) 
 	id,_ := utils.ID64()
 	mh, err := newMessageHandler(conf.Arg.Nsq.Consumer, utils.Int642Str(id))
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
 	go func() {
@@ -57,7 +57,7 @@ func (m *MQNsqService) Consumer(topic string, ch chan []byte, f func(b []byte)) 
 		}
 	}()
 
-	log.Println("[NSQ] ServerID:%v => %v started", "mange-push", topic)
+	logger.Info("[NSQ] ServerID:%v => %v started", "mange-push", topic)
 }
 
 type messageHandler struct {

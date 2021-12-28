@@ -2,14 +2,15 @@ package service
 
 import (
 	"bufio"
+	"io"
+	"os"
+	"strings"
+
 	"github.com/mangenotwork/extras/apps/ServiceTable/model"
 	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
 	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
-	"io"
-	"log"
-	"os"
-	"strings"
 )
 
 func InitRaft(){
@@ -32,7 +33,7 @@ func LogDataToMemory(){
 	if utils.CheckFileExist(fileName) {  //文件存在
 		f, err = os.OpenFile(fileName, os.O_APPEND, 0666) //打开文件
 		if err != nil{
-			log.Println("file open fail", err)
+			logger.Error("file open fail", err)
 			return
 		}
 		// 读取文件
@@ -44,7 +45,7 @@ func LogDataToMemory(){
 			if c == io.EOF {
 				break
 			}
-			log.Println(string(a))
+			logger.Info(string(a))
 			data.ToObj(string(a))
 			CommandDo(data.Command)
 		}
@@ -53,7 +54,7 @@ func LogDataToMemory(){
 	}else {  //文件不存在
 		f, err = os.Create(fileName) //创建文件
 		if err != nil {
-			log.Println("file create fail")
+			logger.Error("file create fail")
 			return
 		}
 	}
@@ -127,7 +128,7 @@ func CommandDo(cmdStr string) {
 		}
 		key := cmdArg[1]
 		value := cmdArg[2]
-		log.Println("Command : KVAdd key value")
+		logger.Info("Command : KVAdd key value")
 		model.KVAdd(key, value)
 
 	case "KVAddExpire":

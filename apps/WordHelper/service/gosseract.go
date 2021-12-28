@@ -35,13 +35,13 @@ package service
 
 import (
 	"bytes"
-	gs "github.com/otiai10/gosseract/v2"
 	"image"
 	"image/color"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
-	"log"
+
+	gs "github.com/otiai10/gosseract/v2"
 )
 
 func GetOCRVersion() string {
@@ -60,9 +60,7 @@ func OCR(imgData []byte, lang string) (string, error){
 	client.SetLanguage(lang)
 	defer client.Close()
 	client.SetImageFromBytes(imgData)
-	text, err := client.Text()
-	log.Println("ocr err = ", err)
-	return text, err
+	return client.Text()
 }
 
 func Huihua(imgData []byte) []byte {

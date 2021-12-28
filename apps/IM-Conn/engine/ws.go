@@ -1,9 +1,11 @@
 package engine
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 func StartWS(){
 	go func() {
-		log.Println("StartWS")
+		logger.Info("StartWS")
 	}()
 }

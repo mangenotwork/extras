@@ -1,12 +1,12 @@
 package pdf
 
 import (
-"bytes"
-"errors"
-"fmt"
-"io"
-"sort"
-"strings"
+	"bytes"
+	"errors"
+	"fmt"
+	"io"
+	"sort"
+	"strings"
 )
 
 // A Page represent a single page in a PDF file.

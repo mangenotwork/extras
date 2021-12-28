@@ -1,14 +1,15 @@
 package utils
 
 import (
-	"github.com/mangenotwork/extras/common/conf"
-	"golang.org/x/net/netutil"
-	"log"
 	"net"
 	"net/http"
 	"runtime"
 	"syscall"
 	"time"
+
+	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
+	"golang.org/x/net/netutil"
 )
 
 func HttpServer(router *http.ServeMux){
@@ -29,7 +30,7 @@ func HttpServer(router *http.ServeMux){
 	server.SetKeepAlivesEnabled(true)
 	l, err := net.Listen("tcp", server.Addr)
 	if err != nil {
-		log.Panic("Listen Err : %v", err)
+		logger.Panic("Listen Err : %v", err)
 		return
 	}
 	defer l.Close()
@@ -38,24 +39,24 @@ func HttpServer(router *http.ServeMux){
 	var rLimit syscall.Rlimit
 	err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
-	log.Println("rLimit.Cur = ", rLimit.Cur)
-	log.Println("rLimit.Max = ", rLimit.Max)
+	logger.Info("rLimit.Cur = ", rLimit.Cur)
+	logger.Info("rLimit.Max = ", rLimit.Max)
 	rLimit.Cur = rLimit.Max
 	err = syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
 
-	log.Println("Starting http server port -> ", conf.Arg.HttpServer.Prod)
+	logger.Info("Starting http server port -> ", conf.Arg.HttpServer.Prod)
 	// 对连接数的保护， 设置为最高连接数是 本机的最高连接数
 	// https://github.com/golang/net/blob/master/netutil/listen.go
 	l = netutil.LimitListener(l, int(rLimit.Max)*10)
 	err = server.Serve(l)
 	if err != nil {
-		log.Panic("ListenAndServe err : ", err)
+		logger.Panic("ListenAndServe err : ", err)
 	}
 }

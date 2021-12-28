@@ -3,9 +3,10 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // HTTP  输出 json body 定义
@@ -77,7 +78,7 @@ func OutErrBody(w http.ResponseWriter, code int,err error) {
 func (m *HttpOutBody) JsonStr() (string,error) {
 	b, err := json.Marshal(m)
 	if err != nil {
-		log.Println("Umarshal failed:", err)
+		logger.Error("Umarshal failed:", err)
 		return "",err
 	}
 	return string(b), nil

@@ -3,10 +3,11 @@ package utils
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // Str2Int64 string -> int
@@ -141,7 +142,7 @@ func stringValue(v reflect.Value, indent int, buf *bytes.Buffer) {
 func P2E() {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("Panic error: %v", r)
+			logger.Error("Panic error: %v", r)
 		}
 	}()
 }

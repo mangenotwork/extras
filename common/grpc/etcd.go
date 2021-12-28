@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"go.etcd.io/etcd/clientv3"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 // 采用单列模式
@@ -81,11 +82,11 @@ func (etcdCil *EtcdCli) Register(key, value string) error {
 		for {
 			getResp, err := etcdCil.cli.Get(context.Background(), key)
 			if err != nil {
-				log.Printf("[ETCD] Register err : %s", err)
+				logger.Error("[ETCD] Register err : %s", err)
 			} else if getResp.Count == 0 {
 				err = etcdCil.withAlive(key, value)
 				if err != nil {
-					log.Printf("[ETCD] keep alive err :%s", err)
+					logger.Error("[ETCD] keep alive err :%s", err)
 				}
 			}
 			<-ticker.C
@@ -102,13 +103,13 @@ func (etcdCil *EtcdCli) withAlive(key, value string) error {
 	}
 	_, err = etcdCil.cli.Put(context.Background(), key, value, clientv3.WithLease(leaseResp.ID))
 	if err != nil {
-		log.Printf("[ETCD] put etcd error:%s", err)
+		logger.Error("[ETCD] put etcd error:%s", err)
 		return err
 	}
 
 	ch, err := etcdCil.cli.KeepAlive(context.Background(), leaseResp.ID)
 	if err != nil {
-		log.Printf("[ETCD] keep alive error:%s", err)
+		logger.Error("[ETCD] keep alive error:%s", err)
 		return err
 	}
 
@@ -184,7 +185,7 @@ func (etcdCil *EtcdCli) GetMinKeyCallBack(key string) error {
 		vInt := byte2int(v)+1
 		_, err = etcdCil.cli.Put(context.Background(),key, fmt.Sprintf("%d",vInt), clientv3.WithPrevKV())
 		if err != nil {
-			log.Printf("[ETCD] put etcd error:%s", err)
+			logger.Error("[ETCD] put etcd error:%s", err)
 			return err
 		}
 	}

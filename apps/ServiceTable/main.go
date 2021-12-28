@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,12 +9,13 @@ import (
 	"github.com/mangenotwork/extras/apps/ServiceTable/raft"
 	"github.com/mangenotwork/extras/apps/ServiceTable/service"
 	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
 )
 
 func main(){
-	log.Println(utils.Logo)
-	log.Println("Starting img helper http server")
+	logger.Info(utils.Logo)
+	logger.Info("Starting img helper http server")
 	conf.InitConf()
 	engine.StartJobServer()
 
@@ -38,7 +38,7 @@ func main(){
 	select {
 	case s := <-ch:
 		// TODO 通知退出
-		log.Println("通知退出....")
+		logger.Info("通知退出....")
 		if i, ok := s.(syscall.Signal); ok {
 			os.Exit(int(i))
 		} else {

@@ -1,11 +1,11 @@
 package engine
 
 import (
-	"log"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 func StartJob(){
 	go func() {
-		log.Println("StartJob")
+		logger.Info("StartJob")
 	}()
 }

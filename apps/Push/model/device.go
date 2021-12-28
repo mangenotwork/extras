@@ -3,9 +3,10 @@ package model
 import (
 	"errors"
 	"fmt"
+
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/rediscmd"
 	"github.com/mangenotwork/extras/common/utils"
-	"log"
 )
 
 const (
@@ -29,7 +30,7 @@ func (d *Device) SetId(deviceId string) *Device {
 // 获取订阅, 并加入连接
 func (d *Device) GetTopic(conn Client) {
 	for _,v := range rediscmd.SMEMBERSString(fmt.Sprintf(DeviceTopic, d.ID)) {
-		log.Println("获取订阅, 并加入订阅", v)
+		logger.Info("获取订阅, 并加入订阅", v)
 		topic, ok := TopicMap[v]
 		if !ok {
 			TopicMap[v] = &Topic{
@@ -63,7 +64,7 @@ func (d *Device) AllTopic() []string {
 // 释放连接
 func (d *Device) Discharge(connType string) {
 	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceTopic, d.ID)) {
-		log.Println(v)
+		logger.Info(v)
 		if topic, ok := TopicMap[utils.Any2String(v)]; ok {
 			if connType == "ws" {
 				delete(topic.WsClient, d.ID)
@@ -78,7 +79,7 @@ func (d *Device) Discharge(connType string) {
 	}
 
 	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceGroup, d.ID)) {
-		log.Println(v)
+		logger.Info(v)
 		if group, ok := GroupMap[v.(string)]; ok {
 			if connType == "ws" {
 				delete(group.WsClient, d.ID)
@@ -96,7 +97,7 @@ func (d *Device) Discharge(connType string) {
 // 获取组
 func (d *Device) GetGroup(conn Client) {
 	for _,v := range rediscmd.SMEMBERS(fmt.Sprintf(DeviceGroup, d.ID)) {
-		log.Println(v)
+		logger.Info(v)
 		group, ok := GroupMap[v.(string)]
 		if !ok {
 			GroupMap[v.(string)] = &Group{
@@ -127,7 +128,7 @@ func (d *Device) UpLine() {
 
 // 下线
 func (d *Device) OffLine() {
-	log.Println(d)
+	logger.Info(d)
 	_=rediscmd.SETEX(fmt.Sprintf(DeviceOnLine, d.ID), 60, 0)
 }
 
@@ -174,7 +175,7 @@ func (d *Device) SubTopic(conn Client, topicName string) (err error) {
 
 	err = rediscmd.SADD(fmt.Sprintf(TopicAllDevice, topicName), []interface{}{d.ID})
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 	return
 }
@@ -198,11 +199,11 @@ func (d *Device) CancelTopic(topicName string) (err error) {
 	}
 	err = rediscmd.SREMOne(fmt.Sprintf(DeviceTopic, d.ID), topicName)
 	if err == nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 	err = rediscmd.SREMOne(fmt.Sprintf(TopicAllDevice, topicName), d.ID)
 	if err == nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 	return
 }

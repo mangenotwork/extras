@@ -1,9 +1,11 @@
 package engine
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 func StartRpcServer(){
 	go func() {
-		log.Println("StartRpcServer...")
+		logger.Info("StartRpcServer...")
 	}()
 }

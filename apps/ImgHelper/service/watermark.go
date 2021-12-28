@@ -9,7 +9,6 @@ import (
 	"image/jpeg"
 	"image/png"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"os"
 	"strconv"
@@ -22,21 +21,23 @@ import (
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 var fontTTF *truetype.Font
 
 func FontTTFInit() {
-	log.Println("加载字体")
+	logger.Info("加载字体")
 	workPath, _ := os.Getwd()
-	log.Println(workPath + conf.Arg.TTF)
+	logger.Info(workPath + conf.Arg.TTF)
 	fontBytes, err := ioutil.ReadFile(workPath + conf.Arg.TTF)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
+		return
 	}
 	fontTTF, err = freetype.ParseFont(fontBytes)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 }
 
@@ -185,7 +186,7 @@ func Txt2Img(txt string, fontSize, dpi, spacing int, outType string) (outByte []
 	for _, s := range txtList {
 		_, err = c.DrawString(s, pt)
 		if err != nil {
-			log.Println(err)
+			logger.Error(err)
 			return
 		}
 		pt.Y += c.PointToFixed(float64(fontSize) * float64(spacing))

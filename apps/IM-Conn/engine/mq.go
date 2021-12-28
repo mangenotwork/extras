@@ -1,9 +1,11 @@
 package engine
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 func StartMQ(){
 	go func() {
-		log.Println("StartMQ")
+		logger.Info("StartMQ")
 	}()
 }

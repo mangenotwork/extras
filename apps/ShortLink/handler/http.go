@@ -3,23 +3,24 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/mangenotwork/extras/apps/ShortLink/model"
-	"github.com/mangenotwork/extras/apps/ShortLink/service"
-	"github.com/mangenotwork/extras/common/middleware"
-	"github.com/mangenotwork/extras/common/utils"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/mangenotwork/extras/apps/ShortLink/model"
+	"github.com/mangenotwork/extras/apps/ShortLink/service"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/middleware"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
-	log.Print("Received request %s %s %s\n", r.Method, r.Host, r.RemoteAddr)
-	log.Println(r.URL)
-	log.Println(r.URL.Path,  r.URL.User, r.URL.Query())
+	logger.Info("Received request %s %s %s\n", r.Method, r.Host, r.RemoteAddr)
+	logger.Info(r.URL)
+	logger.Info(r.URL.Path,  r.URL.User, r.URL.Query())
 	// 获取短链接
 	link := new(model.ShortLink)
 	err := link.Get(r.URL.Path)
@@ -47,7 +48,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 
 // 隐藏静态页面， 如果是动态页面由于隐藏了host无法实现跨域请求
 func Te(w http.ResponseWriter, r *http.Request) {
-	log.Println(r)
+	logger.Info(r)
 
 	transport :=  http.DefaultTransport
 
@@ -63,11 +64,11 @@ func Te(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newUrl,err := url.Parse("https://studygolang.com/articles/6340")
-	log.Println("err = ", err)
+	logger.Info("err = ", err)
 	outReq.URL = newUrl
 	outReq.Host = newUrl.Host
 
-	log.Println("outReq.URL = ", outReq)
+	logger.Info("outReq.URL = ", outReq)
 
 	// step 2
 	res, err := transport.RoundTrip(outReq)

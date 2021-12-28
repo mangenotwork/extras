@@ -8,7 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/conf"
 )
 
@@ -22,7 +22,7 @@ func MongoConn() *mongo.Client {
 	_mongoOnce.Do(func() {
 		var err error
 		url := "mongodb://"+conf.Arg.Mongo.User+":"+conf.Arg.Mongo.Password+"@"+conf.Arg.Mongo.Host
-		log.Println("mongodb url = ", url)
+		logger.Info("mongodb url = ", url)
 		clientOptions := options.Client().ApplyURI(url).SetConnectTimeout(20*time.Second)
 		_mongoClient, err = mongo.Connect(context.TODO(), clientOptions)
 		if err != nil {

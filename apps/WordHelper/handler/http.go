@@ -6,13 +6,14 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/mangenotwork/extras/apps/WordHelper/service"
-	"github.com/mangenotwork/extras/apps/WordHelper/service/pdf"
-	"github.com/mangenotwork/extras/common/utils"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"regexp"
+
+	"github.com/mangenotwork/extras/apps/WordHelper/service"
+	"github.com/mangenotwork/extras/apps/WordHelper/service/pdf"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +46,7 @@ func OCR(w http.ResponseWriter, r *http.Request) {
 		utils.OutErrBody(w, 2001, err)
 		return
 	}
-	log.Println(handler.Size)
+	logger.Info(handler.Size)
 	utils.OutSucceedBody(w, jg)
 }
 
@@ -74,7 +75,7 @@ func OCRBase64Img(w http.ResponseWriter, r *http.Request) {
 		//log.Print(allData)
 		base64img = re.ReplaceAllString(base64img, "")
 	}
-	log.Print(base64img)
+	logger.Info(base64img)
 	// Base64 Standard Decoding
 	sDec, err := base64.StdEncoding.DecodeString(base64img)
 	if err != nil {
@@ -87,7 +88,7 @@ func OCRBase64Img(w http.ResponseWriter, r *http.Request) {
 	file := "./a.png"
 	err = ioutil.WriteFile(file, sDec, 0666)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 
 	jg, err := service.OCR(sDec, lang)

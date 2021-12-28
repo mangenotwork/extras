@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/mangenotwork/extras/apps/BlockWord/model"
-	"log"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 var BlockWorkTrie = model.NewTrie()
@@ -25,7 +25,7 @@ func DelWord(word string) {
 		return
 	}
 	if err := BlockWorkTrie.RemoveWord(word); err!=nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
 	model.NewWord(model.BlockWordKey).Del(word)

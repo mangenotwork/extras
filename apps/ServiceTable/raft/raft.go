@@ -1,13 +1,13 @@
 package raft
 
 import (
-	"log"
 	"math/rand"
 	"net"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
 )
 
@@ -133,15 +133,15 @@ func read() {
 		data := make([]byte, 1024)
 		n, remoteAddr, err := rafter.Conn.ReadFromUDP(data)
 		if err != nil {
-			log.Printf("error during read: %s", err)
+			logger.Error("error during read: %s", err)
 			continue
 		}
-		log.Printf("receive %s from <%s>  leader = %s \n", data[:n], remoteAddr, rafter.leader)
+		logger.Info("receive %s from <%s>  leader = %s \n", data[:n], remoteAddr, rafter.leader)
 		cmd := string(data[:n])
 
 		// 收到拉票的消息
 		if cmd == "拉票" {
-			log.Println("remoteAddr = ", remoteAddr, "要你给他投票", "我的状态 = ", rafter.state, rafter.votedFor )
+			logger.Info("remoteAddr = ", remoteAddr, "要你给他投票", "我的状态 = ", rafter.state, rafter.votedFor )
 
 			// 已经我是leader, 通知你结束竞选
 			if rafter.state == 3 {
@@ -151,7 +151,7 @@ func read() {
 			// 一个节点某一任期内最多只能投一票
 			// follower 才能投票
 			if rafter.votedFor == "" && rafter.state == 0 {
-				log.Println("是否有投票 = ", rafter.votedFor)
+				logger.Info("是否有投票 = ", rafter.votedFor)
 				rafter.votedFor = remoteAddr.String()
 
 				_= send([]byte("给你投票"), remoteAddr)
@@ -171,7 +171,7 @@ func read() {
 
 		// 公布新的leader
 		if strings.Index(cmd, "leader") != -1{
-			log.Println("有新的leader = ", cmd)
+			logger.Info("有新的leader = ", cmd)
 			rafter.state = 0 // 有新的leader,当前节点就是follower状态
 		}
 
@@ -185,7 +185,7 @@ func read() {
 }
 
 func sendHeartBeat() {
-	log.Println("广播心跳")
+	logger.Info("广播心跳")
 	for _, v := range ClusterTable {
 		_=send([]byte("心跳"), v)
 	}
@@ -197,7 +197,7 @@ func election(){
 	for {
 		t := rafter.randEr.Intn(electionTime)+heartBeatTime+1
 		tTime := time.Duration(t)
-		log.Println("随机值t = ", tTime)
+		logger.Info("随机值t = ", tTime)
 		timer := time.NewTimer(tTime * time.Second)
 		select {
 		case t := <-timer.C:
@@ -208,18 +208,18 @@ func election(){
 			rafter.currentLeader = 0
 			rafter.vote = 0
 
-			log.Println("开始拉票 : ", t)
+			logger.Info("开始拉票 : ", t)
 			canvass()
 
 		case  <- rafter.heartBeat:
 			// 重置
-			log.Println("重置 = ", tTime)
+			logger.Info("重置 = ", tTime)
 			timer.Reset(tTime*time.Second)
 
 		case <- rafter.electCh:
-			log.Println("获得选票")
+			logger.Info("获得选票")
 			rafter.vote++
-			log.Println(rafter.vote+1, ",", len(ClusterTable)/2)
+			logger.Info(rafter.vote+1, ",", len(ClusterTable)/2)
 			// 这里做了一下改动:  +1 的目的是投自己一票, >=一半服务投票就竞选成功
 			if rafter.vote+1 >= len(ClusterTable)/2 {
 				// 结束竞选
@@ -246,7 +246,7 @@ func (rf *Raft) depiao(){
 func electionEnd(be bool){
 	// 没竞选上的自行切换到follower
 	if !be {
-		log.Println("竞选失败, 别人已当选")
+		logger.Info("竞选失败, 别人已当选")
 		rafter.state = 0
 		rafter.vote = 0 // 重置票数
 		return
@@ -282,14 +282,14 @@ func canvass(){
 			continue
 		}
 		err := send([]byte("拉票"), v)
-		log.Println("向",k,"进行拉票, err = ", err)
+		logger.Info("向",k,"进行拉票, err = ", err)
 		if err != nil {
 			succeed = false
 			break
 		}
 	}
 	if !succeed {
-		log.Println("拉票失败,重新拉票")
+		logger.Info("拉票失败,重新拉票")
 		canvass()
 	}
 }

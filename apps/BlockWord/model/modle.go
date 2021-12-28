@@ -6,12 +6,13 @@
 package model
 
 import (
-	"github.com/mangenotwork/extras/common/conn"
-	"github.com/mangenotwork/extras/common/utils"
-	"github.com/garyburd/redigo/redis"
-	"log"
 	"sort"
 	"sync"
+
+	"github.com/garyburd/redigo/redis"
+	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 var Words = &wordMaps{
@@ -109,7 +110,7 @@ type blockWord struct {}
 
 func (*blockWord) Add(word string) {
 	if err := addWord(BlockWordKey, word); err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 }
 
@@ -123,7 +124,7 @@ func (*blockWord) Get() []string {
 
 func (*blockWord) Del(word string) {
 	if err := delWord(BlockWordKey, word); err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 }
 
@@ -131,7 +132,7 @@ type whiteWord struct {}
 
 func (*whiteWord) Add(word string) {
 	if err := addWord(WhiteWordKey, word); err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 }
 
@@ -145,7 +146,7 @@ func (*whiteWord) Get() []string {
 
 func (*whiteWord) Del(word string) {
 	if err := delWord(WhiteWordKey, word); err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 }
 

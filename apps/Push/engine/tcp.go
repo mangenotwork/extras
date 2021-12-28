@@ -2,12 +2,13 @@ package engine
 
 import (
 	"encoding/json"
+	"io"
+	"net"
+
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/service"
 	"github.com/mangenotwork/extras/common/conf"
-	"io"
-	"log"
-	"net"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 type TcpServer struct {
@@ -17,7 +18,7 @@ type TcpServer struct {
 
 func StartTcpServer(){
 	go func() {
-		log.Println("StartTcpServer")
+		logger.Info("StartTcpServer")
 
 		//类似于初始化套接字，绑定端口
 		hawkServer, err := net.ResolveTCPAddr("tcp", "0.0.0.0:"+conf.Arg.TcpServer.Prod)
@@ -38,7 +39,7 @@ func StartTcpServer(){
 			Listener:   listen,
 			HawkServer: hawkServer,
 		}
-		log.Println("start TCP server successful.")
+		logger.Info("start TCP server successful.")
 
 		//接收请求
 		for {
@@ -52,10 +53,10 @@ func StartTcpServer(){
 			//来自客户端的连接
 			conn, err := tcpServer.Listener.Accept()
 			if err != nil {
-				log.Println("[连接失败]:", err.Error())
+				logger.Error("[连接失败]:", err.Error())
 				continue
 			}
-			log.Println("[连接成功]: ", conn.RemoteAddr().String(), conn)
+			logger.Info("[连接成功]: ", conn.RemoteAddr().String(), conn)
 
 			wsClient := model.NewTcpClient().AddConn(conn).SetIP(conn.RemoteAddr().String())
 			client = wsClient
@@ -64,7 +65,7 @@ func StartTcpServer(){
 
 				defer func() {
 					if v := recover(); v != nil {
-						log.Println("捕获了一个异常：", v)
+						logger.Error("捕获了一个异常：", v)
 					}
 					_=conn.Close()
 				}()
@@ -72,13 +73,13 @@ func StartTcpServer(){
 				recv := make([]byte, 1024*10)
 				for {
 					n, err := conn.Read(recv)
-					log.Println(n, err)
+					logger.Info(n, err)
 					if err != nil{
 						if err == io.EOF {
-							log.Println(conn.RemoteAddr().String(), " 断开了连接!")
+							logger.Info(conn.RemoteAddr().String(), " 断开了连接!")
 							// 如果认证了设备则清理设备
 							if device != nil {
-								log.Println("释放客户端连接")
+								logger.Info("释放客户端连接")
 								device.OffLine() // 下线记录
 								delete(model.AllWsClient, deviceId)
 								device.Discharge("tcp") // 连接离开topic,group
@@ -89,7 +90,7 @@ func StartTcpServer(){
 					}
 					if n > 0 && n < 10241 {
 						data := recv[:n]
-						log.Println(string(data))
+						logger.Info(string(data))
 						cmdData := &model.CmdData{}
 						jsonErr := json.Unmarshal(data, &cmdData)
 						if jsonErr != nil {

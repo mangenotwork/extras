@@ -1,9 +1,11 @@
 package engine
 
-import "log"
+import (
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 func StartTCP(){
 	go func() {
-		log.Println("StartTCP")
+		logger.Info("StartTCP")
 	}()
 }
