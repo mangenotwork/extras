@@ -56,9 +56,9 @@
 - v0.2.16 [WordHelper] OCR安装的文档
 - v0.2.17 [IM-*] 文件结构初始化
 - v0.2.18 [common] 增加日志
+- v0.2.19 [common] 升级grpc和etcd版本
 
 > Todo
-- v0.2.19 
 - v0.2.20 
 - v0.2.21 
 - v0.2.22 

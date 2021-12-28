@@ -12,7 +12,7 @@ import (
 	"github.com/mangenotwork/extras/common/logger"
 	"github.com/nfnt/resize"
 	"github.com/skip2/go-qrcode"
-	qrcodereco "github.com/tuotoo/qrcode"
+	//qrcodereco "github.com/tuotoo/qrcode"
 )
 
 // 生成二维码
@@ -34,6 +34,7 @@ func Barcode(value string) ([]byte, error) {
 }
 
 // 识别二维码
+// TODO github.com/tuotoo/qrcode 三方库有问题
 func QRCodeRecognition() {
 	fi, err := os.Open("qrcode.png") // 默认到$GOPATH/src/ 下找
 	if err != nil {
@@ -42,12 +43,12 @@ func QRCodeRecognition() {
 	}
 	defer fi.Close()
 
-	qrmatrix, err := qrcodereco.Decode(fi)
-	if err != nil {
-		logger.Error(err.Error())
-		return
-	}
-	logger.Info(qrmatrix.Content)
+	//qrmatrix, err := qrcodereco.Decode(fi)
+	//if err != nil {
+	//	logger.Error(err.Error())
+	//	return
+	//}
+	//logger.Info(qrmatrix.Content)
 }
 
 func ImageResize(src image.Image, w, h int) image.Image {

@@ -133,7 +133,8 @@ func (d *Device) OffLine() {
 }
 
 func (d *Device) OnLineState() bool {
-	if rediscmd.Get(fmt.Sprintf(DeviceOnLine,d.ID)) == "1" {
+	rse, _ := rediscmd.Get(fmt.Sprintf(DeviceOnLine,d.ID))
+	if rse == "1" {
 		return true
 	}
 	return false

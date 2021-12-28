@@ -3,14 +3,13 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"log"
 	"math/rand"
 	"strings"
 	"sync"
 	"time"
 
-	"go.etcd.io/etcd/clientv3"
 	"github.com/mangenotwork/extras/common/logger"
+	"go.etcd.io/etcd/client/v3"
 )
 
 // 采用单列模式

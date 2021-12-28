@@ -2,14 +2,13 @@ package conn
 
 import (
 	"context"
-	"log"
 	"sync"
 	"time"
 
+	"github.com/mangenotwork/extras/common/conf"
+	"github.com/mangenotwork/extras/common/logger"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"github.com/mangenotwork/extras/common/logger"
-	"github.com/mangenotwork/extras/common/conf"
 )
 
 var _mongoClient *mongo.Client

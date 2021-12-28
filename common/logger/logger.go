@@ -44,6 +44,7 @@ var LevelMap = map[Level]string {
 	2 : "Debug ",
 	3 : "Warn  ",
 	4 : "Error ",
+	5 : "Panic ",
 }
 
 func (l *logger) Log(level Level, args string, times int) {
@@ -114,5 +115,6 @@ func ErrorTimes(times int, args ...interface{}) {
 }
 
 func Panic(args ...interface{}){
+	std.Log(5, fmt.Sprint(args...), 2)
 	panic(args)
 }

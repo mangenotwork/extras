@@ -18,6 +18,52 @@ var (
 	notServiceErr = fmt.Errorf("[发现服务失败] 没有发现服务")
 )
 
+// discovery 发现服务
+type client struct {
+	serverAddr string
+	etcdAddr []string
+	clientName string
+	serviceName string
+	reqFuncName string
+	isLog bool
+	times int
+	retry int // 重试次数
+	retryTime time.Duration
+}
+
+// DiscoveryArg 创建发现服务对象参数
+type ClientArg struct {
+	ServiceAddr  string
+	EtcdAddr    string
+	ClientName  string
+	ServiceName string
+	ReqFuncName string
+	OpenLog     bool
+}
+
+// NewDiscovery 创建发现服务
+func NewClient(dis ClientArg) (*client, error) {
+	etcdAddr := strings.Split(dis.EtcdAddr, ",")
+	if len(etcdAddr) < 1 {
+		return nil, etcdAddrNilErr
+	}
+	if len(dis.ServiceName) < 1 {
+		return nil, fmt.Errorf("[Grpc] 参数err: ServiceName is null.")
+	}
+
+	return &client{
+		serverAddr: dis.ServiceAddr,
+		etcdAddr: etcdAddr,
+		clientName: dis.ClientName,
+		serviceName: dis.ServiceName,
+		reqFuncName: dis.ReqFuncName,
+		isLog: dis.OpenLog,
+		times: 0,
+		retry: 20,
+		retryTime: 50*time.Millisecond,
+	}, nil
+}
+
 // NewClient return a new rpc client
 // NewClient("192.168.0.1:1234")
 func newClient(server string) (client *grpc.ClientConn, err error) {
@@ -122,54 +168,10 @@ func setCtx(serviceName, myName, funcName string, grpcConn *grpc.ClientConn) con
 }
 
 
-// discovery 发现服务
-type discovery struct {
-	serverAddr string
-	etcdAddr []string
-	clientName string
-	serviceName string
-	reqFuncName string
-	isLog bool
-	times int
-	retry int // 重试次数
-	retryTime time.Duration
-}
 
-// DiscoveryArg 创建发现服务对象参数
-type ClientArg struct {
-	ServiceAddr  string
-	EtcdAddr    string
-	ClientName  string
-	ServiceName string
-	ReqFuncName string
-	OpenLog     bool
-}
-
-// NewDiscovery 创建发现服务
-func NewClient(dis ClientArg) (*discovery, error) {
-	etcdAddr := strings.Split(dis.EtcdAddr, ",")
-	if len(etcdAddr) < 1 {
-		return nil, etcdAddrNilErr
-	}
-	if len(dis.ServiceName) < 1 {
-		return nil, fmt.Errorf("[Grpc] 参数err: ServiceName is null.")
-	}
-
-	return &discovery{
-		serverAddr: dis.ServiceAddr,
-		etcdAddr: etcdAddr,
-		clientName: dis.ClientName,
-		serviceName: dis.ServiceName,
-		reqFuncName: dis.ReqFuncName,
-		isLog: dis.OpenLog,
-		times: 0,
-		retry: 20,
-		retryTime: 50*time.Millisecond,
-	}, nil
-}
 
 // Conn
-func (c *discovery) Conn() (client *grpc.ClientConn, ctx context.Context, err error) {
+func (c *client) Conn() (client *grpc.ClientConn, ctx context.Context, err error) {
 	client, err = newClient(c.serverAddr)
 	ctx = setCtx(c.serviceName, c.clientName, c.reqFuncName, client)
 	return
@@ -177,7 +179,7 @@ func (c *discovery) Conn() (client *grpc.ClientConn, ctx context.Context, err er
 
 
 // Min  发现服务获取grpc连接; 负载均衡 - 最小连接数法;
-func (c *discovery) Min() (client *grpc.ClientConn, ctx context.Context, err error) {
+func (c *client) Min() (client *grpc.ClientConn, ctx context.Context, err error) {
 	// 避免一直重试
 	if c.times > c.retry {
 		err = notServiceErr
@@ -205,7 +207,7 @@ func (c *discovery) Min() (client *grpc.ClientConn, ctx context.Context, err err
 }
 
 // Rand  发现服务获取grpc连接; 负载均衡 - 随机法;
-func (c *discovery) Rand() (client *grpc.ClientConn, ctx context.Context, err error) {
+func (c *client) Rand() (client *grpc.ClientConn, ctx context.Context, err error) {
 	if c.times > c.retry {
 		err = notServiceErr
 	}
