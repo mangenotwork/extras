@@ -73,6 +73,17 @@ func StartUdp(){
 
 				}
 
+				// 日志是grpc日志 记录到db
+				if string(dataType) == "3" {
+					logger.Info("http 日志 ", string(data[1:n]))
+					dataList := strings.Split(string(data[1:n]), "#")
+					state := dataList[0]
+					link := dataList[1]
+					requestId := dataList[2]
+					method := dataList[3]
+					reqTime := dataList[4]
+					logger.Info("state = ", state, " | link = ", link, " | requestId = ", requestId, "| method", method, "| reqTime = ", reqTime)
+				}
 
 			}else{
 				logger.Error("传入的数据太小或太大, 建议 1~10240个字节")

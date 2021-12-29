@@ -144,7 +144,7 @@ func (m *Server) register() {
 
 // unaryInterceptor  中间件打印日志
 func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	startTime := time.Now()
+	startTime := time.Now().UnixNano()
 
 	pr, _ := peer.FromContext(ctx)
 	md, _ := metadata.FromIncomingContext(ctx)
@@ -152,22 +152,29 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	serviceName := getValue(md, "servicename")
 	requestId := getValue(md, "requestid")
 	m, err := handler(ctx, req)
+	myIp,_ := utils.GetLocalIP()
 	if err != nil {
-		logger.Error("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
-			clientName,
-			serviceName,
-			pr.Addr.String(),
-			requestId,
-			info.FullMethod,
-			err)
+		//logger.Error("[GRPC ERROR] %s->%s(%v) | id:%s | %s | err = %v",
+		//	clientName,
+		//	serviceName,
+		//	pr.Addr.String(),
+		//	requestId,
+		//	info.FullMethod,
+		//	err)
+		logStr := fmt.Sprintf("ok#%s(%v)->%s(%v)#%s#%s#%v ms", clientName, pr.Addr.String(), serviceName, myIp, requestId, info.FullMethod, err)
+		logger.Grpc(logStr, true)
+
 	} else {
-		logger.Info("[GRPC] %v | %s(%v)->%s |id:%s | %s ",
-			time.Now().Sub(startTime),
-			clientName,
-			pr.Addr.String(),
-			serviceName,
-			requestId,
-			info.FullMethod)
+		//logger.Info("[GRPC] %v | %s(%v)->%s |id:%s | %s ",
+		//	time.Now().Sub(startTime),
+		//	clientName,
+		//	pr.Addr.String(),
+		//	serviceName,
+		//	requestId,
+		//	info.FullMethod)
+		logStr := fmt.Sprintf("ok#%s(%v)->%s(%v)#%s#%s#%v ms", clientName, pr.Addr.String(), serviceName, myIp, requestId, info.FullMethod,
+			float64(time.Now().UnixNano()-startTime)/100000)
+		logger.Grpc(logStr, true)
 	}
 	return m, err
 }

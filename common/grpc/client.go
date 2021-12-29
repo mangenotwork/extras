@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"runtime"
 	"strings"
 	"time"
 
@@ -87,31 +86,40 @@ func unaryInterceptorClient(ctx context.Context, method string, req, reply inter
 			break
 		}
 	}
-	_, file, line, _ := runtime.Caller(3)
 	md, _ := metadata.FromOutgoingContext(ctx)
 	clientName := getValue(md, "clientname")
 	serviceName := getValue(md, "servicename")
 	requestId := getValue(md, "requestid")
-	startTime := time.Now()
+	startTime := time.Now().UnixNano()
 	err := invoker(ctx, method, req, reply, cc, opts...)
+	myIp,_ := utils.GetLocalIP()
 	if err != nil {
-		logger.Error("[GRPC ERROR] %s->%s(%v) | id:%s | %s | %s:%d| err = %v",
-			clientName,
-			serviceName,
-			cc.Target(),
-			requestId,
-			method,
-			file, line,
-			err)
+		//logger.Error("[GRPC ERROR] %s(%v)->%s(%v) | id:%s | %s | %s:%d| err = %v",
+		//	clientName,
+		//	myIp,
+		//	serviceName,
+		//	cc.Target(),
+		//	requestId,
+		//	method,
+		//	file, line,
+		//	err)
+
+		logStr := fmt.Sprintf("err#%s(%v)->%s(%v)#%s#%s#%v", clientName, myIp, serviceName, cc.Target(), requestId, method, err)
+		logger.Grpc(logStr, true)
+
 	} else {
-		logger.Info("[GRPC] %v | %s->%s(%v) | id:%s | %s |  %s:%d",
-			time.Now().Sub(startTime),
-			clientName,
-			serviceName,
-			cc.Target(),
-			requestId,
-			method,
-			file, line)
+		//logger.Info("[GRPC] %v | %s->%s(%v) | id:%s | %s |  %s:%d",
+		//	time.Now().Sub(startTime),
+		//	clientName,
+		//	serviceName,
+		//	cc.Target(),
+		//	requestId,
+		//	method,
+		//	file, line)
+
+		logStr := fmt.Sprintf("ok#%s(%v)->%s(%v)#%s#%s#%v ms", clientName, myIp, serviceName, cc.Target(), requestId, method,
+			 float64(time.Now().UnixNano()-startTime)/100000)
+		logger.Grpc(logStr, true)
 	}
 
 	return err

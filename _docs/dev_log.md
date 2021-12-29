@@ -61,9 +61,9 @@
 - v0.2.21 [LogCenter] 收集日志
 - v0.2.22 [common] 日志库上报日志
 - v0.2.23 [common] 自定义http日志并上报
+- v0.2.24 [common] 自定义grpc日志并上报
 
 > Todo
-- v0.2.24 [common] 自定义grpc日志并上报
 - v0.2.25 [LogCenter] 日志存储到 Boltdb
 - v0.2.26 [LogCenter] 增加UI
 - v0.3.1  

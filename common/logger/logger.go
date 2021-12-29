@@ -196,3 +196,22 @@ func Http(log string, show bool) {
 	}()
 
 }
+
+func (l *logger) Grpc(log string) {
+	if l.outService {
+		var out bytes.Buffer
+		out.WriteString("3"+l.appName+"|")
+		out.WriteString(log)
+		_,_ = l.outServiceConn.Write(out.Bytes())
+	}
+}
+
+func Grpc(log string, show bool) {
+	if show {
+		Info(strings.Replace(log, "#", " | ", -1) + " ms")
+	}
+	go func() {
+		std.Grpc(log)
+	}()
+
+}
