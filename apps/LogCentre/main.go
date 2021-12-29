@@ -8,10 +8,9 @@ import (
 )
 
 func main(){
-
+	conf.InitConf()
 	logger.Info(utils.Logo)
 	logger.Info("Starting log center http server")
-	conf.InitConf()
 	engine.StartJob()
 
 	if conf.Arg.HttpServer.Open {

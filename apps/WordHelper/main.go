@@ -8,9 +8,11 @@ import (
 )
 
 func main(){
+	conf.InitConf()
+
 	logger.Info(utils.Logo)
 	logger.Info("Starting img helper http server")
-	conf.InitConf()
+
 	engine.StartJobServer()
 
 	if conf.Arg.HttpServer.Open {

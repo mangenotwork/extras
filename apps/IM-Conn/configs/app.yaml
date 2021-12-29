@@ -19,3 +19,6 @@ udpServer:
   open: true
   prod: 29124
 
+logCentre:
+  host: 192.168.0.9
+  prod: 22223

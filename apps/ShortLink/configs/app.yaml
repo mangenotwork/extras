@@ -18,3 +18,9 @@ redis:
   password: love0021$%
   maxidle: 50
   maxactive: 10000
+
+logCentre:
+  host: 192.168.0.9
+  prod: 22223
+
+

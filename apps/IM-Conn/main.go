@@ -8,10 +8,11 @@ import (
 )
 
 func main(){
+	conf.InitConf()
 
 	logger.Info(utils.Logo)
 	logger.Info("Starting IM-Conn ......")
-	conf.InitConf()
+
 	engine.StartJob()
 	engine.StartMQ()
 

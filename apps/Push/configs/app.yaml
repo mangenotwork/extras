@@ -1,5 +1,5 @@
 app:
-  name: BlockWord
+  name: Push
   runType: dev
 
 httpServer:
@@ -43,3 +43,6 @@ mongo:
   user: admin
   password: 123456
 
+logCentre:
+  host: 192.168.0.9
+  prod: 22223

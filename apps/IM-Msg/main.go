@@ -8,10 +8,11 @@ import (
 )
 
 func main(){
+	conf.InitConf()
 
 	logger.Info(utils.Logo)
 	logger.Info("Starting IM-Msg ......")
-	conf.InitConf()
+
 	engine.StartJob()
 
 	if conf.Arg.HttpServer.Open {

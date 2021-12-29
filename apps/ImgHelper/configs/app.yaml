@@ -12,3 +12,7 @@ grpcServer:
   log: true
 
 ttf: /ttf/Alibaba-PuHuiTi-Heavy.ttf
+
+logCentre:
+  host: 192.168.0.9
+  prod: 22223

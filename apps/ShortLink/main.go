@@ -8,10 +8,11 @@ import (
 )
 
 func main(){
+	conf.InitConf()
 
 	logger.Info(utils.Logo)
 	logger.Info("Starting short link server")
-	conf.InitConf()
+
 	engine.StartJobServer()
 
 	if conf.Arg.HttpServer.Open {

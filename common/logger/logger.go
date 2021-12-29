@@ -32,11 +32,15 @@ type logger struct {
 	outServiceIp string
 	outServicePort int
 	outServiceConn  *net.UDPConn
+	outServiceLevel []int
 }
 
 func newStd() *logger {
 	return &logger{
 		terminal: true,
+		outFile: false,
+		outService: false,
+		outServiceLevel: []int{3, 4, 5},
 	}
 }
 
@@ -62,6 +66,14 @@ func SetOutService(ip string, port int) {
 	if err != nil {
 		Error(err)
 	}
+}
+
+func SetOutServiceWarn2Panic() {
+	std.outServiceLevel = []int{3, 4, 5}
+}
+
+func SetOutServiceInfo2Panic() {
+	std.outServiceLevel = []int{1, 2, 3, 4, 5}
 }
 
 func DisableTerminal() {
@@ -99,9 +111,14 @@ func (l *logger) Log(level Level, args string, times int) {
 		if l.outFile {
 			_,_ = l.outFileWriter.Write(out)
 		}
-		if l.outService && level!=1 && level != 2 {
-			out = append([]byte(l.appName+"|"), out...)
-			_,_ = l.outServiceConn.Write(out)
+
+		if l.outService {
+			for _, v := range l.outServiceLevel {
+				if Level(v) == level {
+					out = append([]byte(l.appName+"|"), out...)
+					_,_ = l.outServiceConn.Write(out)
+				}
+			}
 		}
 	}(out)
 

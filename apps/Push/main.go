@@ -8,10 +8,11 @@ import (
 )
 
 func main(){
+	conf.InitConf()
 
 	logger.Info(utils.Logo)
 	logger.Info("Starting push server")
-	conf.InitConf()
+
 	engine.StartJobServer()
 	engine.StartMqServer()
 

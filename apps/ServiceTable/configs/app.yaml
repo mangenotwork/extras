@@ -1,5 +1,5 @@
 app:
-  name: ConfigCenter
+  name: ServiceTable
   runType: dev
 
 httpServer:
@@ -15,3 +15,8 @@ cluster:
   open: false
   myAddr: "192.168.0.9:12221"
   initCluster: "192.168.0.9:12221,192.168.0.9:12222,192.168.0.9:12223,192.168.0.9:12224,192.168.0.9:12225,192.168.0.9:12226"
+
+logCentre:
+  host: 192.168.0.9
+  prod: 22223
+

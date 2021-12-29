@@ -11,3 +11,6 @@ grpcServer:
   prod: 29128
   log: true
 
+logCentre:
+  host: 192.168.0.9
+  prod: 22223

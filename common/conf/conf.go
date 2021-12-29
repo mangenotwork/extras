@@ -29,6 +29,7 @@ type Configs struct {
 	Mongo *Mongo `yaml:"mongo"`
 	TTF string `yaml:"ttf"`
 	Cluster *Cluster `yaml:"cluster"`
+	LogCentre *LogCentre `yaml:"logCentre"`
 }
 
 type App struct {
@@ -110,6 +111,11 @@ type Cluster struct {
 	InitCluster string `yaml:"initCluster"`
 }
 
+type LogCentre struct {
+	Host string `yaml:"host"`
+	Port int `yaml:"prod"`
+}
+
 // 读取yaml文件
 // 获取配置
 func InitConf(){
@@ -135,6 +141,13 @@ func InitConf(){
 
 	b,_ := json.Marshal(Arg)
 	logger.Info("[conf arg] ", string(b))
+
+	// 日志设置
+	if Arg.LogCentre != nil {
+		logger.SetAppName(Arg.App.Name)
+		logger.SetOutServiceInfo2Panic()
+		logger.SetOutService(Arg.LogCentre.Host, Arg.LogCentre.Port)
+	}
 
 }
 

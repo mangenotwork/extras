@@ -59,14 +59,14 @@
 - v0.2.19 [common] 升级grpc和etcd版本
 - v0.2.20 [LogCenter] 日志中心 文件结构初始化
 - v0.2.21 [LogCenter] 收集日志
+- v0.2.22 [common] 日志库上报日志
 
 > Todo
-- v0.2.22 [common] 日志库上报日志
-- v0.2.23 [LogCenter] 日志存储到文件
-- v0.2.24 [common] 自定义http日志并上报
-- v0.2.25 [common] 自定义grpc日志并上报
-- v0.2.26 [LogCenter] 日志存储到 Boltdb
-- v0.3.1  [LogCenter] 增加UI
+- v0.2.23 [common] 自定义http日志并上报
+- v0.2.24 [common] 自定义grpc日志并上报
+- v0.2.25 [LogCenter] 日志存储到 Boltdb
+- v0.2.26 [LogCenter] 增加UI
+- v0.3.1  
 - v0.3.2
 - v0.3.3
 - v0.3.4
