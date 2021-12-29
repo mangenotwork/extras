@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -115,7 +116,7 @@ func (l *logger) Log(level Level, args string, times int) {
 		if l.outService {
 			for _, v := range l.outServiceLevel {
 				if Level(v) == level {
-					out = append([]byte(l.appName+"|"), out...)
+					out = append([]byte("1"+l.appName+"|"), out...)
 					_,_ = l.outServiceConn.Write(out)
 				}
 			}
@@ -175,4 +176,23 @@ func ErrorTimes(times int, args ...interface{}) {
 func Panic(args ...interface{}){
 	std.Log(5, fmt.Sprint(args...), 2)
 	panic(args)
+}
+
+func (l *logger) Http(log string) {
+	if l.outService {
+		var out bytes.Buffer
+		out.WriteString("2"+l.appName+"|")
+		out.WriteString(log)
+		_,_ = l.outServiceConn.Write(out.Bytes())
+	}
+}
+
+func Http(log string, show bool) {
+	if show {
+		Info(strings.Replace(log, "#", " | ", -1) + " ms")
+	}
+	go func() {
+		std.Http(log)
+	}()
+
 }

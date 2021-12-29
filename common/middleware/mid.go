@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -10,6 +11,20 @@ import (
 	"github.com/mangenotwork/extras/common/logger"
 	"golang.org/x/time/rate"
 )
+
+type ResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
+	return &ResponseWriter{w, http.StatusOK}
+}
+
+func (lrw *ResponseWriter) WriteHeader(code int) {
+	lrw.statusCode = code
+	lrw.ResponseWriter.WriteHeader(code)
+}
 
 // Base Http基础中间件,日志
 func Base(next http.Handler) http.Handler {
@@ -32,10 +47,15 @@ func Base(next http.Handler) http.Handler {
 
 		 */
 
-		start := time.Now()
+		start := time.Now().UnixNano()
 		ip := GetIP(r)
-		next.ServeHTTP(w, r)
-		logger.Info("[%s] %s %s %v", ip, r.Method, r.URL.Path, time.Since(start))
+
+		newW := NewResponseWriter(w)
+
+		next.ServeHTTP(newW, r)
+
+		logStr := fmt.Sprintf("%s#%s#%s#%d#%f", ip, r.Method, r.URL.String(), newW.statusCode, float64(time.Now().UnixNano()-start)/100000)
+		logger.Http(logStr, true)
 	})
 }
 
