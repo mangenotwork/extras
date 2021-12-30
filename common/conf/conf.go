@@ -3,10 +3,10 @@ package conf
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
-	"github.com/mangenotwork/extras/common/logger"
 	yaml "gopkg.in/yaml.v3"
 )
 
@@ -128,7 +128,7 @@ func InitConf(){
 	if !fileExists(appConfigPath) {
 		panic("【启动失败】 未找到配置文件!")
 	}
-	logger.Info("[启动]读取配置文件:", appConfigPath)
+	log.Println("[启动]读取配置文件:", appConfigPath)
 	//读取yaml文件到缓存中
 	config, err := ioutil.ReadFile(appConfigPath)
 	if err != nil {
@@ -140,15 +140,7 @@ func InitConf(){
 	}
 
 	b,_ := json.Marshal(Arg)
-	logger.Info("[conf arg] ", string(b))
-
-	// 日志设置
-	if Arg.LogCentre != nil {
-		logger.SetAppName(Arg.App.Name)
-		logger.SetOutServiceInfo2Panic()
-		logger.SetOutService(Arg.LogCentre.Host, Arg.LogCentre.Port)
-	}
-
+	log.Println("[conf arg] ", string(b))
 }
 
 func fileExists(name string) bool {

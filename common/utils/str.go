@@ -2,12 +2,12 @@ package utils
 
 import (
 	"bytes"
+	"encoding/gob"
 	"fmt"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
-
-	"github.com/mangenotwork/extras/common/logger"
 )
 
 // Str2Int64 string -> int
@@ -142,7 +142,7 @@ func stringValue(v reflect.Value, indent int, buf *bytes.Buffer) {
 func P2E() {
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Error("Panic error: %v", r)
+			log.Printf("Panic error: %v", r)
 		}
 	}()
 }
@@ -158,3 +158,11 @@ func SliceDelNullString(sli []string) []string {
 	return rse
 }
 
+// 深 copy 对象
+func DeepCopy(dst, src interface{}) error {
+	var buf bytes.Buffer
+	if err := gob.NewEncoder(&buf).Encode(src); err != nil {
+		return err
+	}
+	return gob.NewDecoder(bytes.NewBuffer(buf.Bytes())).Decode(dst)
+}

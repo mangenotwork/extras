@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mangenotwork/extras/common/conf"
 )
 
 /*
@@ -183,7 +185,9 @@ func (l *logger) Http(log string) {
 		var out bytes.Buffer
 		out.WriteString("2"+l.appName+"|")
 		out.WriteString(log)
-		_,_ = l.outServiceConn.Write(out.Bytes())
+		fmt.Println("发送到log中心 内容 ", out.String())
+		n,err := l.outServiceConn.Write(out.Bytes())
+		fmt.Println("发送日志到log中心 err = ", n, err)
 	}
 }
 
@@ -192,7 +196,7 @@ func Http(log string, show bool) {
 		Info(strings.Replace(log, "#", " | ", -1) + " ms")
 	}
 	go func() {
-		std.Http(log)
+		std.Http(conf.Arg.App.Name+"#"+int642Str(time.Now().Unix())+"#"+log)
 	}()
 
 }
@@ -202,7 +206,9 @@ func (l *logger) Grpc(log string) {
 		var out bytes.Buffer
 		out.WriteString("3"+l.appName+"|")
 		out.WriteString(log)
-		_,_ = l.outServiceConn.Write(out.Bytes())
+		fmt.Println("发送到log中心 内容 ", out.String())
+		n,err := l.outServiceConn.Write(out.Bytes())
+		fmt.Println("发送日志到log中心 err = ",n, err)
 	}
 }
 
@@ -211,7 +217,20 @@ func Grpc(log string, show bool) {
 		Info(strings.Replace(log, "#", " | ", -1) + " ms")
 	}
 	go func() {
-		std.Grpc(log)
+		std.Grpc(conf.Arg.App.Name+"#"+int642Str(time.Now().Unix())+"#"+log)
 	}()
 
+}
+
+func int642Str(i int64) string {
+	return strconv.FormatInt(i,10)
+}
+
+func InitLogger(){
+	// 日志设置
+	if conf.Arg.LogCentre != nil {
+		SetAppName(conf.Arg.App.Name)
+		SetOutServiceInfo2Panic()
+		SetOutService(conf.Arg.LogCentre.Host, conf.Arg.LogCentre.Port)
+	}
 }

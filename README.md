@@ -52,7 +52,7 @@
 #### LogCenter  日志中心,收集微服务日志
 > 日志中心,收集微服务日志,可以监控微服务的http请求日志,grpc请求日志与链路日志等等; 简化运维工作
 
->  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/LogCenter)
+>  [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/LogCentre)
 
 #### 
 

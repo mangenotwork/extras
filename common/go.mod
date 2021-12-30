@@ -10,4 +10,5 @@ require (
 	golang.org/x/net v0.0.0-20211019232329-c6ed85c7a12d
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	google.golang.org/grpc v1.42.0
+	github.com/boltdb/bolt v1.3.1 // indirect
 )

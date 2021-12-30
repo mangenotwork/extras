@@ -1,0 +1,7 @@
+app:
+  name: GrpcClient
+  runType: dev
+
+logCentre:
+  host: 192.168.0.9
+  prod: 22223

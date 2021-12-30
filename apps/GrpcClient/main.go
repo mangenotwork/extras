@@ -2,11 +2,15 @@ package main
 
 import (
 	"github.com/mangenotwork/extras/apps/GrpcClient/proto"
+	"github.com/mangenotwork/extras/common/conf"
 	"github.com/mangenotwork/extras/common/grpc"
 	"github.com/mangenotwork/extras/common/logger"
 )
 
 func main() {
+	conf.InitConf()
+	logger.InitLogger()
+
 	client, err := grpc.NewClient(grpc.ClientArg{
 		ServiceAddr: "192.168.0.9:11232",
 		ServiceName: "BlockWord",
