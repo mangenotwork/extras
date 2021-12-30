@@ -1,15 +1,16 @@
 package engine
 
 import (
-	"github.com/mangenotwork/extras/apps/WordHelper/handler"
-	"github.com/mangenotwork/extras/common/middleware"
-	"github.com/mangenotwork/extras/common/utils"
 	"net/http"
+
+	"github.com/mangenotwork/extras/apps/WordHelper/handler"
+	"github.com/mangenotwork/extras/common/httpser"
+	"github.com/mangenotwork/extras/common/middleware"
 )
 
 func StartHttpServer(){
 	go func() {
-		utils.HttpServer(Router())
+		httpser.HttpServer(Router())
 	}()
 }
 

@@ -10,9 +10,9 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/mangenotwork/extras/apps/Push/model"
 	"github.com/mangenotwork/extras/apps/Push/service"
+	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/middleware"
-	"github.com/mangenotwork/extras/common/utils"
 )
 
 var upGrader = websocket.Upgrader{
@@ -37,7 +37,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 		ip = middleware.GetIP(r)
 	)
 
-	deviceId := utils.GetUrlArg(r, "device")
+	deviceId := httpser.GetUrlArg(r, "device")
 	conn, err := upGrader.Upgrade(w, r, nil)
 	if err != nil {
 		logger.Error("websocket upgrade error:%v", err)
@@ -103,10 +103,10 @@ func TopicCreate(w http.ResponseWriter, r *http.Request) {
 	_=decoder.Decode(&params)
 	err := service.NewTopic(params.Name)
 	if err != nil {
-		utils.OutErrBody(w, 2001,err)
+		httpser.OutErrBody(w, 2001,err)
 		return
 	}
-	utils.OutSucceedBody(w, "创建成功")
+	httpser.OutSucceedBody(w, "创建成功")
 }
 
 // 发布
@@ -121,15 +121,15 @@ func Publish(w http.ResponseWriter, r *http.Request) {
 	_=decoder.Decode(&params)
 	err := service.TopicSend(params.TopicName, params.Data)
 	if err != nil {
-		utils.OutErrBody(w, 2001,err)
+		httpser.OutErrBody(w, 2001,err)
 		return
 	}
-	utils.OutSucceedBody(w, "发送成功")
+	httpser.OutSucceedBody(w, "发送成功")
 }
 
 // 获取一个随机id, 可以作为设备id使用
 func GetDeviceId(w http.ResponseWriter, r *http.Request) {
-	utils.OutSucceedBody(w, uuid.New().String())
+	httpser.OutSucceedBody(w, uuid.New().String())
 }
 
 
@@ -145,7 +145,7 @@ func Subscription(w http.ResponseWriter, r *http.Request) {
 	_=decoder.Decode(&params)
 
 	if !service.TopicIsHave(params.TopicName) {
-		utils.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
+		httpser.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
 		return
 	}
 
@@ -161,7 +161,7 @@ func Subscription(w http.ResponseWriter, r *http.Request) {
 		}
 		_=device.SubTopic(conn, params.TopicName)
 	}
-	utils.OutSucceedBody(w, "订阅成功")
+	httpser.OutSucceedBody(w, "订阅成功")
 }
 
 // 设备取消订阅, 支持批量
@@ -171,7 +171,7 @@ func TopicCancel(w http.ResponseWriter, r *http.Request) {
 	_=decoder.Decode(&params)
 
 	if !service.TopicIsHave(params.TopicName) {
-		utils.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
+		httpser.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
 		return
 	}
 
@@ -179,51 +179,51 @@ func TopicCancel(w http.ResponseWriter, r *http.Request) {
 		// 生产一条消息
 		_=service.TopicDelDevice(params.TopicName, v)
 	}
-	utils.OutSucceedBody(w, "取消订阅成功")
+	httpser.OutSucceedBody(w, "取消订阅成功")
 }
 
 // 查询设备订阅的topic
 func DeviceViewTopic(w http.ResponseWriter, r *http.Request) {
-	device := utils.GetUrlArg(r, "device")
+	device := httpser.GetUrlArg(r, "device")
 	dataList := new(model.Device).SetId(device).AllTopic()
-	utils.OutSucceedBody(w, dataList)
+	httpser.OutSucceedBody(w, dataList)
 }
 
 // 查询topic被哪些设备订阅
 func TopicAllDevice(w http.ResponseWriter, r *http.Request) {
-	topic := utils.GetUrlArg(r, "topic")
+	topic := httpser.GetUrlArg(r, "topic")
 	dataList := model.GetTopicAllDevice(topic)
-	utils.OutSucceedBody(w, dataList)
+	httpser.OutSucceedBody(w, dataList)
 }
 
 // 查询topic是否被指定device订阅
 func TopicCheckDevice(w http.ResponseWriter, r *http.Request) {
-	device := utils.GetUrlArg(r, "device")
-	topic := utils.GetUrlArg(r, "topic")
+	device := httpser.GetUrlArg(r, "device")
+	topic := httpser.GetUrlArg(r, "topic")
 	isHas, _ := model.GetTopicHasDevice(topic, device)
 	rse := device+"没有订阅"+topic
 	if isHas {
 		rse = device+"订阅了"+topic
 	}
-	utils.OutSucceedBody(w, rse)
+	httpser.OutSucceedBody(w, rse)
 }
 
 // 强制指定topic下全部设备断开接收推送
 func TopicDisconnection(w http.ResponseWriter, r *http.Request) {
-	topic := utils.GetUrlArg(r, "topic")
+	topic := httpser.GetUrlArg(r, "topic")
 	_= service.TopicDisconnectionDevice(topic)
-	utils.OutSucceedBody(w, "断开成功")
+	httpser.OutSucceedBody(w, "断开成功")
 }
 
 // 获取topic记录
 func TopicLog(w http.ResponseWriter, r *http.Request) {
-	topic := utils.GetUrlArg(r, "topic")
-	page := utils.GetUrlArgInt64(r, "page")
-	limit := utils.GetUrlArgInt64(r, "limit")
+	topic := httpser.GetUrlArg(r, "topic")
+	page := httpser.GetUrlArgInt64(r, "page")
+	limit := httpser.GetUrlArgInt64(r, "limit")
 	data, err := service.GetTopicSend(topic, page, limit)
 	if err != nil {
-		utils.OutErrBody(w, 2001,err)
+		httpser.OutErrBody(w, 2001,err)
 		return
 	}
-	utils.OutSucceedBody(w, data)
+	httpser.OutSucceedBody(w, data)
 }

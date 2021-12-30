@@ -63,11 +63,11 @@
 - v0.2.23 [common] 自定义http日志并上报
 - v0.2.24 [common] 自定义grpc日志并上报
 - v0.2.25 [LogCenter] 日志存储到 Boltdb
+- v0.2.26 [common] http封装
 
 > Todo
-- v0.2.26 [LogCenter] 增加UI
-- v0.3.1  
-- v0.3.2
+- v0.3.1  [LogCenter] 获取grpc请求日志
+- v0.3.2  [LogCenter] 获取http请求日志
 - v0.3.3
 - v0.3.4
 - v0.3.5

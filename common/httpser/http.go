@@ -1,4 +1,4 @@
-package utils
+package httpser
 
 import (
 	"net"
@@ -60,3 +60,4 @@ func HttpServer(router *http.ServeMux){
 		logger.Panic("ListenAndServe err : ", err)
 	}
 }
+

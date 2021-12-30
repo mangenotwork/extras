@@ -1,4 +1,4 @@
-package utils
+package httpser
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 // HTTP  输出 json body 定义
@@ -96,12 +97,12 @@ func GetUrlArgInt64(r *http.Request, name string) int64 {
 	var arg string
 	values := r.URL.Query()
 	arg=values.Get(name)
-	return Str2Int64(arg)
+	return utils.Str2Int64(arg)
 }
 
 func GetUrlArgInt(r *http.Request, name string) int {
 	var arg string
 	values := r.URL.Query()
 	arg=values.Get(name)
-	return Str2Int(arg)
+	return utils.Str2Int(arg)
 }

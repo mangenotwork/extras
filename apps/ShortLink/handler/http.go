@@ -12,9 +12,9 @@ import (
 
 	"github.com/mangenotwork/extras/apps/ShortLink/model"
 	"github.com/mangenotwork/extras/apps/ShortLink/service"
+	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/middleware"
-	"github.com/mangenotwork/extras/common/utils"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +29,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if link.IsPrivacy {
-		if utils.GetUrlArg(r, "password") != link.Password {
+		if httpser.GetUrlArg(r, "password") != link.Password {
 			http.Redirect(w, r, "/NotPrivacy", http.StatusMovedPermanently)
 			return
 		}
@@ -135,7 +135,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	params := &AddParam{}
 	_=decoder.Decode(&params)
 	if params.IsPrivacy && len(params.Password) < 1 {
-		utils.OutErrBody(w, 1001, errors.New("设置了隐私但是password为空"))
+		httpser.OutErrBody(w, 1001, errors.New("设置了隐私但是password为空"))
 	}
 	// 生成短链接
 	exp := params.Aging
@@ -158,7 +158,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 
 	err := shortLink.Save()
 	if err != nil {
-		utils.OutErrBody(w, 2001, err)
+		httpser.OutErrBody(w, 2001, err)
 		return
 	}
 	sLink := &AddBody{
@@ -166,7 +166,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		Password: params.Password,
 		Expire: time.Unix(exp, 0).Format("2006-01-02 15:04:05"),
 	}
-	utils.OutSucceedBody(w, sLink)
+	httpser.OutSucceedBody(w, sLink)
 }
 
 // 查看短链接, 如果是隐私的则需要带密码访问

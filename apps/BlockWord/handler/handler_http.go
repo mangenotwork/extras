@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/mangenotwork/extras/apps/BlockWord/service"
+	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/utils"
 )
 
@@ -24,45 +25,45 @@ func Do(w http.ResponseWriter, r *http.Request) {
 	params := &BlockPostParam{}
 	_=decoder.Decode(&params)
 	params.Str, params.Time  = service.BlockWorkTrie.BlockWord(params.Str, params.Sub)
-	utils.OutSucceedBodyJsonP(w, params)
+	httpser.OutSucceedBodyJsonP(w, params)
 	return
 }
 
 func Add(w http.ResponseWriter, r *http.Request) {
-	word := utils.GetUrlArg(r, "word")
+	word := httpser.GetUrlArg(r, "word")
 	service.AddWord(word)
-	utils.OutSucceedBodyJsonP(w,"")
+	httpser.OutSucceedBodyJsonP(w,"")
 	return
 }
 
 func Del(w http.ResponseWriter, r *http.Request) {
-	word := utils.GetUrlArg(r, "word")
+	word := httpser.GetUrlArg(r, "word")
 	service.DelWord(word)
-	utils.OutSucceedBodyJsonP(w,"")
+	httpser.OutSucceedBodyJsonP(w,"")
 	return
 }
 
 func List(w http.ResponseWriter, r *http.Request) {
-	utils.OutSucceedBodyJsonP(w, service.GetWord())
+	httpser.OutSucceedBodyJsonP(w, service.GetWord())
 	return
 }
 
 func WhiteAdd(w http.ResponseWriter, r *http.Request) {
-	word := utils.GetUrlArg(r, "word")
+	word := httpser.GetUrlArg(r, "word")
 	service.WhiteAddWord(word)
-	utils.OutSucceedBodyJsonP(w,"")
+	httpser.OutSucceedBodyJsonP(w,"")
 	return
 }
 
 func WhiteDel(w http.ResponseWriter, r *http.Request) {
-	word := utils.GetUrlArg(r, "word")
+	word := httpser.GetUrlArg(r, "word")
 	service.WhiteDelWord(word)
-	utils.OutSucceedBodyJsonP(w,"")
+	httpser.OutSucceedBodyJsonP(w,"")
 	return
 }
 
 func WhiteList(w http.ResponseWriter, r *http.Request) {
-	utils.OutSucceedBodyJsonP(w, service.WhiteGetWord())
+	httpser.OutSucceedBodyJsonP(w, service.WhiteGetWord())
 	return
 }
 
@@ -74,9 +75,9 @@ func IsHave(w http.ResponseWriter, r *http.Request){
 		_=decoder.Decode(&params)
 		word = params.Str
 	} else {
-		word = utils.GetUrlArg(r, "str")
+		word = httpser.GetUrlArg(r, "str")
 	}
-	utils.OutSucceedBodyJsonP(w, service.BlockWorkTrie.IsHave(word))
+	httpser.OutSucceedBodyJsonP(w, service.BlockWorkTrie.IsHave(word))
 	return
 }
 
@@ -88,8 +89,8 @@ func IsHaveList(w http.ResponseWriter, r *http.Request){
 		_=decoder.Decode(&params)
 		word = params.Str
 	} else {
-		word = utils.GetUrlArg(r, "str")
+		word = httpser.GetUrlArg(r, "str")
 	}
-	utils.OutSucceedBodyJsonP(w,service.BlockWorkTrie.BlockHaveList(word))
+	httpser.OutSucceedBodyJsonP(w,service.BlockWorkTrie.BlockHaveList(word))
 	return
 }

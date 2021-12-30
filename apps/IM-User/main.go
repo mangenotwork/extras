@@ -9,6 +9,8 @@ import (
 
 func main(){
 	conf.InitConf()
+	logger.InitLogger()
+
 	logger.Info(utils.Logo)
 	logger.Info("Starting IM-User ......")
 
