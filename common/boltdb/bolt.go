@@ -2,9 +2,10 @@ package boltdb
 
 import (
 	"bytes"
-	"github.com/boltdb/bolt"
 	"net/http"
 	"strconv"
+
+	"github.com/boltdb/bolt"
 )
 
 type BoltDB struct {
@@ -48,6 +49,18 @@ func (bo *BoltDB) CreateTable(tableName string) error {
 	})
 }
 
+func (bo *BoltDB) GetTable() (list []string, err error){
+	list = make([]string, 0)
+	err = bo.db.Update(func(tx *bolt.Tx) error {
+		_=tx.ForEach(func(name []byte, b *bolt.Bucket) error {
+			list = append(list, string(name))
+			return nil
+		})
+		return nil
+	})
+	return
+}
+
 func (bo *BoltDB) Insert(table, key, value string) error {
 	return bo.db.Update(func(tx *bolt.Tx) error {
 
@@ -87,6 +100,7 @@ func (bo *BoltDB) Select(table, key string) (data string, err error){
 
 // 前缀扫描
 func (bo *BoltDB) SelectPrefix(table, key string) (data map[string]string, err error) {
+	data = make(map[string]string)
 	err = bo.db.View(func(tx *bolt.Tx) error {
 		c := tx.Bucket([]byte(table)).Cursor()
 		prefix := []byte(key)
@@ -101,6 +115,7 @@ func (bo *BoltDB) SelectPrefix(table, key string) (data map[string]string, err e
 // 区间扫描
 // use : SelectInterval(table, "2021-01-01 00:00:00", "2022-01-01 00:00:00")
 func (bo *BoltDB) SelectInterval(table, keyA, keyB string) (data map[string]string, err error) {
+	data = make(map[string]string)
 	err = bo.db.View(func(tx *bolt.Tx) error {
 		c := tx.Bucket([]byte(table)).Cursor()
 		for k, v := c.Seek([]byte(keyA)); k != nil && bytes.Compare(k, []byte(keyB)) <= 0; k, v = c.Next() {
@@ -113,6 +128,7 @@ func (bo *BoltDB) SelectInterval(table, keyA, keyB string) (data map[string]stri
 
 // SelectFront   从前面获取多少个
 func (bo *BoltDB) SelectFront(table string, count int) (data map[string]string) {
+	data = make(map[string]string)
 	_=bo.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(table))
 		i := 0

@@ -93,7 +93,7 @@ func HttpLog(data []byte, n int){
 	reqUrl := dataList[4]
 	reqCode := dataList[5]
 	//reqTime := utils.Str2Float64(dataList[5])
-	reqTime := dataList[5]
+	reqTime := dataList[6]
 	//logger.Info("reqIp = ", reqIp, " | reqMethod = ", reqMethod, " | reqUrl = ", reqUrl, "| reqCode", reqCode, "| reqTime = ", reqTime)
 
 	// 数据存储到 boltdb
@@ -142,7 +142,7 @@ func GrpcLog(data []byte, n int){
 	//logger.Info("state = ", state, " | link = ", link, " | requestId = ", requestId, "| method", method, "| reqTime = ", reqTime)
 
 	// 数据存储到 boltdb
-	tableName := name + "grpc"
+	tableName := name + "-grpc"
 	bo, err := boltdb.NewBoltDB(BoltdbFileName)
 	if err != nil {
 		logger.Error(err)

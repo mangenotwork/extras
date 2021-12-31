@@ -22,5 +22,12 @@ func Router() *http.ServeMux {
 	mux.Handle("/hello", m(http.HandlerFunc(handler.Hello)))
 	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
 
+	// 获取所有table
+	mux.Handle("/table", m(http.HandlerFunc(handler.GetLogTable)))
+	// 获取http 请求日志, 时间段参数
+	mux.Handle("/http/req", m(http.HandlerFunc(handler.HttpReqLog)))
+
+
 	return mux
 }
+

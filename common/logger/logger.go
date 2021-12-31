@@ -183,7 +183,7 @@ func Panic(args ...interface{}){
 func (l *logger) Http(log string) {
 	if l.outService {
 		var out bytes.Buffer
-		out.WriteString("2"+l.appName+"|")
+		out.WriteString("2"+l.appName+"#"+int642Str(time.Now().Unix())+"#")
 		out.WriteString(log)
 		fmt.Println("发送到log中心 内容 ", out.String())
 		n,err := l.outServiceConn.Write(out.Bytes())
@@ -196,7 +196,7 @@ func Http(log string, show bool) {
 		Info(strings.Replace(log, "#", " | ", -1) + " ms")
 	}
 	go func() {
-		std.Http(conf.Arg.App.Name+"#"+int642Str(time.Now().Unix())+"#"+log)
+		std.Http(log)
 	}()
 
 }
@@ -204,7 +204,7 @@ func Http(log string, show bool) {
 func (l *logger) Grpc(log string) {
 	if l.outService {
 		var out bytes.Buffer
-		out.WriteString("3"+l.appName+"|")
+		out.WriteString("3"+l.appName+"#"+int642Str(time.Now().Unix())+"#")
 		out.WriteString(log)
 		fmt.Println("发送到log中心 内容 ", out.String())
 		n,err := l.outServiceConn.Write(out.Bytes())
@@ -217,7 +217,7 @@ func Grpc(log string, show bool) {
 		Info(strings.Replace(log, "#", " | ", -1) + " ms")
 	}
 	go func() {
-		std.Grpc(conf.Arg.App.Name+"#"+int642Str(time.Now().Unix())+"#"+log)
+		std.Grpc(log)
 	}()
 
 }
