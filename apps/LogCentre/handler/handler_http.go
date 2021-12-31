@@ -6,6 +6,8 @@ import (
 	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 
@@ -30,14 +32,12 @@ func GetLogTable(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func HttpReqLog(w http.ResponseWriter, r *http.Request) {
+func CheckLogTime(w http.ResponseWriter, r *http.Request) {
 	start := httpser.GetUrlArg(r, "start")
 	end := httpser.GetUrlArg(r, "end")
 	table := httpser.GetUrlArg(r, "table")
-
 	startKey := utils.Str2TimestampStr(start)
 	endKey := utils.Str2TimestampStr(end)
-	logger.Error(startKey, endKey)
 
 	bo, err := boltdb.NewBoltDB(BoltdbFileName)
 	if err != nil {
@@ -45,8 +45,6 @@ func HttpReqLog(w http.ResponseWriter, r *http.Request) {
 	}
 	defer bo.Close()
 
-
-	//data := bo.SelectFront(table, 100)
 	data, err := bo.SelectInterval(table, startKey, endKey)
 	if err != nil {
 		httpser.OutErrBody(w, 1, err)
@@ -56,3 +54,30 @@ func HttpReqLog(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func CheckLogCount(w http.ResponseWriter, r *http.Request) {
+	table := httpser.GetUrlArg(r, "table")
+	count := httpser.GetUrlArgInt64(r, "count")
+	bo, err := boltdb.NewBoltDB(BoltdbFileName)
+	if err != nil {
+		logger.Error(err)
+	}
+	defer bo.Close()
+
+	data := bo.SelectFront(table, int(count))
+	httpser.OutSucceedBody(w, data)
+	return
+}
+
+func LogDir(w http.ResponseWriter, r *http.Request) {
+	data := make([]string, 0)
+	//获取当前目录下的所有文件或目录信息
+	filepath.Walk("logs/", func(path string, info os.FileInfo, err error) error {
+		fileName := info.Name()
+		if fileName != "logs" {
+			data = append(data, info.Name())
+		}
+		return nil
+	})
+	httpser.OutSucceedBody(w, data)
+	return
+}

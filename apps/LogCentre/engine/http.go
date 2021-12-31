@@ -24,9 +24,14 @@ func Router() *http.ServeMux {
 
 	// 获取所有table
 	mux.Handle("/table", m(http.HandlerFunc(handler.GetLogTable)))
-	// 获取http 请求日志, 时间段参数
-	mux.Handle("/http/req", m(http.HandlerFunc(handler.HttpReqLog)))
-
+	// 获取日志, 时间段参数
+	mux.Handle("/check/time", m(http.HandlerFunc(handler.CheckLogTime)))
+	// 获取日志, 前多少个
+	mux.Handle("/check/count", m(http.HandlerFunc(handler.CheckLogCount)))
+	// 查看日志文件列表
+	mux.Handle("/log/dir", m(http.HandlerFunc(handler.LogDir)))
+	// 查看指定日志文件内容
+	// 下载日志文件
 
 	return mux
 }
