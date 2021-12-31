@@ -70,14 +70,33 @@ func CheckLogCount(w http.ResponseWriter, r *http.Request) {
 
 func LogDir(w http.ResponseWriter, r *http.Request) {
 	data := make([]string, 0)
-	//获取当前目录下的所有文件或目录信息
-	filepath.Walk("logs/", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk("logs/", func(path string, info os.FileInfo, err error) error {
 		fileName := info.Name()
 		if fileName != "logs" {
 			data = append(data, info.Name())
 		}
 		return nil
 	})
+	if err != nil {
+		httpser.OutErrBody(w, 1, err)
+		return
+	}
 	httpser.OutSucceedBody(w, data)
+	return
+}
+
+func LogFile(w http.ResponseWriter, r *http.Request) {
+	fileName := httpser.GetUrlArg(r, "file")
+	str, _ := os.Getwd()
+	path := str+"/logs/"+fileName
+	httpser.OutStaticFile(w, path)
+	return
+}
+
+func LogUpload(w http.ResponseWriter, r *http.Request) {
+	fileName := httpser.GetUrlArg(r, "file")
+	str, _ := os.Getwd()
+	path := str+"/logs/"+fileName
+	httpser.OutUploadFile(w, path, fileName)
 	return
 }

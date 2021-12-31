@@ -14,7 +14,7 @@ import (
 
 type ResponseWriter struct {
 	http.ResponseWriter
-	statusCode int
+	StatusCode int
 }
 
 func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
@@ -22,7 +22,7 @@ func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
 }
 
 func (lrw *ResponseWriter) WriteHeader(code int) {
-	lrw.statusCode = code
+	lrw.StatusCode = code
 	lrw.ResponseWriter.WriteHeader(code)
 }
 
@@ -54,7 +54,7 @@ func Base(next http.Handler) http.Handler {
 
 		next.ServeHTTP(newW, r)
 
-		logStr := fmt.Sprintf("%s#%s#%s#%d#%f", ip, r.Method, r.URL.String(), newW.statusCode, float64(time.Now().UnixNano()-start)/100000)
+		logStr := fmt.Sprintf("%s#%s#%s#%d#%f", ip, r.Method, r.URL.String(), newW.StatusCode, float64(time.Now().UnixNano()-start)/100000)
 		logger.Http(logStr, true)
 	})
 }

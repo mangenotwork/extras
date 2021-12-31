@@ -66,9 +66,9 @@
 - v0.2.26 [common] http封装
 - v0.3.1  [LogCenter] 获取grpc请求日志
 - v0.3.2  [LogCenter] 获取http请求日志
+- v0.3.3  [LogCenter] 查看和下载日志文件
 
 > Todo
-- v0.3.3 [LogCenter] 查看和下载日志文件
 - v0.3.4
 - v0.3.5
 - v0.3.6

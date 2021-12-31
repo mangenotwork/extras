@@ -193,7 +193,7 @@ func (l *logger) Http(log string) {
 
 func Http(log string, show bool) {
 	if show {
-		Info(strings.Replace(log, "#", " | ", -1) + " ms")
+		Info("[HTTP] ", strings.Replace(log, "#", " | ", -1) + " ms")
 	}
 	go func() {
 		std.Http(log)
@@ -214,7 +214,7 @@ func (l *logger) Grpc(log string) {
 
 func Grpc(log string, show bool) {
 	if show {
-		Info(strings.Replace(log, "#", " | ", -1) + " ms")
+		Info("[GRPC] ", strings.Replace(log, "#", " | ", -1) + " ms")
 	}
 	go func() {
 		std.Grpc(log)

@@ -3,7 +3,11 @@ package httpser
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/mangenotwork/extras/common/logger"
@@ -21,6 +25,7 @@ type HttpOutBody struct {
 	Msg string `json:"msg"`
 	Data interface{} `json:"data"`
 }
+
 const (
 	BodyJSON            = "application/json; charset=utf-8"
 	BodyAsciiJSON       = "application/json"
@@ -74,6 +79,51 @@ func OutErrBody(w http.ResponseWriter, code int,err error) {
 	bodyJson, _ := body.JsonStr()
 	_,_=fmt.Fprintln(w, bodyJson)
 	return
+}
+
+// 输出静态文件
+func OutStaticFile(w http.ResponseWriter, path string) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		w.WriteHeader(404)
+		_,_=fmt.Fprintln(w, err)
+		return
+	}
+	w.Header().Add("Content-Type", BodyHTML)
+	_,_=fmt.Fprintln(w, string(data))
+	return
+}
+
+// 给客户端下载的静态文件
+func OutUploadFile(w http.ResponseWriter, path, fileName string) {
+	file, _ := os.Open(path)
+	defer file.Close()
+
+	fileHeader := make([]byte, 512)
+	_,err := file.Read(fileHeader)
+	if err != nil {
+		w.WriteHeader(404)
+		_,_=fmt.Fprintln(w, err)
+		return
+	}
+	fileStat, _ := file.Stat()
+
+	w.Header().Set("Content-Disposition", "attachment; filename=" + fileName)
+	w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
+	w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+	_,err = file.Seek(0, 0)
+	if err != nil {
+		w.WriteHeader(404)
+		_,_=fmt.Fprintln(w, err)
+		return
+	}
+	_,err = io.Copy(w, file)
+	if err != nil {
+		w.WriteHeader(404)
+		_,_=fmt.Fprintln(w, err)
+		return
+	}
+
 }
 
 func (m *HttpOutBody) JsonStr() (string,error) {

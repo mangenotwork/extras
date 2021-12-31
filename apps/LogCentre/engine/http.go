@@ -31,7 +31,10 @@ func Router() *http.ServeMux {
 	// 查看日志文件列表
 	mux.Handle("/log/dir", m(http.HandlerFunc(handler.LogDir)))
 	// 查看指定日志文件内容
+	mux.Handle("/log/file", m(http.HandlerFunc(handler.LogFile)))
 	// 下载日志文件
+	mux.Handle("/log/upload", m(http.HandlerFunc(handler.LogUpload)))
+
 
 	return mux
 }
