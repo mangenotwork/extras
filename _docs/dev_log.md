@@ -67,12 +67,12 @@
 - v0.3.1  [LogCenter] 获取grpc请求日志
 - v0.3.2  [LogCenter] 获取http请求日志
 - v0.3.3  [LogCenter] 查看和下载日志文件
+- v0.3.4 [WordHelper] 分词,Ocr,翻译 Grpc 
+- v0.3.5 [WordHelper] pdf内容提取,加密解密,md转html Grpc
 
 > Todo
-- v0.3.4
-- v0.3.5
-- v0.3.6
-- v0.3.7
+- v0.3.6 [WordHelper] 测试,改Bug,更新文档
+- v0.3.7 
 - v0.3.8
 - v0.3.9
 - v0.3.10
@@ -91,9 +91,6 @@
 - [Push] 设备接收推送的反馈
 - [Push] 设备心跳,处理客户端心跳
 - [Push] 设备接收推送的反馈
-- [Push] 测试,改Bug,更新文档
-- [WordHelper] 分词,Ocr,翻译 Grpc 
-- [WordHelper] pdf内容提取,加密解密,md转html Grpc
 - [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
 
 > 研究

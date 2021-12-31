@@ -4,3 +4,311 @@ package pb;
 
 option go_package = "/proto";
 
+import "google/protobuf/any.proto";
+
+// 分词
+message FenciJiebaReq {
+  string str = 1;
+  int32 type = 2;
+}
+
+message FenciJiebaResp {
+  google.protobuf.Any data = 1;
+}
+
+// ocr 识别
+message OCRReq {
+  bytes file = 1;
+  string lang = 2;
+}
+message OCRResp {
+  string data = 1;
+}
+
+// ocr languages
+message OCRLangReq {
+}
+message OCRLangResp {
+  repeated string data = 1;
+}
+
+// ocr version
+message OCRVersionReq {
+}
+message OCRVersionResp {
+  string data = 1;
+}
+
+// ocr base64图片识别
+message OCRBase64Req {
+  string base64img = 1;
+  string lang = 2;
+}
+message OCRBase64Resp {
+  string data = 1;
+}
+
+// fanyi
+message FanyiReq {
+  string word = 1;
+}
+message FanyiResp {
+  bytes body = 1;
+}
+
+// pdf提取
+message PDFExtractionBody {
+  int32 page = 1;
+  google.protobuf.Any content = 2;
+}
+
+// pdf提取 - 提取内容为txt
+message PDFTxtReq {
+  bytes file = 1;
+}
+message PDFTxtResp {
+  repeated PDFExtractionBody data = 1;
+}
+
+// pdf提取 - 按行提取内容
+message PDFRowReq {
+  bytes file = 1;
+}
+message RDFRowResp {
+  repeated PDFExtractionBody data = 1;
+}
+
+// pdf提取 - 提取标准表格
+message PDFTableReq {
+  bytes file = 1;
+}
+message PDFTableResp {
+  repeated PDFExtractionBody data = 1;
+}
+
+message EncryptParam {
+  string str = 1;
+  string key = 2;
+  string iv = 3;
+}
+
+message DecryptParam {
+  string str = 1;
+  string key = 2;
+  string iv = 3;
+}
+
+// AES CBC Encrypt
+message AESCBCEncryptReq {
+  EncryptParam param = 1;
+}
+message AESCBCEncryptResp {
+  string data = 1;
+}
+
+// AES CBC Decrypt
+message AESCBCDecryptReq {
+  DecryptParam param = 1;
+}
+message AESCBCDecryptResp {
+  string data = 1;
+}
+
+// AES ECB Encrypt
+message AESECBEncryptReq {
+  EncryptParam param = 1;
+}
+message AESECBEncryptResp {
+  string data = 1;
+}
+
+// AES ECB Decrypt
+message AESECBDecryptReq {
+  DecryptParam param = 1;
+}
+message AESECBDecryptResp {
+  string data = 1;
+}
+
+// AES CFB Encrypt
+message AESCFBEncryptReq {
+  EncryptParam param = 1;
+}
+message AESCFBEncryptResp {
+  string data = 1;
+}
+
+// AES CFB Decrypt
+message AESCFBDecryptReq {
+  DecryptParam param = 1;
+}
+message AESCFBDecryptResp {
+  string data = 1;
+}
+
+// AES CTR Encrypt
+message AESCTREncryptReq {
+  EncryptParam param = 1;
+}
+message AESCTREncryptResp {
+  string data = 1;
+}
+
+// AES CTR Decrypt
+message AESCTRDecryptReq {
+  DecryptParam param = 1;
+}
+message AESCTRDecryptResp {
+  string data = 1;
+}
+
+
+// DES CBC Encrypt
+message DESCBCEncryptReq {
+  EncryptParam param = 1;
+}
+message DESCBCEncryptResp {
+  string data = 1;
+}
+
+// DES CBC Decrypt
+message DESCBCDecryptReq {
+  DecryptParam param = 1;
+}
+message DESCBCDecryptResp {
+  string data = 1;
+}
+
+// DES ECB Encrypt
+message DESECBEncryptReq {
+  EncryptParam param = 1;
+}
+message DESECBEncryptResp {
+  string data = 1;
+}
+
+// DES ECB Decrypt
+message DESECBDecryptReq {
+  DecryptParam param = 1;
+}
+message DESECBDecryptResp {
+  string data = 1;
+}
+
+// DES CFB Encrypt
+message DESCFBEncryptReq {
+  EncryptParam param = 1;
+}
+message DESCFBEncryptResp {
+  string data = 1;
+}
+
+// DES CFB Decrypt
+message DESCFBDecryptReq {
+  DecryptParam param = 1;
+}
+message DESCFBDecryptResp {
+  string data = 1;
+}
+
+// DES CTR Encrypt
+message DESCTREncryptReq {
+  EncryptParam param = 1;
+}
+message DESCTREncryptResp {
+  string data = 1;
+}
+
+// DES CTR Decrypt
+message DESCTRDecryptReq {
+  DecryptParam param = 1;
+}
+message DESCTRDecryptResp {
+  string data = 1;
+}
+
+// Hmac md5
+message HmacMd5Req {
+  string str = 1;
+  string key = 2;
+}
+message HmacMd5Resp {
+  string data = 1;
+}
+
+// Hmac sha1
+message HmacSha1Req {
+  string str = 1;
+  string key = 2;
+}
+message HmacSha1Resp {
+  string data = 1;
+}
+
+// Hmac sha256
+message HmacSha256Req {
+  string str = 1;
+  string key = 2;
+}
+message HmacSha256Resp {
+  string data = 1;
+}
+
+// Hmac sha512
+message HmacSha512Req {
+  string str = 1;
+  string key = 2;
+}
+message HmacSha512Resp {
+  string data = 1;
+}
+
+// md 转 html
+message Md2HtmlReq {
+  string str = 1;
+}
+message Md2HtmlResp {
+  string data = 1;
+}
+
+service MessageRPC {
+  rpc FenciJieba (FenciJiebaReq) returns (FenciJiebaResp);
+  rpc OCR (OCRReq) returns (OCRResp);
+  rpc OCRLanguages (OCRLangReq) returns (OCRLangResp);
+  rpc OCRVersion (OCRVersionReq) returns (OCRVersionResp);
+  rpc OCRBase64 (OCRBase64Req) returns (OCRBase64Resp);
+  rpc Fanyi (FanyiReq) returns (FanyiResp);
+  rpc PDFTxt (PDFTxtReq) returns (PDFTxtResp);
+  rpc PDFRow (PDFRowReq) returns (RDFRowResp);
+  rpc PDFTable (PDFTableReq) returns (PDFTableResp);
+  rpc Md2Html (Md2HtmlReq) returns (Md2HtmlResp);
+
+  // AES
+  rpc AESCBCEncrypt (AESCBCEncryptReq) returns (AESCBCEncryptResp);
+  rpc AESCBCDecrypt (AESCBCDecryptReq) returns (AESCBCDecryptResp);
+  rpc AESECBEncrypt (AESECBEncryptReq) returns (AESECBEncryptResp);
+  rpc AESECBDecrypt (AESECBDecryptReq) returns (AESECBDecryptResp);
+  rpc AESCFBEncrypt (AESCFBEncryptReq) returns (AESCFBEncryptResp);
+  rpc AESCFBDecrypt (AESCFBDecryptReq) returns (AESCFBDecryptResp);
+  rpc AESCTREncrypt (AESCTREncryptReq) returns (AESCTREncryptResp);
+  rpc AESCTRDecrypt (AESCTRDecryptReq) returns (AESCTRDecryptResp);
+
+  // DES
+  rpc DESCBCEncrypt (DESCBCEncryptReq) returns (DESCBCEncryptResp);
+  rpc DESCBCDecrypt (DESCBCDecryptReq) returns (DESCBCDecryptResp);
+  rpc DESECBEncrypt (DESECBEncryptReq) returns (DESECBEncryptResp);
+  rpc DESECBDecrypt (DESECBDecryptReq) returns (DESECBDecryptResp);
+  rpc DESCFBEncrypt (DESCFBEncryptReq) returns (DESCFBEncryptResp);
+  rpc DESCFBDecrypt (DESCFBDecryptReq) returns (DESCFBDecryptResp);
+  rpc DESCTREncrypt (DESCTREncryptReq) returns (DESCTREncryptResp);
+  rpc DESCTRDecrypt (DESCTRDecryptReq) returns (DESCTRDecryptResp);
+
+  // Hmac
+  rpc HmacMd5 (HmacMd5Req) returns (HmacMd5Resp);
+  rpc HmacSha1 (HmacSha1Req) returns (HmacSha1Resp);
+  rpc HmacSha256 (HmacSha256Req) returns (HmacSha256Resp);
+  rpc HmacSha512 (HmacSha512Req) returns (HmacSha512Resp);
+
+}
+
+
