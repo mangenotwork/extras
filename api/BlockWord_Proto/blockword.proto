@@ -93,7 +93,7 @@ message IsHaveListResp {
   repeated string list = 2;
 }
 
-service MessageRPC {
+service BlockwordRPC {
   rpc Do (DoReq) returns (DoResp);
   rpc Add (AddReq) returns (AddResp);
   rpc Del(DelReq) returns (DelResp);

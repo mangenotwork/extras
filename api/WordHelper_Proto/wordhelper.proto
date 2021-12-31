@@ -4,8 +4,6 @@ package pb;
 
 option go_package = "/proto";
 
-import "google/protobuf/any.proto";
-
 // 分词
 message FenciJiebaReq {
   string str = 1;
@@ -13,7 +11,7 @@ message FenciJiebaReq {
 }
 
 message FenciJiebaResp {
-  google.protobuf.Any data = 1;
+  repeated string data = 1;
 }
 
 // ocr 识别
@@ -59,7 +57,7 @@ message FanyiResp {
 // pdf提取
 message PDFExtractionBody {
   int32 page = 1;
-  google.protobuf.Any content = 2;
+  repeated string content = 2;
 }
 
 // pdf提取 - 提取内容为txt
@@ -271,7 +269,7 @@ message Md2HtmlResp {
   string data = 1;
 }
 
-service MessageRPC {
+service WordHelperRPC {
   rpc FenciJieba (FenciJiebaReq) returns (FenciJiebaResp);
   rpc OCR (OCRReq) returns (OCRResp);
   rpc OCRLanguages (OCRLangReq) returns (OCRLangResp);

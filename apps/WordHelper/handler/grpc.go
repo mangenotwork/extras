@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"github.com/mangenotwork/extras/apps/WordHelper/proto"
 	"github.com/mangenotwork/extras/apps/WordHelper/service"
 )
@@ -17,11 +18,17 @@ func (*GRPCService) FenciJieba(ctx context.Context, req *proto.FenciJiebaReq) (*
 	// 		2: 精确模式
 	//		3: 搜索引擎模式
 	//		4: 词性标注
+	//     == 单独
 	//      5: Tokenize 搜索引擎模式
 	//      6: Tokenize 默认模式
 	//      7: Extract
 	 */
-	data := service.JieBa(req.Str, req.Type)
+	if int(req.Type) > 5 || int(req.Type) < 1 {
+		return resp, fmt.Errorf("Type 错误, 应该是 1~4")
+	}
+	for _, v := range service.JieBa(req.Str, int(req.Type)) {
+		resp.Data = append(resp.Data, v.(string))
+	}
 	return resp, nil
 }
 

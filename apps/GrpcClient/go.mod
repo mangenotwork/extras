@@ -9,4 +9,5 @@ require (
 	github.com/mangenotwork/extras/common v0.0.0-00010101000000-000000000000
 	golang.org/x/net v0.0.0-20211019232329-c6ed85c7a12d
 	google.golang.org/grpc v1.42.0
+	google.golang.org/protobuf v1.26.0
 )

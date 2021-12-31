@@ -20,7 +20,7 @@ func StartRpcServer(){
 		if err != nil {
 			panic(err)
 		}
-		proto.RegisterMessageRPCServer(g.Server, &handler.GRPCService{})
+		proto.RegisterWordHelperRPCServer(g.Server, &handler.GRPCService{})
 		g.Run()
 		logger.Info("[RPC] Listening and serving TCP on %d", g.Port)
 	}()
