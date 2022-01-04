@@ -27,21 +27,27 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/err", http.StatusMovedPermanently)
 		return
 	}
-	if link.IsPrivacy {
-		if httpser.GetUrlArg(r, "password") != link.Password {
-			http.Redirect(w, r, "/NotPrivacy", http.StatusMovedPermanently)
-			return
-		}
+
+	if link.IsPrivacy && httpser.GetUrlArg(r, "password") != link.Password{
+		http.Redirect(w, r, "/NotPrivacy", http.StatusMovedPermanently)
+		return
 	}
+
 	ip := middleware.GetIP(r)
 	if !link.IsWhiteList(ip){
 		http.Redirect(w, r, "/WhiteNote", http.StatusMovedPermanently)
 		return
 	}
+
 	if link.IsBlockList(ip) {
 		http.Redirect(w, r, "/BlockNote", http.StatusMovedPermanently)
 		return
 	}
+
+	go func() {
+		_=link.ViewAdd()
+	}()
+
 	http.Redirect(w, r, link.Url, http.StatusMovedPermanently)
 }
 
@@ -66,7 +72,6 @@ func Te(w http.ResponseWriter, r *http.Request) {
 	logger.Info("err = ", err)
 	outReq.URL = newUrl
 	outReq.Host = newUrl.Host
-
 	logger.Info("outReq.URL = ", outReq)
 
 	// step 2
@@ -141,6 +146,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	if exp == 0 {
 		exp = params.Deadline
 	}
+
 	shortLink := &model.ShortLink{
 		Short: "/"+service.MustGenerate(),
 		Url: params.Url,
@@ -160,6 +166,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		httpser.OutErrBody(w, 2001, err)
 		return
 	}
+
 	sLink := &AddBody{
 		Url: shortLink.Short,
 		Password: params.Password,
@@ -170,16 +177,74 @@ func Add(w http.ResponseWriter, r *http.Request) {
 
 // 查看短链接, 如果是隐私的则需要带密码访问
 func Get(w http.ResponseWriter, r *http.Request) {
-
+	urlStr := httpser.GetUrlArg(r, "url")
+	link := new(model.ShortLink)
+	err := link.Get(urlStr)
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutSucceedBody(w, link)
 }
 
 // 修改短链接， 如果是隐私的则需要带密码
 func Modify(w http.ResponseWriter, r *http.Request) {
+	urlStr := httpser.GetUrlArg(r, "url")
+	params := &AddParam{}
+	httpser.GetJsonParam(r, params)
+	if params.IsPrivacy && len(params.Password) < 1 {
+		httpser.OutErrBody(w, 1001, errors.New("设置了隐私但是password为空"))
+		return
+	}
 
+	link := new(model.ShortLink)
+	err := link.Get(urlStr)
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+
+	if link.IsPrivacy && httpser.GetUrlArg(r, "password") != link.Password {
+		httpser.OutErrBody(w, 1001, errors.New("链接访问密码错误"))
+		return
+	}
+
+	if len(params.Url) > 0 {
+		link.Url = params.Url
+	}
+	link.IsPrivacy = params.IsPrivacy
+	link.Password = params.Password
+
+	err = link.Save()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutSucceedBody(w, "成功")
 }
 
 // 删除短链接
 func Del(w http.ResponseWriter, r *http.Request) {
+	urlStr := httpser.GetUrlArg(r, "url")
+	link := new(model.ShortLink)
+	err := link.Get(urlStr)
+	if err != nil {
+		logger.Info(err)
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
 
+	if link.IsPrivacy && httpser.GetUrlArg(r, "password") != link.Password {
+		httpser.OutErrBody(w, 1001, errors.New("链接访问密码错误"))
+		return
+	}
+
+	err = link.Del()
+	if err != nil {
+		logger.Info(err)
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutSucceedBody(w, "成功")
 }
 

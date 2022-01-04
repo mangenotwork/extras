@@ -64,6 +64,8 @@
 - v0.2.24 [common] 自定义grpc日志并上报
 - v0.2.25 [LogCenter] 日志存储到 Boltdb
 - v0.2.26 [common] http封装
+
+> v0.3
 - v0.3.1  [LogCenter] 获取grpc请求日志
 - v0.3.2  [LogCenter] 获取http请求日志
 - v0.3.3  [LogCenter] 查看和下载日志文件
@@ -71,9 +73,9 @@
 - v0.3.5  [GrpcClient] 新增 wordhelper
 - v0.3.6  [WordHelper] pdf内容提取,加密解密,md转html Grpc
 - v0.3.7  [WordHelper] 测试,改Bug,更新文档
+- v0.3.8  [ShortLink] 新增查看短链接,修改短链接,删除短链接
 
 > Todo
-- v0.3.8  [ShortLink] 新增查看短链接,修改短链接,删除短链接
 - v0.3.9  [ShortLink] 创建, 修改, 查看, 删除 短链接 Grpc
 - v0.3.10 [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
 - v0.3.11 

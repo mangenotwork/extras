@@ -40,3 +40,18 @@ func Router() *http.ServeMux {
 
 	return mux
 }
+
+/*
+{
+    "code": 0,
+    "timestamp": 1641278024,
+    "msg": "succeed",
+    "data": {
+        "url": "/5J-qfBAnR",
+        "password": "",
+        "expire": "1970-01-01 08:00:00"
+    }
+}
+
+
+ */

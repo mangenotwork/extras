@@ -28,6 +28,7 @@ const (
 	ShortLinkWhiteListKey = "link:%s:w" // 短链接白名单， set
 )
 
+// 保存数据到redis
 func (sl *ShortLink) Save() (err error) {
 	rc := conn.RedisConn().Get()
 	defer rc.Close()
@@ -91,6 +92,12 @@ func (sl *ShortLink) Get(key string) error {
 		logger.Error("GET error", err.Error())
 		return err
 	}
+
+	if len(res) < 1  {
+		err = fmt.Errorf("没有该链接的信息")
+		return err
+	}
+
 	logger.Info(res)
 	sl.Short = key
 	sl.Url = res["Url"]
@@ -110,6 +117,7 @@ func (sl *ShortLink) GetUrl(key string) (url string,err error){
 	return
 }
 
+// 输入ip是否是白名单
 func (sl *ShortLink) IsWhiteList(ip string) (resBool bool) {
 	resBool = true
 	if !sl.OpenWhiteList {
@@ -125,6 +133,7 @@ func (sl *ShortLink) IsWhiteList(ip string) (resBool bool) {
 	return
 }
 
+// 输入ip是否是黑名单
 func (sl *ShortLink) IsBlockList(ip string) (resBool bool) {
 	resBool = false
 	if !sl.OpenBlockList {
@@ -141,5 +150,22 @@ func (sl *ShortLink) IsBlockList(ip string) (resBool bool) {
 		resBool = true
 		return
 	}
+	return
+}
+
+func (sl *ShortLink) Del() (err error) {
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	logger.Info("执行redis : ", "DEL", fmt.Sprintf(ShortLinkInfoKey, sl.Short))
+	_, err = rc.Do("DEL", fmt.Sprintf(ShortLinkInfoKey, sl.Short))
+	return
+}
+
+// 查看次数加1
+func (sl *ShortLink) ViewAdd() (err error) {
+	rc := conn.RedisConn().Get()
+	defer rc.Close()
+	logger.Info("执行redis : ", "HINCRBY", fmt.Sprintf(ShortLinkInfoKey, sl.Short), "View", 1)
+	_, err = redis.Int64(rc.Do("HINCRBY", fmt.Sprintf(ShortLinkInfoKey, sl.Short), "View", 1))
 	return
 }

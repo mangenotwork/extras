@@ -185,9 +185,7 @@ func (l *logger) Http(log string) {
 		var out bytes.Buffer
 		out.WriteString("2"+l.appName+"#"+int642Str(time.Now().Unix())+"#")
 		out.WriteString(log)
-		fmt.Println("发送到log中心 内容 ", out.String())
-		n,err := l.outServiceConn.Write(out.Bytes())
-		fmt.Println("发送日志到log中心 err = ", n, err)
+		_,_= l.outServiceConn.Write(out.Bytes())
 	}
 }
 
