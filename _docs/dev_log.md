@@ -69,9 +69,9 @@
 - v0.3.3  [LogCenter] 查看和下载日志文件
 - v0.3.4  [WordHelper] 分词,Ocr,翻译 Grpc 
 - v0.3.5  [GrpcClient] 新增 wordhelper
+- v0.3.6  [WordHelper] pdf内容提取,加密解密,md转html Grpc
 
 > Todo
-- v0.3.6 [WordHelper] pdf内容提取,加密解密,md转html Grpc
 - v0.3.7 [WordHelper] 测试,改Bug,更新文档
 - v0.3.8
 - v0.3.9

@@ -54,34 +54,44 @@ message FanyiResp {
   bytes body = 1;
 }
 
-// pdf提取
-message PDFExtractionBody {
-  int32 page = 1;
-  repeated string content = 2;
-}
 
 // pdf提取 - 提取内容为txt
+message PDFTxtBody {
+  int32 page = 1;
+  string content = 2;
+}
 message PDFTxtReq {
   bytes file = 1;
 }
 message PDFTxtResp {
-  repeated PDFExtractionBody data = 1;
+  repeated PDFTxtBody data = 1;
 }
 
 // pdf提取 - 按行提取内容
+message PDFRowBody {
+  int32 page = 1;
+  repeated string content = 2;
+}
 message PDFRowReq {
   bytes file = 1;
 }
 message RDFRowResp {
-  repeated PDFExtractionBody data = 1;
+  repeated PDFRowBody data = 1;
 }
 
 // pdf提取 - 提取标准表格
+message PDFTableBody {
+  int32 page = 1;
+  repeated PDFTableBodyMap content = 2;
+}
+message PDFTableBodyMap {
+  map<int64,string> data = 1;
+}
 message PDFTableReq {
   bytes file = 1;
 }
 message PDFTableResp {
-  repeated PDFExtractionBody data = 1;
+  repeated PDFTableBody data = 1;
 }
 
 message EncryptParam {

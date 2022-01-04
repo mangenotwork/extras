@@ -181,9 +181,9 @@ type fw struct {
 	Str map[int]string
 }
 
-func (p *Page) GetTable() []map[int]string {
+func (p *Page) GetTable() []map[int64]string {
 
-	rse := make([]map[int]string,0)
+	rse := make([]map[int64]string,0)
 
 	yMap := make(map[int][]int) // y轴对应的x的每个点坐标
 	for _, v := range p.Content().Rect {
@@ -261,14 +261,14 @@ func (p *Page) GetTable() []map[int]string {
 	}
 
 	// 整理数据
-	rd := map[int]string{}
+	rd := map[int64]string{}
 	for _, v := range fws {
 		if _,ok := v.Str[0]; ok {
 			rse = append(rse, rd)
-			rd = map[int]string{}
+			rd = map[int64]string{}
 		}
 		for k,v := range v.Str {
-			rd[k] = v
+			rd[int64(k)] = v
 		}
 	}
 	rse = append(rse, rd)
@@ -295,7 +295,7 @@ func qc(a []int) []int {
 	return rse
 }
 
-func reverse(s []map[int]string) []map[int]string {
+func reverse(s []map[int64]string) []map[int64]string {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
 	}
