@@ -5,5 +5,66 @@ package pb;
 option go_package = "/proto";
 
 message AddReq {
-  string word = 1;
+  string url = 1;   // 目的地址
+  int64 aging = 2;  // 时效，单位秒
+  int64 deadline = 3;  // 截止日期， 单位时间戳, 只有当Aging为0时才用
+  bool is_privacy = 4;  // 是否隐私
+  string password = 5;  // 只有当IsPrivacy=true使用
+  bool open_block_list = 6;  // 是否启用黑名单，启用后黑名单不能访问
+  repeated string block_list = 7;  // 访问黑名单， OpenBlockList=true使用
+  bool open_white_list = 8;  // 是否启用白名单，启用后只有白名单才能访问
+  repeated string white_list = 9;  // 访问白名单， OpenWhiteList=true使用
+}
+message AddResp {
+  string url = 1;
+  string password = 2;
+  string expire = 3;
+}
+
+message ModifyReq {
+  string short_link = 1;  //短链接地址
+  string url = 2;   // 目的地址
+  int64 aging = 3;  // 时效，单位秒
+  int64 deadline = 4;  // 截止日期， 单位时间戳, 只有当Aging为0时才用
+  bool is_privacy = 5;  // 是否隐私
+  string password = 6;  // 只有当IsPrivacy=true使用
+  bool open_block_list = 7;  // 是否启用黑名单，启用后黑名单不能访问
+  repeated string block_list = 8;  // 访问黑名单， OpenBlockList=true使用
+  bool open_white_list = 9;  // 是否启用白名单，启用后只有白名单才能访问
+  repeated string white_list = 10;  // 访问白名单， OpenWhiteList=true使用
+}
+message ModifyResp {
+  string data = 1;
+}
+
+message GetReq {
+  string short_link = 1;  //短链接地址
+}
+message GetResp {
+  string short = 1;
+  string url = 2;
+  int64 expiration = 3;  // 过期时间
+  bool isPrivacy = 4;  // 是否隐私
+  string password = 5;  // 只有当IsPrivacy=true使用
+  int64 creation = 6;  // 创建时间
+  int64 view = 7;  // 请求次数
+  bool open_block_list = 8;  // 是否启用黑名单，启用后黑名单不能访问
+  bool open_white_list = 9;  // 是否启用白名单，启用后只有白名单才能访问
+  repeated string block_list = 10;
+  repeated string white_list = 11;
+}
+
+message DelReq {
+  string short_link = 1;  //短链接地址
+  string password = 2;
+}
+message DelResp {
+  string data = 1;
+}
+
+service ShortLinkRPC {
+  rpc Add (AddReq) returns (AddResp);   // 创建短链接
+  rpc Modify (ModifyReq) returns (ModifyResp);    // 修改短链接
+  rpc Get (GetReq) returns (GetResp);   // 获取短链接信息
+  rpc Del (DelReq) returns (DelResp);   // 删除短链接
 }

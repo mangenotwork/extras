@@ -74,10 +74,10 @@
 - v0.3.6  [WordHelper] pdf内容提取,加密解密,md转html Grpc
 - v0.3.7  [WordHelper] 测试,改Bug,更新文档
 - v0.3.8  [ShortLink] 新增查看短链接,修改短链接,删除短链接
+- v0.3.9  [ShortLink] 创建, 修改, 查看, 删除 短链接 Grpc
 
 > Todo
-- v0.3.9  [ShortLink] 创建, 修改, 查看, 删除 短链接 Grpc
-- v0.3.10 [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
+- v0.3.10 
 - v0.3.11 
 - v0.3.12
 - v0.3.13
@@ -108,9 +108,13 @@
 - [Push] 设备接收推送的反馈
 - [Push] 设备心跳,处理客户端心跳
 - [Push] 设备接收推送的反馈
-
+- [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
 
 > 研究
 - 文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 
 - [WordHelper] html转md
+- 人机对话
+- 推荐算法
+- 搜索算法
+
 
