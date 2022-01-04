@@ -156,3 +156,8 @@ func GetUrlArgInt(r *http.Request, name string) int {
 	arg=values.Get(name)
 	return utils.Str2Int(arg)
 }
+
+func GetJsonParam(r *http.Request, param interface{}) {
+	decoder:=json.NewDecoder(r.Body)
+	_=decoder.Decode(&param)
+}

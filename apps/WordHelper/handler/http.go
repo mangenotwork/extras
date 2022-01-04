@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -222,9 +221,8 @@ type DecryptParam struct {
 
 // AES
 func AESCBCEncrypt(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &EncryptParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	rse, err := service.NewAES("cbc", []byte(params.Iv)).Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
@@ -234,9 +232,8 @@ func AESCBCEncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESCBCDecrypt(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &DecryptParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	decoded, err := base64.StdEncoding.DecodeString(params.Str)
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
@@ -251,9 +248,8 @@ func AESCBCDecrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESECBEncrypt(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &EncryptParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	rse, err := service.NewAES("ecb").Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
@@ -263,9 +259,8 @@ func AESECBEncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESECBDecrypt(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &DecryptParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	decoded, err := base64.StdEncoding.DecodeString(params.Str)
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
@@ -280,9 +275,8 @@ func AESECBDecrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESCFBEncrypt(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &EncryptParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	rse, err := service.NewAES("cfb").Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
@@ -292,9 +286,8 @@ func AESCFBEncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESCFBDecrypt(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &DecryptParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	decoded, err := base64.StdEncoding.DecodeString(params.Str)
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
@@ -309,10 +302,9 @@ func AESCFBDecrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESCTREncrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	iv := httpser.GetUrlArg(r, "iv")
-	rse, err := service.NewAES("ctr", []byte(iv)).Encrypt([]byte(str), []byte(key))
+	params := &EncryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewAES("ctr", []byte(params.Iv)).Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -321,10 +313,9 @@ func AESCTREncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func AESCTRDecrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	iv := httpser.GetUrlArg(r, "iv")
-	rse, err := service.NewAES("ctr", []byte(iv)).Decrypt([]byte(str), []byte(key))
+	params := &DecryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewAES("ctr", []byte(params.Iv)).Decrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -334,10 +325,9 @@ func AESCTRDecrypt(w http.ResponseWriter, r *http.Request) {
 
 // DES
 func DESCBCEncrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	iv := httpser.GetUrlArg(r, "iv")
-	rse, err := service.NewDES("cbc", []byte(iv)).Encrypt([]byte(str), []byte(key))
+	params := &EncryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("cbc", []byte(params.Iv)).Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -346,10 +336,9 @@ func DESCBCEncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESCBCDecrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	iv := httpser.GetUrlArg(r, "iv")
-	rse, err := service.NewDES("cbc", []byte(iv)).Decrypt([]byte(str), []byte(key))
+	params := &DecryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("cbc", []byte(params.Iv)).Decrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -358,9 +347,9 @@ func DESCBCDecrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESECBEncrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	rse, err := service.NewDES("ecb").Encrypt([]byte(str), []byte(key))
+	params := &EncryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("ecb").Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -369,9 +358,9 @@ func DESECBEncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESECBDecrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	rse, err := service.NewDES("ecb").Decrypt([]byte(str), []byte(key))
+	params := &DecryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("ecb").Decrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -380,9 +369,9 @@ func DESECBDecrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESCFBEncrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	rse, err := service.NewDES("cfb").Encrypt([]byte(str), []byte(key))
+	params := &EncryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("cfb").Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -391,9 +380,9 @@ func DESCFBEncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESCFBDecrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	rse, err := service.NewDES("cfb").Decrypt([]byte(str), []byte(key))
+	params := &DecryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("cfb").Decrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -402,10 +391,9 @@ func DESCFBDecrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESCTREncrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	iv := httpser.GetUrlArg(r, "iv")
-	rse, err := service.NewDES("ctr", []byte(iv)).Encrypt([]byte(str), []byte(key))
+	params := &EncryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("ctr", []byte(params.Iv)).Encrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return
@@ -414,10 +402,9 @@ func DESCTREncrypt(w http.ResponseWriter, r *http.Request) {
 }
 
 func DESCTRDecrypt(w http.ResponseWriter, r *http.Request) {
-	str := httpser.GetUrlArg(r, "str")
-	key := httpser.GetUrlArg(r, "key")
-	iv := httpser.GetUrlArg(r, "iv")
-	rse, err := service.NewDES("ctr", []byte(iv)).Decrypt([]byte(str), []byte(key))
+	params := &DecryptParam{}
+	httpser.GetJsonParam(r, params)
+	rse, err := service.NewDES("ctr", []byte(params.Iv)).Decrypt([]byte(params.Str), []byte(params.Key))
 	if err != nil {
 		httpser.OutErrBody(w, 2001, err)
 		return

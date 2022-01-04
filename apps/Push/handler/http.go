@@ -98,9 +98,8 @@ type TopicCreateParam struct {
 }
 
 func TopicCreate(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &TopicCreateParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	err := service.NewTopic(params.Name)
 	if err != nil {
 		httpser.OutErrBody(w, 2001,err)
@@ -116,9 +115,8 @@ type PublishParam struct {
 }
 
 func Publish(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &PublishParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	err := service.TopicSend(params.TopicName, params.Data)
 	if err != nil {
 		httpser.OutErrBody(w, 2001,err)
@@ -140,9 +138,8 @@ type SubscriptionParam struct {
 
 // 设备订阅, 支持批量
 func Subscription(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &SubscriptionParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 
 	if !service.TopicIsHave(params.TopicName) {
 		httpser.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
@@ -166,10 +163,8 @@ func Subscription(w http.ResponseWriter, r *http.Request) {
 
 // 设备取消订阅, 支持批量
 func TopicCancel(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &SubscriptionParam{}
-	_=decoder.Decode(&params)
-
+	httpser.GetJsonParam(r, params)
 	if !service.TopicIsHave(params.TopicName) {
 		httpser.OutErrBody(w, 2001, errors.New(params.TopicName + " Topic 不存在"))
 		return

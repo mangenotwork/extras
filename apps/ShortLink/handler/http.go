@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"errors"
 	"io"
 	"net"
@@ -131,12 +130,12 @@ type AddBody struct {
 
 // 创建短链接
 func Add(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &AddParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	if params.IsPrivacy && len(params.Password) < 1 {
 		httpser.OutErrBody(w, 1001, errors.New("设置了隐私但是password为空"))
 	}
+
 	// 生成短链接
 	exp := params.Aging
 	if exp == 0 {

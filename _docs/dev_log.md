@@ -38,15 +38,15 @@
 - v0.1.26 [Push] 测试,改Bug,更新文档
 
 > v0.2
-- v0.2.1 [ImgHelper] 图片色彩反转
-- v0.2.2 [ImgHelper] 图片灰化
-- v0.2.3 [ImgHelper] 图片转为字符画
-- v0.2.4 [ImgHelper] 图片透明
-- v0.2.5 [ServiceTable] 由 ConfigCenter 改为 ServiceTable
-- v0.2.6 [ServiceTable] 实现raft算法 - leader 选举
-- v0.2.7 [ServiceTable] 配置文件优化
-- v0.2.8 [ServiceTable] 设计数据存储方案
-- v0.2.9 [ServiceTable] 数据结构集合
+- v0.2.1  [ImgHelper] 图片色彩反转
+- v0.2.2  [ImgHelper] 图片灰化
+- v0.2.3  [ImgHelper] 图片转为字符画
+- v0.2.4  [ImgHelper] 图片透明
+- v0.2.5  [ServiceTable] 由 ConfigCenter 改为 ServiceTable
+- v0.2.6  [ServiceTable] 实现raft算法 - leader 选举
+- v0.2.7  [ServiceTable] 配置文件优化
+- v0.2.8  [ServiceTable] 设计数据存储方案
+- v0.2.9  [ServiceTable] 数据结构集合
 - v0.2.10 [ServiceTable] key增删查基于前缀树实现
 - v0.2.11 [ServiceTable] 数据结构k/v
 - v0.2.12 [ServiceTableClient] init project
@@ -70,12 +70,28 @@
 - v0.3.4  [WordHelper] 分词,Ocr,翻译 Grpc 
 - v0.3.5  [GrpcClient] 新增 wordhelper
 - v0.3.6  [WordHelper] pdf内容提取,加密解密,md转html Grpc
+- v0.3.7  [WordHelper] 测试,改Bug,更新文档
 
 > Todo
-- v0.3.7 [WordHelper] 测试,改Bug,更新文档
-- v0.3.8
-- v0.3.9
-- v0.3.10
+- v0.3.8  [ShortLink] 新增查看短链接,修改短链接,删除短链接
+- v0.3.9  [ShortLink] 创建, 修改, 查看, 删除 短链接 Grpc
+- v0.3.10 [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
+- v0.3.11 
+- v0.3.12
+- v0.3.13
+- v0.3.14
+- v0.3.15
+- v0.3.16
+- v0.3.17
+- v0.3.18
+- v0.3.19
+- v0.3.20
+- v0.3.21
+- v0.3.22
+- v0.3.23
+- v0.3.24
+- v0.3.25
+- v0.3.26
 
 > 预计
 - [ServiceTableClient] 请求设计
@@ -84,14 +100,13 @@
 - [ServiceTableClient] 数据结构k/v
 - [ServiceTable] 数据结构集合 - 分布式一致性
 - [ServiceTable] 数据结构k/v - 分布式一致性
-- [ShortLink] 新增查看短链接,修改短链接,删除短链接
 - [Push] 指定设备强制断开
 - [Push] 获取设备在线情况
 - [Push] 设备拉取离线推送
 - [Push] 设备接收推送的反馈
 - [Push] 设备心跳,处理客户端心跳
 - [Push] 设备接收推送的反馈
-- [ImgHelper] 生成数字或文字图的base64,每次的base64都不一样
+
 
 > 研究
 - 文本内容的领域信息识别, 基金数据, 两个文本之间的相似度, 开奖号抓取, 标签提取, 

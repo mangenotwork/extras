@@ -21,9 +21,8 @@ type BlockPostParam struct {
 }
 
 func Do(w http.ResponseWriter, r *http.Request) {
-	decoder:=json.NewDecoder(r.Body)
 	params := &BlockPostParam{}
-	_=decoder.Decode(&params)
+	httpser.GetJsonParam(r, params)
 	params.Str, params.Time  = service.BlockWorkTrie.BlockWord(params.Str, params.Sub)
 	httpser.OutSucceedBodyJsonP(w, params)
 	return

@@ -147,7 +147,7 @@ $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr
 
 ---
 
-#### [get] /fanyi
+##### [get] /fanyi
 > 翻译
 
 参数
@@ -160,7 +160,7 @@ $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr
 
 ---
 
-#### [post] /pdf/txt
+##### [post] /pdf/txt
 > 提取PDF,每页为一个文本
 
 参数
@@ -184,7 +184,7 @@ $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr
 
 ---
 
-#### [post] /pdf/row
+##### [post] /pdf/row
 > 提取PDF,每页按行提取
 
 参数
@@ -255,7 +255,7 @@ $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr
 
 ---
 
-#### [post] /pdf/table
+##### [post] /pdf/table
 > 提取PDF,每页提取标准表格数据, 注意: 只会提取表格数据
 
 参数
@@ -325,12 +325,319 @@ $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr
 
 ---
 
+##### [post] /aes/cbc/encrypt
+> AES CBC 加密
+
+参数
+-  str  *
+-  key  *  16位
+-  iv
+```
+{
+	"str":"aaaaaaaaaa",
+	"key":"1234567890123456"
+}
+```
+
+返回
+```
+{
+    "code": 0,
+    "timestamp": 1641264306,
+    "msg": "succeed",
+    "data": "kV9P+njDNrC4yVBpnBYEXg=="
+}
+```
+
+---
+
+##### [post] /aes/cbc/decrypt
+> AES CBC 解密
+
+参数
+-  str  *
+-  key  *  16位
+-  iv
+```
+{
+	"str":"kV9P+njDNrC4yVBpnBYEXg==",
+	"key":"1234567890123456"
+}
+```
+
+返回
+```
+{
+    "code": 0,
+    "timestamp": 1641264380,
+    "msg": "succeed",
+    "data": "aaaaaaaaaa"
+}
+```
+
+---
+
+##### [post] /aes/ecb/encrypt
+> AES ECB 加密
+
+---
+
+##### [post] /aes/ecb/decrypt
+> AES ECB 解密
+
+---
+
+##### [post] /aes/cfb/encrypt
+> AES CFB 加密
+
+---
+
+##### [post] /aes/cfb/decrypt
+> AES CFB 解密
+
+---
+
+##### [post] /aes/ctr/encrypt
+> AES CTR 加密
+
+---
+
+##### [post] /aes/ctr/decrypt
+> AES CTR 解密
+
+---
+
+##### [post] /des/cbc/encrypt
+> DES CBC 加密
+
+---
+
+##### [post] /des/cbc/decrypt
+> DES CBC 解密
+
+---
+
+##### [post] /des/ecb/encrypt
+> DES ECB 加密
+
+---
+
+##### [post] /des/ecb/decrypt
+> DES ECB 解密
+
+---
+
+##### [post] /des/cfb/encrypt
+> DES CFB 加密
+
+---
+
+##### [post] /des/cfb/decrypt
+> DES CFB 解密
+
+___
+
+##### [post] /des/ctr/encrypt
+> DES CTR 加密
+
+___
+
+##### [post] /des/ctr/decrypt
+> DES CTR 解密
+
+___
+
+##### [get] /md5/16
+> md5加密输出16位
+
+参数
+- str
+
+---
+
+##### [get] /md5/32
+> md5加密输出32位
+  
+参数
+- str
+
+---
+
+##### [get] /base64/encrypt
+> base64 编码
+
+___
+
+##### [get] /base64/decrypt
+> base64 解码
+
+___
+
+##### [get] /base64url/encrypt
+> base64 url 编码
+
+___
+
+##### [get] /base64url/decrypt
+> base64 url 解码
+
+___
+
+##### [get] /hmac/md5
+> hmac md5 加密 
+
+参数
+- str
+- key
+
+___
+
+##### [get] /hmac/sha1
+> hmac sha1 加密 
+
+___
+
+##### [get] /hmac/sha256
+> hmac sha256 加密 
+
+___
+
+##### [get] /hmac/sha512
+> hmac sha256 加密 
+
+___
+
+#### [get] doc/change/md2html
+> md格式字符串转html格式字符串
+
+参数
+- str
+
 
 ## grpc 文档
 > proto文件: https://github.com/mangenotwork/extras/api/WordHelper_Proto/wordhelper.proto
 
 > 生成pb.go: https://github.com/mangenotwork/extras/script/wordhelper_pb.sh
 
+##### rpc FenciJieba (FenciJiebaReq) returns (FenciJiebaResp);
+> 结巴分词
+___
+
+##### rpc OCR (OCRReq) returns (OCRResp);
+> ocr识别
+___
+
+##### rpc OCRLanguages (OCRLangReq) returns (OCRLangResp);
+> ocr 语言词典列表
+___
+
+##### rpc OCRVersion (OCRVersionReq) returns (OCRVersionResp);
+> ocr 版本
+___
+
+##### rpc OCRBase64 (OCRBase64Req) returns (OCRBase64Resp);
+> ocr 识别base64图片
+___
+
+##### rpc Fanyi (FanyiReq) returns (FanyiResp);
+> 翻译
+___
+
+##### rpc PDFTxt (PDFTxtReq) returns (PDFTxtResp);
+> pdf识别 - 文本
+___
+
+##### rpc PDFRow (PDFRowReq) returns (RDFRowResp);
+> pdf识别 - 按行识别
+___
+
+##### rpc PDFTable (PDFTableReq) returns (PDFTableResp);
+> pdf识别 - 标准画线的表格
+___
+
+##### rpc Md2Html (Md2HtmlReq) returns (Md2HtmlResp);
+> md格式字符串转html格式字符串
+___ 
+
+##### rpc AESCBCEncrypt (AESCBCEncryptReq) returns (AESCBCEncryptResp);
+> AES CBC Encrypt
+___
+
+##### rpc AESCBCDecrypt (AESCBCDecryptReq) returns (AESCBCDecryptResp);
+> AES CBC Decrypt
+___
+
+##### rpc AESECBEncrypt (AESECBEncryptReq) returns (AESECBEncryptResp);
+> AES ECB Encrypt
+___
+
+##### rpc AESECBDecrypt (AESECBDecryptReq) returns (AESECBDecryptResp);
+> AES ECB Decrypt
+___
+
+##### rpc AESCFBEncrypt (AESCFBEncryptReq) returns (AESCFBEncryptResp);
+> AES CFB Encrypt
+___
+
+##### rpc AESCFBDecrypt (AESCFBDecryptReq) returns (AESCFBDecryptResp);
+> AES CFB Decrypt
+___
+
+##### rpc AESCTREncrypt (AESCTREncryptReq) returns (AESCTREncryptResp);
+> AES CTR Encrypt
+___
+
+##### rpc AESCTRDecrypt (AESCTRDecryptReq) returns (AESCTRDecryptResp);
+> AES CTR Decrypt
+___
+
+##### rpc DESCBCEncrypt (DESCBCEncryptReq) returns (DESCBCEncryptResp);
+> DES CBC Encrypt
+___
+
+##### rpc DESCBCDecrypt (DESCBCDecryptReq) returns (DESCBCDecryptResp);
+> DES CBC Decrypt
+___
+
+##### rpc DESECBEncrypt (DESECBEncryptReq) returns (DESECBEncryptResp);
+> DES ECB Encrypt
+___
+
+##### rpc DESECBDecrypt (DESECBDecryptReq) returns (DESECBDecryptResp);
+> DES ECB Decrypt
+___
+
+##### rpc DESCFBEncrypt (DESCFBEncryptReq) returns (DESCFBEncryptResp);
+> DES CFB Encrypt
+___
+
+##### rpc DESCFBDecrypt (DESCFBDecryptReq) returns (DESCFBDecryptResp);
+> DES CFB Decrypt
+___
+
+##### rpc DESCTREncrypt (DESCTREncryptReq) returns (DESCTREncryptResp);
+> DES CTR Encrypt
+___
+
+##### rpc DESCTRDecrypt (DESCTRDecryptReq) returns (DESCTRDecryptResp);
+> DES CTR Decrypt
+___
+
+##### rpc HmacMd5 (HmacMd5Req) returns (HmacMd5Resp);
+> Hmac Md5
+___
+
+##### rpc HmacSha1 (HmacSha1Req) returns (HmacSha1Resp);
+> Hmac Sha1
+___
+
+##### rpc HmacSha256 (HmacSha256Req) returns (HmacSha256Resp);
+> Hmac Sha256
+___ 
+
+##### rpc HmacSha512 (HmacSha512Req) returns (HmacSha512Resp);
+> Hmac Sha512
+___
 
 ## 编译
 > 直接编译:  go build main.go
