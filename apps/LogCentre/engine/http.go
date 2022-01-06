@@ -1,41 +1,31 @@
 package engine
 
 import (
-	"net/http"
-
 	"github.com/mangenotwork/extras/apps/LogCentre/handler"
 	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/logger"
-	"github.com/mangenotwork/extras/common/middleware"
 )
 
 func StartHttp(){
 	go func() {
 		logger.Info("StartHttp")
-		httpser.HttpServer(Router())
+		mux := httpser.NewEngine()
+
+		// 获取所有table
+		mux.Router("/table",handler.GetLogTable)
+		// 获取日志, 时间段参数
+		mux.Router("/check/time",handler.CheckLogTime)
+		// 获取日志, 前多少个
+		mux.Router("/check/count",handler.CheckLogCount)
+		// 查看日志文件列表
+		mux.Router("/log/dir",handler.LogDir)
+		// 查看指定日志文件内容
+		mux.Router("/log/file",handler.LogFile)
+		// 下载日志文件
+		mux.Router("/log/upload",handler.LogUpload)
+
+		mux.Run()
+
 	}()
-}
-
-func Router() *http.ServeMux {
-	mux := http.NewServeMux()
-	m := middleware.Base
-	mux.Handle("/hello", m(http.HandlerFunc(handler.Hello)))
-	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
-
-	// 获取所有table
-	mux.Handle("/table", m(http.HandlerFunc(handler.GetLogTable)))
-	// 获取日志, 时间段参数
-	mux.Handle("/check/time", m(http.HandlerFunc(handler.CheckLogTime)))
-	// 获取日志, 前多少个
-	mux.Handle("/check/count", m(http.HandlerFunc(handler.CheckLogCount)))
-	// 查看日志文件列表
-	mux.Handle("/log/dir", m(http.HandlerFunc(handler.LogDir)))
-	// 查看指定日志文件内容
-	mux.Handle("/log/file", m(http.HandlerFunc(handler.LogFile)))
-	// 下载日志文件
-	mux.Handle("/log/upload", m(http.HandlerFunc(handler.LogUpload)))
-
-
-	return mux
 }
 

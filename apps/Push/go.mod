@@ -11,5 +11,4 @@ require (
 	github.com/nsqio/go-nsq v1.1.0
 	github.com/streadway/amqp v1.0.0
 	go.mongodb.org/mongo-driver v1.7.3
-	golang.org/x/net v0.0.0-20211019232329-c6ed85c7a12d
 )

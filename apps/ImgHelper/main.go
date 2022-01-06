@@ -18,7 +18,7 @@ func main(){
 	engine.StartJobServer()
 
 	if conf.Arg.HttpServer.Open {
-		engine.StartHttpServer()
+		engine.StartHttp()
 	}
 
 	if conf.Arg.GrpcServer.Open {

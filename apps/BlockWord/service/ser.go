@@ -6,8 +6,6 @@ import (
 )
 
 var BlockWorkTrie = model.NewTrie()
-var FileName = "./word.action"
-
 
 // 添加屏蔽词
 func AddWord(word string) {

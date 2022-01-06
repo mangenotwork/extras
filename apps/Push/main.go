@@ -18,7 +18,7 @@ func main(){
 	engine.StartMqServer()
 
 	if conf.Arg.HttpServer.Open {
-		engine.StartHttpServer()
+		engine.StartHttp()
 	}
 
 	if conf.Arg.TcpServer.Open {

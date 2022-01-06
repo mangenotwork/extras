@@ -126,6 +126,11 @@ func OutUploadFile(w http.ResponseWriter, path, fileName string) {
 
 }
 
+func Out404(w http.ResponseWriter) {
+	w.WriteHeader(404)
+	_,_=fmt.Fprintln(w, "404")
+}
+
 func (m *HttpOutBody) JsonStr() (string,error) {
 	b, err := json.Marshal(m)
 	if err != nil {

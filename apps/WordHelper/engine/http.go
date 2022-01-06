@@ -1,82 +1,75 @@
 package engine
 
 import (
-	"net/http"
-
 	"github.com/mangenotwork/extras/apps/WordHelper/handler"
 	"github.com/mangenotwork/extras/common/httpser"
-	"github.com/mangenotwork/extras/common/middleware"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
-func StartHttpServer(){
+func StartHttp(){
 	go func() {
-		httpser.HttpServer(Router())
+		logger.Info("StartHttp")
+		mux := httpser.NewEngine()
+
+		// 分词
+		mux.Router("/fenci/jieba",  handler.JieBaFenCi)
+
+		// ocr
+		mux.Router("/ocr", handler.OCR)
+		mux.Router("/ocr/languages", handler.GetOCRLanguages)
+		mux.Router("/ocr/version", handler.GetOCRVersion)
+		mux.Router("/ocr/base64", handler.OCRBase64Img) // 识别base64图片
+
+		// 翻译
+		mux.Router("/fanyi", handler.FanYi)
+
+		// pdf提取
+		mux.Router("/pdf/txt", handler.PDFExtractionTxt)
+		mux.Router("/pdf/row", handler.PDFExtractionRow)
+		mux.Router("/pdf/table", handler.PDFExtractionTable)
+
+		// AES
+		mux.Router("/aes/cbc/encrypt", handler.AESCBCEncrypt)
+		mux.Router("/aes/cbc/decrypt", handler.AESCBCDecrypt)
+		mux.Router("/aes/ecb/encrypt", handler.AESECBEncrypt)
+		mux.Router("/aes/ecb/decrypt", handler.AESECBDecrypt)
+		mux.Router("/aes/cfb/encrypt", handler.AESCFBEncrypt)
+		mux.Router("/aes/cfb/decrypt", handler.AESCFBDecrypt)
+		mux.Router("/aes/ctr/encrypt", handler.AESCTREncrypt)
+		mux.Router("/aes/ctr/decrypt", handler.AESCTRDecrypt)
+
+		// DES
+		mux.Router("/des/cbc/encrypt", handler.DESCBCEncrypt)
+		mux.Router("/des/cbc/decrypt", handler.DESCBCDecrypt)
+		mux.Router("/des/ecb/encrypt", handler.DESECBEncrypt)
+		mux.Router("/des/ecb/decrypt", handler.DESECBDecrypt)
+		mux.Router("/des/cfb/encrypt", handler.DESCFBEncrypt)
+		mux.Router("/des/cfb/decrypt", handler.DESCFBDecrypt)
+		mux.Router("/des/ctr/encrypt", handler.DESCTREncrypt)
+		mux.Router("/des/ctr/decrypt", handler.DESCTRDecrypt)
+
+		// md5
+		mux.Router("/md5/16", handler.MD516)
+		mux.Router("/md5/32", handler.MD532)
+
+		// base64
+		mux.Router("/base64/encrypt", handler.Base64Encrypt)
+		mux.Router("/base64/decrypt", handler.Base64Decrypt)
+		mux.Router("/base64url/encrypt", handler.Base64UrlEncrypt)
+		mux.Router("/base64url/decrypt", handler.Base64UrlDecrypt)
+
+		// Hmac
+		mux.Router("/hmac/md5", handler.HmacMD5)
+		mux.Router("/hmac/sha1", handler.HmacSHA1)
+		mux.Router("/hmac/sha256", handler.HmacSHA256)
+		mux.Router("/hmac/sha512", handler.HmacSHA512)
+
+		// TODO: PBKDF2
+
+		// md 转 html
+		mux.Router("doc/change/md2html", handler.Md2Html)
+
+		mux.Run()
+
 	}()
-}
-
-func Router() *http.ServeMux {
-	mux := http.NewServeMux()
-	m := middleware.Base
-	mux.Handle("/hello", m(http.HandlerFunc(handler.Hello)))
-	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
-
-	// 分词
-	mux.Handle("/fenci/jieba",  m(http.HandlerFunc(handler.JieBaFenCi)))
-
-	// ocr
-	mux.Handle("/ocr", m(http.HandlerFunc(handler.OCR)))
-	mux.Handle("/ocr/languages", m(http.HandlerFunc(handler.GetOCRLanguages)))
-	mux.Handle("/ocr/version", m(http.HandlerFunc(handler.GetOCRVersion)))
-	mux.Handle("/ocr/base64", m(http.HandlerFunc(handler.OCRBase64Img))) // 识别base64图片
-
-	// 翻译
-	mux.Handle("/fanyi", m(http.HandlerFunc(handler.FanYi)))
-
-	// pdf提取
-	mux.Handle("/pdf/txt", m(http.HandlerFunc(handler.PDFExtractionTxt)))
-	mux.Handle("/pdf/row", m(http.HandlerFunc(handler.PDFExtractionRow)))
-	mux.Handle("/pdf/table", m(http.HandlerFunc(handler.PDFExtractionTable)))
-
-	// AES
-	mux.Handle("/aes/cbc/encrypt", m(http.HandlerFunc(handler.AESCBCEncrypt)))
-	mux.Handle("/aes/cbc/decrypt", m(http.HandlerFunc(handler.AESCBCDecrypt)))
-	mux.Handle("/aes/ecb/encrypt", m(http.HandlerFunc(handler.AESECBEncrypt)))
-	mux.Handle("/aes/ecb/decrypt", m(http.HandlerFunc(handler.AESECBDecrypt)))
-	mux.Handle("/aes/cfb/encrypt", m(http.HandlerFunc(handler.AESCFBEncrypt)))
-	mux.Handle("/aes/cfb/decrypt", m(http.HandlerFunc(handler.AESCFBDecrypt)))
-	mux.Handle("/aes/ctr/encrypt", m(http.HandlerFunc(handler.AESCTREncrypt)))
-	mux.Handle("/aes/ctr/decrypt", m(http.HandlerFunc(handler.AESCTRDecrypt)))
-
-	// DES
-	mux.Handle("/des/cbc/encrypt", m(http.HandlerFunc(handler.DESCBCEncrypt)))
-	mux.Handle("/des/cbc/decrypt", m(http.HandlerFunc(handler.DESCBCDecrypt)))
-	mux.Handle("/des/ecb/encrypt", m(http.HandlerFunc(handler.DESECBEncrypt)))
-	mux.Handle("/des/ecb/decrypt", m(http.HandlerFunc(handler.DESECBDecrypt)))
-	mux.Handle("/des/cfb/encrypt", m(http.HandlerFunc(handler.DESCFBEncrypt)))
-	mux.Handle("/des/cfb/decrypt", m(http.HandlerFunc(handler.DESCFBDecrypt)))
-	mux.Handle("/des/ctr/encrypt", m(http.HandlerFunc(handler.DESCTREncrypt)))
-	mux.Handle("/des/ctr/decrypt", m(http.HandlerFunc(handler.DESCTRDecrypt)))
-
-	// md5
-	mux.Handle("/md5/16", m(http.HandlerFunc(handler.MD516)))
-	mux.Handle("/md5/32", m(http.HandlerFunc(handler.MD532)))
-
-	// base64
-	mux.Handle("/base64/encrypt", m(http.HandlerFunc(handler.Base64Encrypt)))
-	mux.Handle("/base64/decrypt", m(http.HandlerFunc(handler.Base64Decrypt)))
-	mux.Handle("/base64url/encrypt", m(http.HandlerFunc(handler.Base64UrlEncrypt)))
-	mux.Handle("/base64url/decrypt", m(http.HandlerFunc(handler.Base64UrlDecrypt)))
-
-	// Hmac
-	mux.Handle("/hmac/md5", m(http.HandlerFunc(handler.HmacMD5)))
-	mux.Handle("/hmac/sha1", m(http.HandlerFunc(handler.HmacSHA1)))
-	mux.Handle("/hmac/sha256", m(http.HandlerFunc(handler.HmacSHA256)))
-	mux.Handle("/hmac/sha512", m(http.HandlerFunc(handler.HmacSHA512)))
-
-	// TODO: PBKDF2
-
-	// md 转 html
-	mux.Handle("doc/change/md2html", m(http.HandlerFunc(handler.Md2Html)))
-
-	return mux
 }

@@ -1,57 +1,37 @@
 package engine
 
 import (
-	"net/http"
-
 	"github.com/mangenotwork/extras/apps/ShortLink/handler"
-	"github.com/mangenotwork/extras/common/middleware"
 	"github.com/mangenotwork/extras/common/httpser"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
-func StartHttpServer(){
-	go func(){
-		httpser.HttpServer(Router())
+func StartHttp(){
+	go func() {
+		logger.Info("StartHttp")
+		mux := httpser.NewEngine()
+
+		mux.Router("/err", handler.Error)
+		mux.Router("/NotPrivacy", handler.NotPrivacy)
+		mux.Router("/WhiteNote", handler.WhiteNote)
+		mux.Router("/BlockNote", handler.BlockNote)
+
+		mux.Router("/ttttt", handler.Te)
+
+		// [post] /v1/add  创建短链接
+		mux.Router("/v1/add", handler.Add)
+
+		// [post] /v1/modify  修改短链接
+		mux.Router("/v1/modify", handler.Modify)
+
+		// [post] /v1/get   获取短链接信息
+		mux.Router("/v1/get", handler.Get)
+
+		// [post] /v1/del   删除短链接
+		mux.Router("/v1/del", handler.Del)
+
+		mux.Run()
+
 	}()
 }
 
-func Router() *http.ServeMux {
-	mux := http.NewServeMux()
-	m := middleware.Base
-	mux.Handle("/", m(http.HandlerFunc(handler.Hello)))
-
-	mux.Handle("/err", m(http.HandlerFunc(handler.Error)))
-	mux.Handle("/NotPrivacy", m(http.HandlerFunc(handler.NotPrivacy)))
-	mux.Handle("/WhiteNote", m(http.HandlerFunc(handler.WhiteNote)))
-	mux.Handle("/BlockNote", m(http.HandlerFunc(handler.BlockNote)))
-
-	mux.Handle("/ttttt", m(http.HandlerFunc(handler.Te)))
-
-	// [post] /v1/add  创建短链接
-	mux.Handle("/v1/add", m(http.HandlerFunc(handler.Add)))
-
-	// [post] /v1/modify  修改短链接
-	mux.Handle("/v1/modify", m(http.HandlerFunc(handler.Modify)))
-
-	// [post] /v1/get   获取短链接信息
-	mux.Handle("/v1/get", m(http.HandlerFunc(handler.Get)))
-
-	// [post] /v1/del   删除短链接
-	mux.Handle("/v1/del", m(http.HandlerFunc(handler.Del)))
-
-	return mux
-}
-
-/*
-{
-    "code": 0,
-    "timestamp": 1641278024,
-    "msg": "succeed",
-    "data": {
-        "url": "/5J-qfBAnR",
-        "password": "",
-        "expire": "1970-01-01 08:00:00"
-    }
-}
-
-
- */

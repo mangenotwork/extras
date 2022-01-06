@@ -75,9 +75,9 @@
 - v0.3.7  [WordHelper] 测试,改Bug,更新文档
 - v0.3.8  [ShortLink] 新增查看短链接,修改短链接,删除短链接
 - v0.3.9  [ShortLink] 创建, 修改, 查看, 删除 短链接 Grpc
+- v0.3.10 [common] http 静态文件
 
 > Todo
-- v0.3.10 
 - v0.3.11 
 - v0.3.12
 - v0.3.13
