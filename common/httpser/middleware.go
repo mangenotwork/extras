@@ -31,20 +31,17 @@ func Base(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		/*
-
 			// 中间件 上下文传递值
 			data := map[string]interface{}{
-			            "1": "one",
-			            "2": "two",
-			        }
+			   "1": "one",
+			   "2": "two",
+			}
 			ctx := context.WithValue(r.Context(), "data", data)
 			r.WithContext(ctx)
-
 
 			// 下文读值
 			data := r.Context().Value("data").(ContextValue)["2"]
 			fmt.Println(data) // 会打印 two
-
 		*/
 
 		start := time.Now().UnixNano()

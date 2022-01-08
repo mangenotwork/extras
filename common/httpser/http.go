@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/http/pprof"
 	"os"
 	"runtime"
 	"strings"
@@ -134,6 +135,14 @@ func (engine *Engine) Run() {
 		if err != nil {
 			logger.Panic("ListenAndServe err : ", err)
 		}
+}
+
+func (engine *Engine) OpenPprof() {
+	engine.mux.Handle("/debug/pprof/", engine.base(http.HandlerFunc(pprof.Index)))
+	engine.mux.Handle("/debug/pprof/cmdline", engine.base(http.HandlerFunc(pprof.Cmdline)))
+	engine.mux.Handle("/debug/pprof/profile", engine.base(http.HandlerFunc(pprof.Profile)))
+	engine.mux.Handle("/debug/pprof/symbol", engine.base(http.HandlerFunc(pprof.Symbol)))
+	engine.mux.Handle("/debug/pprof/trace", engine.base(http.HandlerFunc(pprof.Trace)))
 }
 
 

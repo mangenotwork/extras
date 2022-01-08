@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"time"
@@ -166,3 +167,41 @@ func GetJsonParam(r *http.Request, param interface{}) {
 	decoder:=json.NewDecoder(r.Body)
 	_=decoder.Decode(&param)
 }
+
+func GetCookie(r *http.Request, name string) (*http.Cookie, error) {
+	return r.Cookie(name)
+}
+
+func GetCookieVal(r *http.Request, name string) string {
+	cookie, err := GetCookie(r, name)
+	if err != nil {
+		return ""
+	}
+	return cookie.Value
+}
+
+func SetCookie(w http.ResponseWriter, name, value string, t int) {
+	http.SetCookie(w, &http.Cookie{
+		Name:    name,
+		Value:   url.QueryEscape(value),
+		Expires: time.Now().Add(time.Duration(t) * time.Second),
+		Path:     "/",
+		HttpOnly: true,
+		MaxAge:   -1,
+	})
+}
+
+func SetCookieMap(w http.ResponseWriter, data map[string]string, t int) {
+	for k, v := range data {
+		SetCookie(w, k, v, t)
+	}
+}
+
+func GetClientIp(r *http.Request) string {
+	return GetIP(r)
+}
+
+func GetHeader(r *http.Request, name string) string {
+	return r.Header.Get(name)
+}
+
