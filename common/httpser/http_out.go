@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/mangenotwork/extras/common/logger"
@@ -205,3 +207,19 @@ func GetHeader(r *http.Request, name string) string {
 	return r.Header.Get(name)
 }
 
+func GetIp(r *http.Request) (ip string) {
+		for _, ip := range strings.Split(r.Header.Get("X-Forward-For"), ",") {
+			if net.ParseIP(ip) != nil {
+				return ip
+			}
+		}
+		if ip = r.Header.Get("X-Real-IP"); net.ParseIP(ip) != nil {
+			return ip
+		}
+		if ip, _, err := net.SplitHostPort(r.RemoteAddr); err == nil {
+			if net.ParseIP(ip) != nil {
+				return ip
+			}
+		}
+		return "0.0.0.0"
+}

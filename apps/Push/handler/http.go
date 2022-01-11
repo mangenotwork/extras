@@ -12,7 +12,6 @@ import (
 	"github.com/mangenotwork/extras/apps/Push/service"
 	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/logger"
-	"github.com/mangenotwork/extras/common/middleware"
 )
 
 var upGrader = websocket.Upgrader{
@@ -34,7 +33,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 	var (
 		device *model.Device
 		client model.Client
-		ip = middleware.GetIP(r)
+		ip = httpser.GetIp(r)
 	)
 
 	deviceId := httpser.GetUrlArg(r, "device")
