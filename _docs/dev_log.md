@@ -78,9 +78,9 @@
 - v0.3.10 [common] http 静态文件
 - v0.3.11 [common] http cookie, pprof
 - v0.3.12 [IM-Conn] Ws客户端连接存储对象
+- v0.3.13 [IM-Conn] Tcp客户端连接存储对象
 
 > Todo
-- v0.3.13 [IM-Conn] Tcp客户端连接存储对象
 - v0.3.14 [IM-Conn] Udp客户端连接存储对象
 - v0.3.15
 - v0.3.16

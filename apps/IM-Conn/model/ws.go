@@ -3,7 +3,6 @@ package model
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
-	"sync"
 )
 
 type WsClient struct {
@@ -36,6 +35,7 @@ type WsHashTable struct {
 	Size  int64
 }
 
+// 哈希算法 userid余表Size
 func (table *WsHashTable) hashFunction(uid int64) int64 {
 	return uid % table.Size
 }
@@ -52,10 +52,18 @@ func (table *WsHashTable) Insert(value *WsClient){
 	element.Data[value.UserID] = value
 }
 
+func (table *WsHashTable) Get(uid int64) (date *WsClient, err error){
+	if t, ok := table.Table[table.hashFunction(uid)]; ok {
+		if client, ok := t.Data[uid]; ok {
+			return client, nil
+		}
+	}
+	return nil, fmt.Errorf("not fond")
+}
 
 func InitWsConnTable() *WsHashTable {
-	table := make(map[int64]*wsNode, 10)
-	return &WsHashTable{Table: table, Size: 10}
+	table := make(map[int64]*wsNode, HashSize)
+	return &WsHashTable{Table: table, Size: int64(HashSize)}
 }
 
 func wsTraverse(hash *WsHashTable) {
@@ -68,24 +76,3 @@ func wsTraverse(hash *WsHashTable) {
 		fmt.Println()
 	}
 }
-
-func (table *WsHashTable) Get(uid int64) (date *WsClient, err error){
-	if t, ok := table.Table[table.hashFunction(uid)]; ok {
-		if client, ok := t.Data[uid]; ok {
-			return client, nil
-		}
-	}
-	return nil, fmt.Errorf("not fond")
-}
-
-var _wsConnTable = InitWsConnTable()
-var _wsConnTableOnce sync.Once
-
-func WsConnTable() *WsHashTable{
-	_wsConnTableOnce.Do(func() {
-		_wsConnTable = InitWsConnTable()
-	})
-	return _wsConnTable
-}
-
-
