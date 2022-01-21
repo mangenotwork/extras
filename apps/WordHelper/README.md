@@ -51,6 +51,42 @@ $ git clone https://github.com/tesseract-ocr/tessdata.gitsudo mv tessdata/* /usr
   
 ```
 
+### libreoffice 安装与使用
+> 主要实现文本格式转换, word, xls, ppt 转pdf, html, txt, jpg 的功能
+
+> https://www.libreoffice.org/download/download/  官方下载地址
+
+RMP
+> 解压: tar -xvf LibreOffice_6.4.2_Linux_x86-64_rpm.tar.gz
+> 安装：cd LibreOffice_6.4.2_Linux_x86-64_rpm/RPMS && yum localinstall *.rpm
+```
+## 依赖
+$ yum install cairo -y
+$ yum install cups-libs -y
+$ yum install libSM -y
+```
+
+DEB
+> tar -zxvf LibreOffice_6.1.5_Linux_x86-64_deb.tar.gz   /*解压安装包*/
+> sudo dpkg -i ./LibreOffice_6.1.5_Linux_x86_deb/DEBS/*.deb        /* 安装主安装程序的所有deb包 */
+
+使用:
+```
+## word
+$ libreoffice  --headless --convert-to pdf(html,jpg,txt) '/home/总结.docx'
+$ libreoffice  --invisible --convert-to pdf '/home/总结.docx'
+$ libreoffice  --invisible --convert-to :writer_pdf_Export '/home/总结.docx'
+$ libreoffice  --invisible --convert-to "html:XHTML Writer File:UTF8" *.doc
+$ libreoffice  --invisible --convert-to "txt:Text (encoded):UTF8" *.doc
+
+## xls
+$ libreoffice  --invisible --convert-to pdf *.xls
+
+## ppt
+$ libreoffice  --invisible --convert-to pdf *.ppt
+
+```
+
 ## Http接口文档
 
 #### [get] /fenci/jieba
