@@ -80,9 +80,9 @@
 - v0.3.12 [IM-Conn] Ws客户端连接存储对象
 - v0.3.13 [IM-Conn] Tcp客户端连接存储对象
 - v0.3.14 [WordHelper] libreoffice 的使用,安装文档
+- v0.3.15 [common] 装载 command 方法
 
 > Todo
-- v0.3.15 [common] 装载 command 方法
 - v0.3.16 [WordHelper] word,xls,ppt 转 pdf, html, jpg(封面)
 - v0.3.17 [IM-Conn] Udp客户端连接存储对象
 - v0.3.18
