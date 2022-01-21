@@ -5,15 +5,15 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"regexp"
-
 	"github.com/mangenotwork/extras/apps/WordHelper/service"
 	"github.com/mangenotwork/extras/apps/WordHelper/service/pdf"
 	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"regexp"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -484,3 +484,127 @@ func Md2Html(w http.ResponseWriter, r *http.Request) {
 	str := httpser.GetUrlArg(r, "str")
 	httpser.OutSucceedBody(w, service.MarkdownToHTML(str))
 }
+
+func ConversionWord2Pdf(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	path, err := service.Conversion(file, handler, "pdf")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutPdf(w, path)
+	_ =os.Remove(path)
+	return
+}
+
+func ConversionEcxel2Pdf(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	path, err := service.Conversion(file, handler, "pdf")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutPdf(w, path)
+	_ =os.Remove(path)
+	return
+}
+
+func ConversionPPT2Pdf(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	path, err := service.Conversion(file, handler, "pdf")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutPdf(w, path)
+	_ =os.Remove(path)
+	return
+}
+
+func ConversionWord2Html(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+
+	path, err := service.Conversion(file, handler, "html")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutStaticFile(w, path)
+	_ =os.Remove(path)
+	return
+}
+
+func ConversionEcxel2Html(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+
+	path, err := service.Conversion(file, handler, "html")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutStaticFile(w, path)
+	_ =os.Remove(path)
+	return
+}
+
+func ConversionWord2Jpg(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+
+	path, err := service.Conversion(file, handler, "jpg")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutJPG(w, path)
+	_ =os.Remove(path)
+	return
+}
+
+func ConversionPPT2Jpg(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+
+	path, err := service.Conversion(file, handler, "jpg")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	httpser.OutJPG(w, path)
+	_ =os.Remove(path)
+	return
+}
+

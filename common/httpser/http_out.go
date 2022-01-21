@@ -38,6 +38,13 @@ const (
 	BodyPlain           = "text/plain; charset=utf-8"
 	BodyYAML            = "application/x-yaml; charset=utf-8"
 	BodyDownload        = "application/octet-stream; charset=utf-8"
+	BodyPDF 			= "application/pdf"
+	BodyJPG   			= "image/jpeg"
+	BodyPNG	 			= "image/png"
+	BodyGif				= "image/gif"
+	BodyWord			= "application/msword"
+	BodyOctet			= "application/octet-stream"
+
 )
 
 func OutSucceedBodyJsonP(w http.ResponseWriter, data interface{}) {
@@ -93,6 +100,30 @@ func OutStaticFile(w http.ResponseWriter, path string) {
 		return
 	}
 	w.Header().Add("Content-Type", BodyHTML)
+	_,_=fmt.Fprintln(w, string(data))
+	return
+}
+
+func OutPdf(w http.ResponseWriter, path string) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		w.WriteHeader(404)
+		_,_=fmt.Fprintln(w, err)
+		return
+	}
+	w.Header().Add("Content-Type", BodyPDF)
+	_,_=fmt.Fprintln(w, string(data))
+	return
+}
+
+func OutJPG(w http.ResponseWriter, path string) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		w.WriteHeader(404)
+		_,_=fmt.Fprintln(w, err)
+		return
+	}
+	w.Header().Add("Content-Type", BodyJPG)
 	_,_=fmt.Fprintln(w, string(data))
 	return
 }
@@ -223,3 +254,4 @@ func GetIp(r *http.Request) (ip string) {
 		}
 		return "0.0.0.0"
 }
+

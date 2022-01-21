@@ -69,6 +69,15 @@ func StartHttp(){
 		// md 转 html
 		mux.Router("doc/change/md2html", handler.Md2Html)
 
+		// 文件转换
+		mux.Router("/conversion/word2pdf", handler.ConversionWord2Pdf) // word 转 pdf
+		mux.Router("/conversion/ecxel2pdf", handler.ConversionEcxel2Pdf) // ecxel 转 pdf
+		mux.Router("/conversion/ppt2pdf", handler.ConversionPPT2Pdf) // ppt 转 pdf
+		mux.Router("/conversion/word2html", handler.ConversionWord2Html) // word 转 html
+		mux.Router("/conversion/ecxel2html", handler.ConversionEcxel2Html) // ecxel 转 html
+		mux.Router("/conversion/word2jpg", handler.ConversionWord2Jpg) // word 转 jpg 封面
+		mux.Router("/conversion/PPT2jpg", handler.ConversionPPT2Jpg) // ppt 转 jpg 封面
+
 		mux.Run()
 
 	}()
