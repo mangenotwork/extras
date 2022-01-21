@@ -30,14 +30,18 @@ func Conversion(file multipart.File, handler *multipart.FileHeader, target strin
 
 	var ok bool
 	var cmdErr error
+	var newfileSuffix string
 
 	switch target {
 	case "pdf":
 		ok, cmdErr = command.Cmd(20*time.Second, "libreoffice", "--invisible", "--convert-to", "pdf", pathStr, "--outdir", "./temp")
+		newfileSuffix = ".pdf"
 	case "html":
 		ok, cmdErr = command.Cmd(20*time.Second, "libreoffice", "--invisible", "--convert-to", "html", pathStr, "--outdir", "./temp")
+		newfileSuffix = ".html"
 	case "jpg":
 		ok, cmdErr = command.Cmd(20*time.Second, "libreoffice", "--invisible", "--convert-to", "jpg", pathStr, "--outdir", "./temp")
+		newfileSuffix = ".jpg"
 	}
 	if cmdErr != nil {
 		return "", cmdErr
@@ -52,7 +56,7 @@ func Conversion(file multipart.File, handler *multipart.FileHeader, target strin
 	}
 
 	dir,_ := os.Getwd()
-	pathStrPdf := dir+"/temp/" + filePrefix+"-"+t+".pdf"
+	pathStrPdf := dir + "/temp/" + filePrefix+"-" + t + newfileSuffix
 	return pathStrPdf, nil
 }
 
