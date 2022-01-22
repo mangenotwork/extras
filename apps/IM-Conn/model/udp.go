@@ -6,7 +6,7 @@ import (
 )
 
 type UdpClient struct {
-	conn *net.UDPAddr
+	Conn *net.UDPAddr
 	UserID int64 // 用户id唯一的
 	IP string // 当前连接的ip
 	DeviceID string // 当前连接的设备id
@@ -19,11 +19,11 @@ func (udp *UdpClient) GetIP() string {
 }
 
 func (udp *UdpClient) Send(msg []byte) {
-	_,_=udp.UDPListener.WriteToUDP(msg, udp.conn)
+	_,_=udp.UDPListener.WriteToUDP(msg, udp.Conn)
 }
 
-func (udp *UdpClient) Conn() *net.UDPAddr {
-	return udp.conn
+func (udp *UdpClient) GetConn() *net.UDPAddr {
+	return udp.Conn
 }
 
 // 使用哈希表存储
@@ -59,6 +59,14 @@ func (table *UdpHashTable) Get(uid int64) (date *UdpClient, err error){
 		}
 	}
 	return nil, fmt.Errorf("not fond")
+}
+
+func (table *UdpHashTable) Del(value *UdpClient) {
+	h := table.hashFunction(value.UserID)
+	element, ok := table.Table[h]
+	if ok {
+		delete(element.Data, value.UserID)
+	}
 }
 
 func InitUdpConnTable() *UdpHashTable {

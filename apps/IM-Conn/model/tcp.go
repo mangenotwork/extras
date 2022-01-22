@@ -6,7 +6,7 @@ import (
 )
 
 type TcpClient struct {
-	conn net.Conn
+	Conn net.Conn
 	UserID int64 // 用户id唯一的
 	IP string // 当前连接的ip
 	DeviceID string // 当前连接的设备id
@@ -18,11 +18,11 @@ func (tcp *TcpClient) GetIP() string {
 }
 
 func (tcp *TcpClient) Send(msg []byte) {
-	_,_=tcp.conn.Write(msg)
+	_,_=tcp.Conn.Write(msg)
 }
 
-func (tcp *TcpClient) Conn() net.Conn {
-	return tcp.conn
+func (tcp *TcpClient) GetConn() net.Conn {
+	return tcp.Conn
 }
 
 // 使用哈希表存储
@@ -59,6 +59,15 @@ func (table *TcpHashTable) Get(uid int64) (date *TcpClient, err error){
 	}
 	return nil, fmt.Errorf("not fond")
 }
+
+func (table *TcpHashTable) Del(value *TcpClient) {
+	h := table.hashFunction(value.UserID)
+	element, ok := table.Table[h]
+	if ok {
+		delete(element.Data, value.UserID)
+	}
+}
+
 
 func InitTcpConnTable() *TcpHashTable {
 	table := make(map[int64]*tcpNode, HashSize)

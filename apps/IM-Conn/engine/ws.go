@@ -108,6 +108,27 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 
 	}()
 
+
+	// TODO 处理心跳和僵尸连接
+	go func(){
+		for {
+			timer := time.NewTimer(10 * time.Second)
+
+			select {
+			case <-timer.C:
+				// 10秒内收不到来自客户端的心跳连接断开
+				_=client.Conn.Close()
+
+				// 接收心跳
+				//case <-rafter.heartBeat:
+				//	// 重置
+				//	log.Println("重置 = ", 10)
+				//	timer.Reset(10 * time.Second)
+			}
+		}
+
+	}()
+
 }
 
 func Err(w http.ResponseWriter, r *http.Request, status int, reason error) {
