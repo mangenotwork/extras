@@ -6,7 +6,7 @@ import (
 )
 
 type WsClient struct {
-	conn *websocket.Conn
+	Conn *websocket.Conn
 	UserID int64 // 用户id唯一的
 	IP string // 当前连接的ip
 	DeviceID string // 当前连接的设备id
@@ -18,11 +18,11 @@ func (ws *WsClient) GetIP() string {
 }
 
 func (ws *WsClient) Send(msg []byte) {
-	_=ws.conn.WriteMessage(websocket.BinaryMessage, msg)
+	_=ws.Conn.WriteMessage(websocket.BinaryMessage, msg)
 }
 
-func (ws *WsClient) Conn() *websocket.Conn {
-	return ws.conn
+func (ws *WsClient) GetConn() *websocket.Conn {
+	return ws.Conn
 }
 
 // 使用哈希表存储
@@ -59,6 +59,14 @@ func (table *WsHashTable) Get(uid int64) (date *WsClient, err error){
 		}
 	}
 	return nil, fmt.Errorf("not fond")
+}
+
+func (table *WsHashTable) Del(value *WsClient) {
+	h := table.hashFunction(value.UserID)
+	element, ok := table.Table[h]
+	if ok {
+		delete(element.Data, value.UserID)
+	}
 }
 
 func InitWsConnTable() *WsHashTable {

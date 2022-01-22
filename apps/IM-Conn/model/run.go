@@ -27,3 +27,15 @@ func TcpClientTable() *TcpHashTable{
 	})
 	return _tcpClientTable
 }
+
+// udp client hash table
+var _udpClientTable = InitUdpConnTable()
+var _udpClientTableOnce sync.Once
+
+// 提供调用
+func UdpClientTable() *UdpHashTable{
+	_udpClientTableOnce.Do(func() {
+		_udpClientTable = InitUdpConnTable()
+	})
+	return _udpClientTable
+}
