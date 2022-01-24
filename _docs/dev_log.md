@@ -88,16 +88,16 @@
 - v0.3.20 [IM-Conn] Udp服务端
 - v0.3.21 [IM-User] 用户结构设计
 - v0.3.22 [common] mysql 封装
+- v0.3.23 [IM-User] 用户注册api
 
 > Todo
-- v0.3.23 [IM-User] 用户注册
-- v0.3.24 [IM-User] 用户验证
-- v0.3.25 [IM-User] 用户注册,验证 grpc
-- v0.3.26 [IM-Conn] 调用用户验证及相关业务
+- v0.3.24 [common] Jwt 封装
+- v0.3.25 [IM-User] 用户验证
+- v0.3.26 [IM-User] 用户注册,验证 grpc
 
 > v0.4
-- v0.4.1 [IM-Msg]  消息结构设计
-- v0.4.2
+- v0.4.1 [IM-Conn] 调用用户验证及相关业务
+- v0.4.2 [IM-Msg]  消息结构设计
 - v0.4.3
 - v0.4.4
 - v0.4.5

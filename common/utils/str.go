@@ -5,9 +5,11 @@ import (
 	"encoding/gob"
 	"fmt"
 	"log"
+	"math/rand"
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Str2Int64 string -> int
@@ -165,4 +167,9 @@ func DeepCopy(dst, src interface{}) error {
 		return err
 	}
 	return gob.NewDecoder(bytes.NewBuffer(buf.Bytes())).Decode(dst)
+}
+
+func RandInt(min, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max) + min
 }

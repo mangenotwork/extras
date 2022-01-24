@@ -102,6 +102,10 @@ func GetMysqlDriver(dbName string) *MysqlDriver {
 	if !ok {
 		logger.Panic("[DB] 未init")
 	}
+	err := m.Conn()
+	if err != nil {
+		logger.Error(err)
+	}
 	return m
 }
 

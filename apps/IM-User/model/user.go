@@ -7,6 +7,7 @@ import (
 
 type UserBase struct {
 	ID int `gorm:"primary_key;column:id;size:11" json:"id"` // 表自增id
+	TableId int `gorm:"column:table_id" json:"table_id"`
 	UId string `gorm:"column:uid" json:"uid"` // 用户id  拆表id(前4位)+表自增id
 	UName string `gorm:"column:uname" json:"uname"` // 用户昵称
 	Account string `gorm:"column:account" json:"account"` // 用户账号
@@ -22,6 +23,6 @@ type UserBase struct {
 	IsDeleted int64  `gorm:"column:deleted" json:"is_deleted"` // 删除字段
 }
 
-func (u *UserBase) TableName(tableId int) string {
-	return fmt.Sprintf(global.UserBaseTableName, tableId)
+func (u *UserBase) TableName() string {
+	return fmt.Sprintf(global.UserBaseTableName, u.TableId)
 }

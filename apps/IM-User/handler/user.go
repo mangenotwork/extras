@@ -10,8 +10,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	params := &service.UserParam{}
 	httpser.GetJsonParam(r, params)
 	// 执行注册业务
-	params.Register()
+	rse := params.Register()
 
-	httpser.OutSucceedBodyJsonP(w, params)
+	httpser.OutSucceedBodyJsonP(w, rse)
 	return
 }

@@ -14,6 +14,7 @@ import (
 
 var userBaseTable = `CREATE TABLE ` + global.UserBaseTableName + ` (
 	id int(11) NOT NULL AUTO_INCREMENT,
+	table_id int(11),
 	uid varchar(20),
 	uname varchar(20),
 	account varchar(20),

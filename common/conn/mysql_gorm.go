@@ -20,6 +20,7 @@ var mysqlGorm map[string]*gorm.DB
 func InitMysqlGorm() {
 	mysqlGorm = make(map[string]*gorm.DB, len(conf.Arg.Mysql))
 	for _, v := range conf.Arg.Mysql {
+		logger.Debug(v)
 		m, err := newORM(v.DBName, v.User, v.Password, v.Host, false)
 		if err != nil {
 			logger.Panic(err)
