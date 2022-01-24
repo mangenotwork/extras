@@ -86,9 +86,9 @@
 - v0.3.18 [IM-Conn] Ws服务端
 - v0.3.19 [IM-Conn] Tcp服务端
 - v0.3.20 [IM-Conn] Udp服务端
+- v0.3.21 [IM-User] 用户结构设计
 
 > Todo
-- v0.3.21 [IM-User] 用户结构设计
 - v0.3.22 [IM-User] 用户注册
 - v0.3.23 [IM-User] 用户验证
 - v0.3.24 [IM-User] 用户注册,验证 grpc

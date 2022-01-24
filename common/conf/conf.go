@@ -22,6 +22,7 @@ type Configs struct {
 	UdpServer *UdpServer `yaml:"udpServer"`
 	UdpClient *UdpClient `yaml:"udpClient"`
 	Redis *Redis `yaml:"redis"`
+	Mysql *Mysql `yaml:"mysql"`
 	MqType string `yaml:"mqType"`
 	Nsq *Nsq `yaml:"nsq"`
 	Rabbit *Rabbit `yaml:"rabbit"`
@@ -77,6 +78,13 @@ type Redis struct {
 	Password string `yaml:"password"`
 	MaxIdle int `yaml:"maxidle"`
 	MaxActive int `yaml:"maxactive"`
+}
+
+type Mysql struct {
+	User string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host string `yaml:"host"`
+	DBName string `yaml:"dbname"`
 }
 
 type MqType struct {
