@@ -1,10 +1,16 @@
 package dao
 
-import "github.com/mangenotwork/extras/apps/IM-User/global"
+import (
+	"fmt"
+	"github.com/mangenotwork/extras/apps/IM-User/global"
+	"github.com/mangenotwork/extras/common/conn"
+	"github.com/mangenotwork/extras/common/logger"
+)
 
 /*
 	初始化table, 创建table
  */
+
 
 var userBaseTable = `CREATE TABLE ` + global.UserBaseTableName + ` (
 	id int(11) NOT NULL AUTO_INCREMENT,
@@ -25,3 +31,17 @@ var userBaseTable = `CREATE TABLE ` + global.UserBaseTableName + ` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`
 
 
+func InitUserBaseTable(){
+	db := conn.GetMysqlDriver("imtest")
+	err := db.Conn()
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	for i:=0; i<global.MaxUserBaseTable; i++ {
+		_, err := db.DB.Exec(fmt.Sprintf(userBaseTable, i))
+		if err != nil {
+			logger.Error(err)
+		}
+	}
+}
