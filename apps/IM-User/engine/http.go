@@ -14,6 +14,9 @@ func StartHTTP(){
 
 		mux.Router("/register", handler.Register)
 
+		mux.Router("/test", handler.Jwt)
+		mux.Router("/t", handler.JwtGet)
+
 		mux.Run()
 
 	}()

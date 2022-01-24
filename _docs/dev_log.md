@@ -89,9 +89,9 @@
 - v0.3.21 [IM-User] 用户结构设计
 - v0.3.22 [common] mysql 封装
 - v0.3.23 [IM-User] 用户注册api
+- v0.3.24 [common] Jwt 封装
 
 > Todo
-- v0.3.24 [common] Jwt 封装
 - v0.3.25 [IM-User] 用户验证
 - v0.3.26 [IM-User] 用户注册,验证 grpc
 

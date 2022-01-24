@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/boltdb/bolt v1.3.1
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/garyburd/redigo v1.6.3
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/jinzhu/gorm v1.9.16

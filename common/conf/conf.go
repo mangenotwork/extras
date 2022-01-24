@@ -31,6 +31,7 @@ type Configs struct {
 	TTF string `yaml:"ttf"`
 	Cluster *Cluster `yaml:"cluster"`
 	LogCentre *LogCentre `yaml:"logCentre"`
+	Jwt *Jwt `yaml:"jwt"`
 }
 
 type App struct {
@@ -124,6 +125,11 @@ type LogCentre struct {
 	Port int `yaml:"prod"`
 }
 
+type Jwt struct {
+	Secret string `yaml:"secret"`
+	Expire int `yaml:"expire"`
+}
+
 // 读取yaml文件
 // 获取配置
 func InitConf(){
@@ -145,6 +151,16 @@ func InitConf(){
 	err =yaml.Unmarshal(config, &Arg)
 	if err!=nil{
 		panic("【启动失败】"+err.Error())
+	}
+
+	if Arg.Jwt == nil {
+		Arg.Jwt = &Jwt{}
+	}
+	if Arg.Jwt.Secret == "" {
+		Arg.Jwt.Secret = "mange-extras"
+	}
+	if Arg.Jwt.Expire == 0 {
+		Arg.Jwt.Expire = 3600 // 默认一小时
 	}
 
 	b,_ := json.Marshal(Arg)
