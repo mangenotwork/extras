@@ -18,6 +18,18 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func Login(w http.ResponseWriter, r *http.Request) {
+	params := &service.UserParam{}
+	httpser.GetJsonParam(r, params)
+	token, err := params.Token()
+	if err != nil {
+		httpser.OutErrBody(w, 2000, err)
+		return
+	}
+	httpser.OutSucceedBodyJsonP(w, token)
+}
+
+
 func Jwt(w http.ResponseWriter, r *http.Request) {
 	j := jwt.NewJWT()
 	j.AddClaims("uid", 100)

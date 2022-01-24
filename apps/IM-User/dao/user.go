@@ -14,6 +14,7 @@ type UserDao struct {
 
 }
 
+// UserBaseHas 验证用户信息是否已经存在
 func (dao *UserDao) UserBaseHas(name, account string) bool {
 	var (
 		wg sync.WaitGroup
@@ -48,8 +49,39 @@ func (dao *UserDao) UserBaseHas(name, account string) bool {
 	return has
 }
 
+// NewUser 新建用户
 func (dao *UserDao) NewUser(u *model.UserBase) error {
 	db := conn.GetGorm("imtest")
 	u.TableId = utils.RandInt(0, global.MaxUserBaseTable)
-	return db.Table(u.TableName()).Create(u).Error
+	err := db.Table(u.TableName()).Create(u).Error
+	if err != nil {
+		return err
+	}
+	u.UId = fmt.Sprintf("%04d%d", u.TableId, u.ID)
+	return db.Model(&u).Update("uid", u.UId).Error
+}
+
+// GetFromAccount 获取用户来自参数 Account
+func (dao *UserDao) GetFromAccount(account string) *model.UserBase {
+	var (
+		wg sync.WaitGroup
+		user = &model.UserBase{}
+	)
+
+	for i:=0; i<global.MaxUserBaseTable; i++ {
+		wg.Add(1)
+		go func(number int) {
+			defer wg.Done()
+			table := fmt.Sprintf(global.UserBaseTableName, number)
+			db := conn.GetGorm("imtest")
+			err := db.Table(table).Where("account=?", account).First(&user).Error
+			if err != nil {
+				logger.Error(err)
+			}
+		}(i)
+	}
+	wg.Wait()
+
+	logger.Debug(user)
+	return user
 }

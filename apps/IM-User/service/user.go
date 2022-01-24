@@ -4,19 +4,22 @@ import (
 	"fmt"
 	"github.com/mangenotwork/extras/apps/IM-User/dao"
 	"github.com/mangenotwork/extras/apps/IM-User/model"
+	"github.com/mangenotwork/extras/common/jwt"
 	"time"
 )
 
 type UserAPI interface {
-	Register()
+	Register() // 用户注册业务
 }
 
+// UserParam 用户业务相关参数
 type UserParam struct {
 	Name string `json:"name"` // 昵称
 	Account string `json:"account"` // 账号
 	Password string `json:"password"`
 }
 
+// verifyName 验证用户昵称
 func (param *UserParam) verifyName() error {
 	if len(param.Name) < 1 || len(param.Name) > 15 {
 		return fmt.Errorf("昵称太长")
@@ -24,6 +27,7 @@ func (param *UserParam) verifyName() error {
 	return nil
 }
 
+// verifyAccount 验证用户账号
 func (param *UserParam) verifyAccount() error {
 	if len(param.Account) < 1 || len(param.Account) > 15 {
 		return fmt.Errorf("账号太长")
@@ -31,6 +35,7 @@ func (param *UserParam) verifyAccount() error {
 	return nil
 }
 
+// verifyPassword 验证用户密码
 func (param *UserParam) verifyPassword() error {
 	if len(param.Password) < 6 {
 		return fmt.Errorf("密码太短")
@@ -38,6 +43,7 @@ func (param *UserParam) verifyPassword() error {
 	return nil
 }
 
+// Register 用户注册
 func (param *UserParam) Register() string {
 	err := param.verifyName()
 	if err != nil {
@@ -69,5 +75,30 @@ func (param *UserParam) Register() string {
 	if err != nil {
 		return err.Error()
 	}
+
+	// 会写id
+
+
 	return "创建成功"
 }
+
+
+
+// Token 获取用户token
+func (param *UserParam) Token() (string, error){
+	err := param.verifyPassword()
+	if err != nil {
+		return "", err
+	}
+	u := new(dao.UserDao).GetFromAccount(param.Account)
+	if param.Password != u.Password {
+		return "", fmt.Errorf("密码错误")
+	}
+
+	j := jwt.NewJWT()
+	j.AddClaims("uid", u.UId)
+	j.AddClaims("name", u.UName)
+	j.AddClaims("isok", u.Account)
+	return j.Token()
+}
+

@@ -13,6 +13,8 @@ func StartHTTP(){
 		mux := httpser.NewEngine()
 
 		mux.Router("/register", handler.Register)
+		mux.Router("/login", handler.Login)
+
 
 		mux.Router("/test", handler.Jwt)
 		mux.Router("/t", handler.JwtGet)
