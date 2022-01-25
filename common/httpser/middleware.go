@@ -28,7 +28,12 @@ func (lrw *ResponseWriter) WriteHeader(code int) {
 
 // Base Http基础中间件,日志
 func Base(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return BaseFunc(next)
+}
+
+// Base Http基础中间件,日志
+func BaseFunc(next http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
 		/*
 			// 中间件 上下文传递值
@@ -53,7 +58,7 @@ func Base(next http.Handler) http.Handler {
 
 		logStr := fmt.Sprintf("%s#%s#%s#%d#%f", ip, r.Method, r.URL.String(), newW.StatusCode, float64(time.Now().UnixNano()-start)/100000)
 		logger.Http(logStr, true)
-	})
+	}
 }
 
 // ReqLimit 基础中间件 IP限流, IP黑白名单

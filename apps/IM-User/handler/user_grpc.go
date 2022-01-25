@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/mangenotwork/extras/apps/IM-User/proto"
 	"github.com/mangenotwork/extras/apps/IM-User/service"
+	"github.com/mangenotwork/extras/common/logger"
 )
 
 type GRPCService struct {
@@ -18,9 +19,10 @@ func (*GRPCService) Authentication(ctx context.Context, req *proto.AuthReq) (*pr
 	resp := &proto.AuthResp{
 		State: 0,
 	}
+	logger.Debug("token = ", req.Token)
 	uParams := &service.UserParam{
 		TokenStr: req.Token,
 	}
-	resp.State, err = uParams.AuthToken()
+	resp.State, resp.Uid, err = uParams.AuthToken()
 	return resp, err
 }

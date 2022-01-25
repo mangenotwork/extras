@@ -84,8 +84,16 @@ func NewEngine() *Engine {
 	return engine
 }
 
+func (engine *Engine) GetMux() *http.ServeMux {
+	return engine.mux
+}
+
 func (engine *Engine) Router(path string, f func(w http.ResponseWriter, r *http.Request)) {
 	engine.mux.Handle(path, engine.base(http.HandlerFunc(f)))
+}
+
+func (engine *Engine) RouterFunc(path string, f func(w http.ResponseWriter, r *http.Request)) {
+	engine.mux.HandleFunc(path, f)
 }
 
 func (engine *Engine) Run() {

@@ -11,7 +11,7 @@ func StartHttp(){
 		logger.Info("StartHttp")
 		mux := httpser.NewEngine()
 
-		mux.Router("/ws", handler.Ws)
+		mux.RouterFunc("/ws", handler.Ws)
 
 		// [post] 登记, 下发一个随机uuid可以作为设备id,以便确认设备
 		mux.Router("/register", handler.GetDeviceId)

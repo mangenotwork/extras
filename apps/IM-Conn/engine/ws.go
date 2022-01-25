@@ -2,7 +2,9 @@ package engine
 
 import (
 	"fmt"
+	"github.com/mangenotwork/extras/apps/IM-Conn/handler"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -17,40 +19,38 @@ func StartWS(){
 
 		mux := httpser.NewEngine()
 
-		mux.Router("/ws", Ws)
+		mux.RouterFunc("/ws", Ws)
 
+		mux.Run()
 	}()
 }
 
 var upGrader = websocket.Upgrader{
-	ReadBufferSize:  1024*100,
+	ReadBufferSize:  65535,
 	WriteBufferSize: 65535,
 	HandshakeTimeout: 5*time.Second,
 	Error: Err,
 	CheckOrigin: func(r *http.Request) bool {
 		if r.Method != "GET" {
-			fmt.Println("method is not GET")
+			logger.Error("method is not GET")
 			return false
 		}
-		if r.URL.Path != "/ws" {
-			fmt.Println("path error")
+		if  strings.Index(r.URL.Path, "/ws") == -1 {
+			logger.Error("path error")
 			return false
 		}
 		return true
 	},
 }
 
-func Ws(w http.ResponseWriter, r *http.Request) {
 
+func Ws(w http.ResponseWriter, r *http.Request) {
 	if !websocket.IsWebSocketUpgrade(r) {
 		Err(w, r, 2001, fmt.Errorf("非websocket请求"))
 	}
 
 	st := time.Now()
-
-	// TODO Token JWT解码 得出 user_id, device_id, source
-
-	userId := httpser.GetUrlArgInt64(r, "user_id")
+	token := httpser.GetUrlArg(r, "token")
 	deviceId := httpser.GetUrlArg(r, "device")
 	source := httpser.GetUrlArg(r, "source")
 	conn, err := upGrader.Upgrade(w, r, nil)
@@ -59,7 +59,13 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO 身份验证
+	uid, err := handler.AuthToken(token)
+	if err != nil {
+		_= conn.WriteMessage(websocket.BinaryMessage, []byte("[未知身份连接]device为空, 客户端可以send数据来确认身份"))
+		_= conn.Close()
+		Err(w, r, 2001, fmt.Errorf("[未知身份连接]device为空, 客户端可以send数据来确认身份"))
+		return
+	}
 
 	if len(deviceId) < 1 {
 		_= conn.WriteMessage(websocket.BinaryMessage, []byte("[未知身份连接]device为空, 客户端可以send数据来确认身份"))
@@ -72,7 +78,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 
 	client := &model.WsClient{
 		Conn : conn,
-		UserID : userId,
+		UserID : uid,
 		IP : conn.RemoteAddr().String(),
 		DeviceID : deviceId,
 		DeviceType : source,

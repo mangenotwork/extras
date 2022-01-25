@@ -5,6 +5,7 @@ import (
 	"github.com/mangenotwork/extras/apps/IM-User/dao"
 	"github.com/mangenotwork/extras/apps/IM-User/model"
 	"github.com/mangenotwork/extras/common/jwt"
+	"github.com/mangenotwork/extras/common/logger"
 	"github.com/mangenotwork/extras/common/utils"
 	"time"
 )
@@ -106,25 +107,27 @@ func (param *UserParam) Token() (string, error) {
 
 // AuthToken 用户token 的验证
 // return  ->  1: 验证通过  2: 验证失败
-func (param *UserParam) AuthToken() (int64, error) {
+func (param *UserParam) AuthToken() (int64, int64, error) {
 
 	j := jwt.NewJWT()
 	err := j.ParseToken(param.TokenStr)
 	if err != nil {
-		return 2, err
+		return 2, 0, err
 	}
 
 	// 是否过期
 	if j.IsExpire() {
-		return 2, fmt.Errorf("token 过期")
+		return 2, 0, fmt.Errorf("token 过期")
 	}
 
 	// 是否存在
-	uid := utils.Int642Str(j.GetInt64("uid"))
+	uid := utils.Any2String(j.Get("uid"))
+	logger.Debug("uid = ", uid)
 	tid, id := model.SplitUId(uid)
+	logger.Debug("tid, id = ", tid, id)
 	if !new(dao.UserDao).HasFromUid(tid, id) {
-		return 2, fmt.Errorf("用户不存在")
+		return 2, 0, fmt.Errorf("用户不存在")
 	}
 
-	return 1, nil
+	return 1, utils.Str2Int64(uid), nil
 }
