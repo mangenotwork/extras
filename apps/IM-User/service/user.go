@@ -5,11 +5,14 @@ import (
 	"github.com/mangenotwork/extras/apps/IM-User/dao"
 	"github.com/mangenotwork/extras/apps/IM-User/model"
 	"github.com/mangenotwork/extras/common/jwt"
+	"github.com/mangenotwork/extras/common/utils"
 	"time"
 )
 
 type UserAPI interface {
-	Register() // 用户注册业务
+	Register() string // 用户注册业务
+	Token()	(string, error) // 获取用户token
+	AuthToken() (int64, error) // 用户token 的验证
 }
 
 // UserParam 用户业务相关参数
@@ -17,6 +20,7 @@ type UserParam struct {
 	Name string `json:"name"` // 昵称
 	Account string `json:"account"` // 账号
 	Password string `json:"password"`
+	TokenStr string `json:"token_str"` // 用户token
 }
 
 // verifyName 验证用户昵称
@@ -82,10 +86,8 @@ func (param *UserParam) Register() string {
 	return "创建成功"
 }
 
-
-
 // Token 获取用户token
-func (param *UserParam) Token() (string, error){
+func (param *UserParam) Token() (string, error) {
 	err := param.verifyPassword()
 	if err != nil {
 		return "", err
@@ -102,3 +104,27 @@ func (param *UserParam) Token() (string, error){
 	return j.Token()
 }
 
+// AuthToken 用户token 的验证
+// return  ->  1: 验证通过  2: 验证失败
+func (param *UserParam) AuthToken() (int64, error) {
+
+	j := jwt.NewJWT()
+	err := j.ParseToken(param.TokenStr)
+	if err != nil {
+		return 2, err
+	}
+
+	// 是否过期
+	if j.IsExpire() {
+		return 2, fmt.Errorf("token 过期")
+	}
+
+	// 是否存在
+	uid := utils.Int642Str(j.GetInt64("uid"))
+	tid, id := model.SplitUId(uid)
+	if !new(dao.UserDao).HasFromUid(tid, id) {
+		return 2, fmt.Errorf("用户不存在")
+	}
+
+	return 1, nil
+}

@@ -1,0 +1,20 @@
+syntax  = "proto3";
+
+package pb;
+
+option go_package = "/proto";
+
+// 用户省份验证 输入输出参数
+message AuthReq {
+  string token = 1;
+}
+message AuthResp {
+  int64 state = 1;
+}
+
+// TODO 获取用户信息 输入输出
+
+service IMUserRPC {
+  rpc Authentication (AuthReq) returns (AuthResp); // 用户省份验证
+}
+

@@ -85,3 +85,21 @@ func (dao *UserDao) GetFromAccount(account string) *model.UserBase {
 	logger.Debug(user)
 	return user
 }
+
+// HasFromUid 用户是否存在
+func (dao *UserDao) HasFromUid(tid, id int) bool {
+	var count  int
+	table := fmt.Sprintf(global.UserBaseTableName, tid)
+	db := conn.GetGorm("imtest")
+	err := db.Table(table).Where("id=?", id).Count(&count).Error
+	if err != nil {
+		logger.Error(err)
+		return false
+	}
+
+	logger.Debug("count = ", count)
+	if count > 0 {
+		return true
+	}
+	return false
+}

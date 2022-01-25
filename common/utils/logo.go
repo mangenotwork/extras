@@ -3,7 +3,7 @@ package utils
 const Logo = `
 
  █▄ ▄█ ▄▀▄ █▄ █   ▄▀▀ ██▀
- █ ▀ █ █▀█ █ ▀█   ▀▄█ █▄▄  v0.3.26
+ █ ▀ █ █▀█ █ ▀█   ▀▄█ █▄▄  v0.4.1
  https://github.com/mangenotwork/extras
 
 `
