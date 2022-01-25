@@ -28,18 +28,18 @@ func main(){
 	log.Println(wsc, err)
 
 	go func(){
-
-		time.Sleep(2*time.Second)
-		err = wsc.Send([]byte(`{
+		for {
+			time.Sleep(2*time.Second)
+			logger.Debug("send...")
+			err = wsc.Send([]byte(`{
 				"cmd":"Auth",
 				"data":{
 					"device":"456"
 				}
 			}
 			`))
-		time.Sleep(2*time.Second)
-		log.Println(err)
-
+			log.Println(err)
+		}
 	}()
 
 	for {

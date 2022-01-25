@@ -92,16 +92,15 @@
 - v0.3.24 [common] Jwt 封装
 - v0.3.25 [IM-User] 用户验证
 - v0.3.26 [IM-User] 登录接口
-- v0.4.1 [IM-User] 用户验证grpc
-- v0.4.2 [IM-Conn] 调用用户验证及相关业务
-
+- v0.4.1  [IM-User] 用户验证grpc
+- v0.4.2  [IM-Conn] 调用用户验证及相关业务
+- v0.4.3  [IM-Test] Ws登录
 > Todo
 
 > v0.4
-- v0.4.3 [IM-Test] Ws登录
-- v0.4.4 [IM-Msg]  消息结构设计
-- v0.4.5
-- v0.4.6
+- v0.4.4  [IM-Test] TCP登录
+- v0.4.5  [IM-Test] UDP登录
+- v0.4.6  [IM-Msg]  消息结构设计
 - v0.4.7
 - v0.4.8
 - v0.4.9

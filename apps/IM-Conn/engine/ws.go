@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"github.com/mangenotwork/extras/apps/IM-Conn/handler"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -82,12 +83,12 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 		IP : conn.RemoteAddr().String(),
 		DeviceID : deviceId,
 		DeviceType : source,
+		HeartBeat : make(chan []byte),
 	}
 
 	model.WsClientTable().Insert(client) // 加入ws哈希表
 
-	// TODO 接收数据
-
+	//接收数据
 	go func() {
 
 		for {
@@ -102,7 +103,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 			if len(data) < 1 {
 				continue
 			}
-
+			client.HeartBeat <- data
 			//cmdData := &model.CmdData{}
 			//jsonErr := json.Unmarshal(data, &cmdData)
 			//if jsonErr != nil {
@@ -127,10 +128,10 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 				_=client.Conn.Close()
 
 				// 接收心跳
-				//case <-rafter.heartBeat:
-				//	// 重置
-				//	log.Println("重置 = ", 10)
-				//	timer.Reset(10 * time.Second)
+			case <-client.HeartBeat:
+				// 重置
+				log.Println("重置 = ", 10)
+				timer.Reset(10 * time.Second)
 			}
 		}
 
