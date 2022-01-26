@@ -3,12 +3,10 @@ package handler
 import (
 	"github.com/mangenotwork/extras/apps/IM-Conn/model"
 	"github.com/mangenotwork/extras/apps/IM-Conn/service"
-	"github.com/mangenotwork/extras/common/jwt"
 	"github.com/mangenotwork/extras/common/logger"
-	"github.com/mangenotwork/extras/common/utils"
 )
 
-func TcpHandler(client *model.TcpClient, data *model.CmdData) {
+func UdpHandler(client *model.UdpClient, data *model.CmdData) {
 
 	switch data.Cmd {
 		// 登录
@@ -26,34 +24,10 @@ func TcpHandler(client *model.TcpClient, data *model.CmdData) {
 				client.UserID = uid
 				client.DeviceID = loginCmdData.Device
 				client.Source = loginCmdData.Source
-				model.TcpClientTable().Insert(client)
+				model.UdpClientTable().Insert(client)
 				// 下发 token
 				sendToken := model.NewCmdData()
 				client.Send(sendToken.SendCmd("Token", token))
 			}
-
-		// 心跳
-		case "HeartBeat":
-			logger.Debug("HeartBeat doing ...")
-			token := utils.Any2String(data.Data)
-			logger.Debug("token = ", token)
-			j := jwt.NewJWT()
-			err := j.ParseToken(token)
-			if err != nil {
-				logger.Debug("Token err = ", err)
-				sendToken := model.NewCmdData()
-				client.Send(sendToken.SendCmd("Error", "Token err"))
-				return
-			}
-
-			uid := utils.Str2Int64(j.GetString("uid"))
-			if uid == client.UserID {
-				client.HeartBeat <- []byte("1")
-			}
-
-		//
-
-
 	}
 }
-

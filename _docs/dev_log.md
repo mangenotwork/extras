@@ -98,11 +98,11 @@
 - v0.4.4  [IM-Test] TCP登录
 - v0.4.5  [IM-User] 登录接口 Grpc 
 - v0.4.6  [IM-Conn] TCP 心跳设计
+- v0.4.7  [IM-Test] UDP登录
 > Todo
 
 > v0.4
-- v0.4.7  [IM-Test] UDP登录
-- v0.4.8  [IM-Conn] UDP 心跳设计
+- v0.4.8  [IM-Conn] UDP Token 验证
 - v0.4.9  [IM-Conn] WS 心跳设计 
 - v0.4.10 [IM-Msg]  消息结构设计
 - v0.4.11 [IM-Msg]  发送消息 
