@@ -10,7 +10,7 @@ type TcpClient struct {
 	UserID int64 // 用户id唯一的
 	IP string // 当前连接的ip
 	DeviceID string // 当前连接的设备id
-	DeviceType string // 设备类型
+	Source string // 设备类型
 	HeartBeat chan []byte // 心跳包
 }
 

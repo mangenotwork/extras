@@ -8,35 +8,47 @@ import (
 
 func TcpHandler(client *model.TcpClient, data *model.CmdData) {
 
-	//device = service.Interactive(cmdData, client)
-	// TODO 获取来自客服端的身份信息,并验证
-	// client.UserID = ...
-	// if 验证失败 { _=conn.Close() }
-	// model.TcpClientTable().Insert(client)
-	// TODO 心跳
-
 	switch data.Cmd {
 		case "Login":
-			resByre, resByteErr := json.Marshal(data.Data)
-			if resByteErr != nil {
-				logger.Debugf("%v",resByteErr)
+			loginCmdData := NewLoginCmd()
+			err := loginCmdData.Serialize(data.Data)
+			if err != nil {
+				logger.Errorf("%v",err)
 				return
 			}
-			var LoginCmdData LoginCmd
-			jsonRes := json.Unmarshal(resByre, &LoginCmdData)
-			if jsonRes != nil {
-				logger.Debugf("%v",jsonRes)
-				return
-			}
-			logger.Debugf("使用 json: %v",LoginCmdData)
+			logger.Debugf("使用 json: %v",loginCmdData)
 			// 登录验证 grpc
+			uid, token, err := Login(loginCmdData.Account, loginCmdData.Password)
+			if err == nil {
+				client.UserID = uid
+				client.DeviceID = loginCmdData.Device
+				client.Source = loginCmdData.Source
+				model.TcpClientTable().Insert(client)
+				// 下发 token
+				client.Send([]byte(token))
+			}
+
+		// TODO 心跳
 
 	}
 }
 
+// LoginCmd 交互命令 Login
 type LoginCmd struct {
 	Account string `json:"account"`
 	Password string `json:"password"`
 	Device string `json:"device"`
 	Source string `json:"source"`
+}
+
+func NewLoginCmd() *LoginCmd {
+	return &LoginCmd{}
+}
+
+func (l *LoginCmd) Serialize(data interface{}) error {
+	resByre, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(resByre, &l)
 }

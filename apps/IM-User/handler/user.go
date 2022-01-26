@@ -21,7 +21,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 func Login(w http.ResponseWriter, r *http.Request) {
 	params := &service.UserParam{}
 	httpser.GetJsonParam(r, params)
-	token, err := params.Token()
+	token, _, err := params.Token()
 	if err != nil {
 		httpser.OutErrBody(w, 2000, err)
 		return

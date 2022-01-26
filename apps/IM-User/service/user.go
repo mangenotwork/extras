@@ -88,21 +88,22 @@ func (param *UserParam) Register() string {
 }
 
 // Token 获取用户token
-func (param *UserParam) Token() (string, error) {
+func (param *UserParam) Token() (string, string,  error) {
 	err := param.verifyPassword()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	u := new(dao.UserDao).GetFromAccount(param.Account)
 	if param.Password != u.Password {
-		return "", fmt.Errorf("密码错误")
+		return "", "", fmt.Errorf("密码错误")
 	}
 
 	j := jwt.NewJWT()
 	j.AddClaims("uid", u.UId)
 	j.AddClaims("name", u.UName)
 	j.AddClaims("isok", u.Account)
-	return j.Token()
+	token, err := j.Token()
+	return token, u.UId, err
 }
 
 // AuthToken 用户token 的验证

@@ -96,10 +96,10 @@
 - v0.4.2  [IM-Conn] 调用用户验证及相关业务
 - v0.4.3  [IM-Test] Ws登录
 - v0.4.4  [IM-Test] TCP登录
+- v0.4.5  [IM-User] 登录接口 Grpc 
 > Todo
 
 > v0.4
-- v0.4.5  [IM-User] 登录接口 Grpc 
 - v0.4.6  [IM-Test] UDP登录
 - v0.4.7  [IM-Msg]  消息结构设计
 - v0.4.8  [IM-Conn] WS 心跳设计 
