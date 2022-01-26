@@ -66,6 +66,12 @@ func (j *JWT) AddClaims(k string, v interface{}) *JWT {
 	return j
 }
 
+func (j *JWT) Print() {
+	for k, v := range j.Claims {
+		logger.Debug(k , v)
+	}
+}
+
 func (j *JWT) Get(k string) interface{} {
 	v, ok := j.Claims[k]
 	if !ok {

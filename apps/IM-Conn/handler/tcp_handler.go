@@ -3,12 +3,15 @@ package handler
 import (
 	"encoding/json"
 	"github.com/mangenotwork/extras/apps/IM-Conn/model"
+	"github.com/mangenotwork/extras/common/jwt"
 	"github.com/mangenotwork/extras/common/logger"
+	"github.com/mangenotwork/extras/common/utils"
 )
 
 func TcpHandler(client *model.TcpClient, data *model.CmdData) {
 
 	switch data.Cmd {
+		// 登录
 		case "Login":
 			loginCmdData := NewLoginCmd()
 			err := loginCmdData.Serialize(data.Data)
@@ -25,10 +28,28 @@ func TcpHandler(client *model.TcpClient, data *model.CmdData) {
 				client.Source = loginCmdData.Source
 				model.TcpClientTable().Insert(client)
 				// 下发 token
-				client.Send([]byte(token))
+				sendToken := model.NewCmdData()
+				client.Send(sendToken.SendCmd("Token", token))
 			}
 
-		// TODO 心跳
+		// 心跳
+		case "HeartBeat":
+			logger.Debug("HeartBeat doing ...")
+			token := utils.Any2String(data.Data)
+			logger.Debug("token = ", token)
+			j := jwt.NewJWT()
+			err := j.ParseToken(token)
+			if err != nil {
+				logger.Debug("Token err = ", err)
+				sendToken := model.NewCmdData()
+				client.Send(sendToken.SendCmd("Error", "Token err"))
+				return
+			}
+
+			uid := utils.Str2Int64(j.GetString("uid"))
+			if uid == client.UserID {
+				client.HeartBeat <- []byte("1")
+			}
 
 	}
 }

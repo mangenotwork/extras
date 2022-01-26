@@ -22,3 +22,7 @@ udpServer:
 logCentre:
   host: 192.168.0.9
   prod: 22223
+
+jwt:
+  secret: sada45614asd1f2as5asd
+  expire: 86400

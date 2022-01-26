@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/mangenotwork/extras/apps/IM-Conn/handler"
 	"io"
+	"log"
 	"net"
 	"time"
 
@@ -99,8 +100,8 @@ func RunTcpServer() {
 			}
 		}()
 
-		// TODO 处理心跳和僵尸连接
-		go func(){
+		// 处理心跳和僵尸连接
+		go func(client *model.TcpClient){
 			for {
 				timer := time.NewTimer(10 * time.Second)
 
@@ -110,14 +111,15 @@ func RunTcpServer() {
 					_=client.Conn.Close()
 
 				// 接收心跳
-				//case <-rafter.heartBeat:
-				//	// 重置
-				//	log.Println("重置 = ", 10)
-				//	timer.Reset(10 * time.Second)
+				case <-client.HeartBeat:
+					// 重置
+					log.Println("重置 = ", 10)
+					timer.Reset(10 * time.Second)
+
 				}
 			}
 
-		}()
+		}(client)
 
 	}
 }
