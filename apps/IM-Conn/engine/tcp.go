@@ -1,6 +1,8 @@
 package engine
 
 import (
+	"encoding/json"
+	"github.com/mangenotwork/extras/apps/IM-Conn/handler"
 	"io"
 	"net"
 	"time"
@@ -54,61 +56,42 @@ func RunTcpServer() {
 			continue
 		}
 		logger.Info("[连接成功]: ", conn.RemoteAddr().String(), conn)
-
-		//wsClient := model.NewTcpClient().AddConn(conn).SetIP(conn.RemoteAddr().String())
-		//client = wsClient
 		client := &model.TcpClient{
 			Conn : conn,
 			IP : conn.RemoteAddr().String(),
+			HeartBeat: make(chan []byte),
 		}
 
-
 		go func(){
-
 			defer func() {
 				if v := recover(); v != nil {
 					logger.Error("捕获了一个异常：", v)
 				}
-				_=conn.Close()
+				_=client.Conn.Close()
 			}()
 
 			recv := make([]byte, 1024*10)
 			for {
-				n, err := conn.Read(recv)
-				logger.Info(n, err)
+				n, err := client.Conn.Read(recv)
 				if err != nil{
 					if err == io.EOF {
-						logger.Info(conn.RemoteAddr().String(), " 断开了连接!")
-						// 如果认证了设备则清理设备
-						//if device != nil {
-						//	logger.Info("释放客户端连接")
-						//	device.OffLine() // 下线记录
-						//	delete(model.AllWsClient, deviceId)
-						//	device.Discharge("tcp") // 连接离开topic,group
-						//}
-						_=conn.Close()
-						model.TcpClientTable().Del(client)
-						return
+						logger.Info(client.Conn.RemoteAddr().String(), " 断开了连接!")
 					}
+					_=client.Conn.Close()
+					model.TcpClientTable().Del(client)
+					return
 				}
+
 				if n > 0 && n < 10241 {
 					data := recv[:n]
 					logger.Info(string(data))
-					//cmdData := &model.CmdData{}
-					//jsonErr := json.Unmarshal(data, &cmdData)
-					//if jsonErr != nil {
-					//	_,_=conn.Write(model.CmdDataMsg("非法数据格式"))
-					//	continue
-					//}
-					//device = service.Interactive(cmdData, client)
-
-					// TODO 获取来自客服端的身份信息,并验证
-					// client.UserID = ...
-					// if 验证失败 { _=conn.Close() }
-					model.TcpClientTable().Insert(client)
-
-					// TODO 心跳
-
+					cmdData := &model.CmdData{}
+					jsonErr := json.Unmarshal(data, &cmdData)
+					if jsonErr != nil {
+						_,_=client.Conn.Write(cmdData.SendMsg("非法数据格式", 1001))
+						continue
+					}
+					go handler.TcpHandler(client, cmdData)
 
 				}else{
 					_,_=client.Conn.Write([]byte("传入的数据太小或太大, 建议 1~10240个字节"))
@@ -138,3 +121,4 @@ func RunTcpServer() {
 
 	}
 }
+

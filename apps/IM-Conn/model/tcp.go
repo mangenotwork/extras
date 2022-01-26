@@ -11,6 +11,7 @@ type TcpClient struct {
 	IP string // 当前连接的ip
 	DeviceID string // 当前连接的设备id
 	DeviceType string // 设备类型
+	HeartBeat chan []byte // 心跳包
 }
 
 func (tcp *TcpClient) GetIP() string {

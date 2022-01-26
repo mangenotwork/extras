@@ -95,17 +95,17 @@
 - v0.4.1  [IM-User] 用户验证grpc
 - v0.4.2  [IM-Conn] 调用用户验证及相关业务
 - v0.4.3  [IM-Test] Ws登录
+- v0.4.4  [IM-Test] TCP登录
 > Todo
 
 > v0.4
-- v0.4.4  [IM-Test] TCP登录
-- v0.4.5  [IM-Test] UDP登录
-- v0.4.6  [IM-Msg]  消息结构设计
-- v0.4.7
-- v0.4.8
-- v0.4.9
-- v0.4.10
-- v0.4.11
+- v0.4.5  [IM-User] 登录接口 Grpc 
+- v0.4.6  [IM-Test] UDP登录
+- v0.4.7  [IM-Msg]  消息结构设计
+- v0.4.8  [IM-Conn] WS 心跳设计 
+- v0.4.9  [IM-Conn] TCP 心跳设计
+- v0.4.10 [IM-Conn] UDP 心跳设计
+- v0.4.11 [IM-Msg]  发送消息 
 - v0.4.12
 - v0.4.13
 - v0.4.14
