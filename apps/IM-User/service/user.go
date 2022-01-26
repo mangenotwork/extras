@@ -108,17 +108,17 @@ func (param *UserParam) Token() (string, string,  error) {
 
 // AuthToken 用户token 的验证
 // return  ->  1: 验证通过  2: 验证失败
-func (param *UserParam) AuthToken() (int64, int64, error) {
+func (param *UserParam) AuthToken() (int64, string, error) {
 
 	j := jwt.NewJWT()
 	err := j.ParseToken(param.TokenStr)
 	if err != nil {
-		return 2, 0, err
+		return 2, "", err
 	}
 
 	// 是否过期
 	if j.IsExpire() {
-		return 2, 0, fmt.Errorf("token 过期")
+		return 2, "", fmt.Errorf("token 过期")
 	}
 
 	// 是否存在
@@ -127,8 +127,8 @@ func (param *UserParam) AuthToken() (int64, int64, error) {
 	tid, id := model.SplitUId(uid)
 	logger.Debug("tid, id = ", tid, id)
 	if !new(dao.UserDao).HasFromUid(tid, id) {
-		return 2, 0, fmt.Errorf("用户不存在")
+		return 2, "", fmt.Errorf("用户不存在")
 	}
 
-	return 1, utils.Str2Int64(uid), nil
+	return 1, uid, nil
 }

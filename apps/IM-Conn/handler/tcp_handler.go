@@ -46,7 +46,7 @@ func TcpHandler(client *model.TcpClient, data *model.CmdData) {
 				return
 			}
 
-			uid := utils.Str2Int64(j.GetString("uid"))
+			uid := j.GetString("uid")
 			if uid == client.UserID {
 				client.HeartBeat <- []byte("1")
 			}

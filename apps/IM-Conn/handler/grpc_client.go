@@ -7,20 +7,20 @@ import (
 	"github.com/mangenotwork/extras/common/logger"
 )
 
-func AuthToken(token string) (int64, error) {
+func AuthToken(token string) (string, error) {
 	client, err := grpc.NewClient(grpc.ClientArg{
 		ServiceAddr: "192.168.0.9:29128",
 		ServiceName: "IM-User",
 	})
 	if err != nil {
 		logger.Error(err)
-		return 0, err
+		return "", err
 	}
 	conn, ctx, err := client.Conn()
 	logger.Info("conn = ", conn)
 	defer conn.Close()
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	c := proto.NewIMUserRPCClient(conn)
@@ -29,28 +29,28 @@ func AuthToken(token string) (int64, error) {
 	})
 	logger.Info("AuthToken --> ", r, err)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 	if r.State != 1 {
-		return 0, fmt.Errorf("身份验证失败")
+		return "", fmt.Errorf("身份验证失败")
 	}
 	return r.Uid, nil
 }
 
-func Login(account, password string) (int64, string, error) {
+func Login(account, password string) (string, string, error) {
 	client, err := grpc.NewClient(grpc.ClientArg{
 		ServiceAddr: "192.168.0.9:29128",
 		ServiceName: "IM-User",
 	})
 	if err != nil {
 		logger.Error(err)
-		return 0, "", err
+		return "", "", err
 	}
 	conn, ctx, err := client.Conn()
 	logger.Info("conn = ", conn)
 	defer conn.Close()
 	if err != nil {
-		return 0, "", err
+		return "", "", err
 	}
 
 	c := proto.NewIMUserRPCClient(conn)
@@ -60,10 +60,10 @@ func Login(account, password string) (int64, string, error) {
 	})
 	logger.Info("Login --> ", r, err)
 	if err != nil {
-		return 0, "", err
+		return "", "", err
 	}
 	if r.State != 1 {
-		return 0, "", fmt.Errorf("身份验证失败")
+		return "", "", fmt.Errorf("身份验证失败")
 	}
 	return r.Uid, r.Token, nil
 }

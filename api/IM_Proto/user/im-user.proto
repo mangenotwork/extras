@@ -10,7 +10,7 @@ message AuthReq {
 }
 message AuthResp {
   int64 state = 1;
-  int64 uid = 2;
+  string uid = 2;
 }
 
 // 用户登录
@@ -20,7 +20,7 @@ message LoginReq {
 }
 message LoginResp {
   int64 state = 1;
-  int64 uid = 2;
+  string uid = 2;
   string token = 3;
 }
 

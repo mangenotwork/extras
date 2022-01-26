@@ -2,12 +2,13 @@ package model
 
 import (
 	"fmt"
+	"github.com/mangenotwork/extras/common/utils"
 	"net"
 )
 
 type TcpClient struct {
 	Conn net.Conn
-	UserID int64 // 用户id唯一的
+	UserID string // 用户id唯一的
 	IP string // 当前连接的ip
 	DeviceID string // 当前连接的设备id
 	Source string // 设备类型
@@ -28,7 +29,7 @@ func (tcp *TcpClient) GetConn() net.Conn {
 
 // 使用哈希表存储
 type tcpNode struct {
-	Data map[int64]*TcpClient // UserID 用户id作为key
+	Data map[string]*TcpClient // UserID 用户id作为key
 }
 
 type TcpHashTable struct {
@@ -36,8 +37,9 @@ type TcpHashTable struct {
 	Size  int64
 }
 
-func (table *TcpHashTable) hashFunction(uid int64) int64 {
-	return uid % table.Size
+func (table *TcpHashTable) hashFunction(uid string) int64 {
+	uidInt := utils.Str2Int64(uid)
+	return uidInt % table.Size
 }
 
 func (table *TcpHashTable) Insert(value *TcpClient){
@@ -45,14 +47,14 @@ func (table *TcpHashTable) Insert(value *TcpClient){
 	element, ok := table.Table[h]
 	if !ok {
 		element = &tcpNode{
-			Data: make(map[int64]*TcpClient),
+			Data: make(map[string]*TcpClient),
 		}
 		table.Table[h] = element
 	}
 	element.Data[value.UserID] = value
 }
 
-func (table *TcpHashTable) Get(uid int64) (date *TcpClient, err error){
+func (table *TcpHashTable) Get(uid string) (date *TcpClient, err error){
 	if t, ok := table.Table[table.hashFunction(uid)]; ok {
 		if client, ok := t.Data[uid]; ok {
 			return client, nil

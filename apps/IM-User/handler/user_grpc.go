@@ -5,7 +5,6 @@ import (
 	"github.com/mangenotwork/extras/apps/IM-User/proto"
 	"github.com/mangenotwork/extras/apps/IM-User/service"
 	"github.com/mangenotwork/extras/common/logger"
-	"github.com/mangenotwork/extras/common/utils"
 )
 
 type GRPCService struct {
@@ -42,6 +41,6 @@ func (*GRPCService) Login(ctx context.Context, req *proto.LoginReq) (*proto.Logi
 		resp.State = 2
 	}
 	resp.Token = token
-	resp.Uid = utils.Str2Int64(uid)
+	resp.Uid = uid
 	return resp, err
 }

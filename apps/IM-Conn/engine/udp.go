@@ -39,7 +39,7 @@ func RunUDPServer() {
 			logger.Error("error during read: %s", err)
 		}
 
-		client := &model.UdpClient{
+		client := model.UdpClient{
 			Conn : remoteAddr,
 			IP : remoteAddr.String(),
 			UDPListener : UDPListener,

@@ -70,4 +70,5 @@ type CmdData struct {
 	Data interface{} `json:"data"`  // obj
 	Msg string `json:"msg"`
 	Code int `json:"code"`
+	Token string `json:"token"`
 }
