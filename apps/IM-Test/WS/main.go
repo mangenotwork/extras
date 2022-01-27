@@ -4,6 +4,7 @@ import (
 	"github.com/mangenotwork/extras/common/logger"
 	gt "github.com/mangenotwork/gathertool"
 	"log"
+	"os"
 	"time"
 )
 
@@ -25,19 +26,18 @@ func main(){
 	host := "ws://192.168.0.9:29121"
 	path := "/ws?token="+token+"&device=1&source=1"
 	wsc, err := gt.WsClient(host, path, false)
-	log.Println(wsc, err)
+	if err != nil {
+		log.Println("连接失败 : ", err)
+		os.Exit(0)
+	}
 
 	go func(){
 		for {
 			time.Sleep(2*time.Second)
 			logger.Debug("send...")
 			err = wsc.Send([]byte(`{
-				"cmd":"Auth",
-				"data":{
-					"device":"456"
-				}
-			}
-			`))
+				"cmd":"HeartBeat",
+				"data":"`+ token  +`"}`))
 			log.Println(err)
 		}
 	}()

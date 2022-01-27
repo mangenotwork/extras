@@ -14,3 +14,19 @@ grpcServer:
 logCentre:
   host: 192.168.0.9
   prod: 22223
+
+mysql:
+  -
+    dbname: imtest
+    user: root
+    password: root123
+    host: 192.168.0.192:3306
+  -
+    dbname: imtest2
+    user: root
+    password: root123
+    host: 192.168.0.192:3306
+
+jwt:
+  secret: sada45614asd1f2as5asd
+  expire: 86400

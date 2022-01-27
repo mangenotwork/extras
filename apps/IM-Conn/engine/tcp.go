@@ -109,6 +109,7 @@ func RunTcpServer() {
 				case <-timer.C:
 					// 10秒内收不到来自客户端的心跳连接断开
 					_=client.Conn.Close()
+					model.TcpClientTable().Del(client)
 
 				// 接收心跳
 				case <-client.HeartBeat:

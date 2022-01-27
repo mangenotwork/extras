@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/mangenotwork/extras/apps/IM-Conn/handler"
 	"log"
@@ -103,21 +104,22 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 			if len(data) < 1 {
 				continue
 			}
-			client.HeartBeat <- data
-			//cmdData := &model.CmdData{}
-			//jsonErr := json.Unmarshal(data, &cmdData)
-			//if jsonErr != nil {
-			//	_=conn.WriteMessage(websocket.BinaryMessage, model.CmdDataMsg("非法数据格式"))
-			//	continue
-			//}
-			//logger.Info(cmdData)
-			//device = service.Interactive(cmdData, client)
+
+			logger.Info(string(data))
+			cmdData := &model.CmdData{}
+			jsonErr := json.Unmarshal(data, &cmdData)
+			if jsonErr != nil {
+				client.Send(cmdData.SendMsg("非法数据格式", 1001))
+				continue
+			}
+			handler.WsHandler(client, cmdData)
+
 		}
 
 	}()
 
 
-	// TODO 处理心跳和僵尸连接
+	// 处理心跳和僵尸连接
 	go func(){
 		for {
 			timer := time.NewTimer(10 * time.Second)
@@ -126,6 +128,7 @@ func Ws(w http.ResponseWriter, r *http.Request) {
 			case <-timer.C:
 				// 10秒内收不到来自客户端的心跳连接断开
 				_=client.Conn.Close()
+				model.WsClientTable().Del(client)
 
 				// 接收心跳
 			case <-client.HeartBeat:
