@@ -71,6 +71,11 @@ ___
 
 ___
 
+#### MinioClient  Minio客户端服务
+> 对外提供对象存储服务
+>
+> [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/Minio)
+
 #### Mail 邮件服务
 > 提供邮件服务
 

@@ -1,0 +1,11 @@
+app:
+  name: Gateway
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 8181
+
+logCentre:
+  host: 192.168.0.9
+  prod: 22223
