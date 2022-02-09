@@ -20,9 +20,11 @@ import (
 )
 
 // GetFile 请求文件的参数介绍
-// compact 压缩等级
+// use : ?compact=5&width=500&height=500
+// compact 压缩等级; 优先级最高
+// width,height 指定图片宽高,必须都指定; 优先级第2高
 //
-func GetFile(w http.ResponseWriter, bucket, obj, compact string) {
+func GetFile(w http.ResponseWriter, bucket, obj, compact, width, height string) {
 	bucket = strings.TrimPrefix(bucket, "/")
 	log.Println("bucket = ", bucket)
 	log.Println("obj = ", obj)
@@ -36,24 +38,42 @@ func GetFile(w http.ResponseWriter, bucket, obj, compact string) {
 	objectInfo, err :=  object.Stat()
 	logger.Info(objectInfo, err)
 
-	// 图片压缩
+
 	if strings.Index(objectInfo.ContentType, "jpeg") != -1 || strings.Index(objectInfo.ContentType, "gif") != -1 ||
 		strings.Index(objectInfo.ContentType, "png") != -1  || strings.Index(objectInfo.ContentType, "bmp") != -1 ||
 		strings.Index(objectInfo.ContentType, "wbmp") != -1 {
-		img, str, err := image.Decode(object)
-		if err != nil {
-			httpser.OutErrBody(w, 2001, err)
+
+		// 图片压缩
+		if compact != "" {
+			img, str, err := image.Decode(object)
+			if err != nil {
+				httpser.OutErrBody(w, 2001, err)
+				return
+			}
+			b := img.Bounds()
+			width := b.Max.X
+			levelInt := utils.Str2Int(compact)
+			if levelInt <= 0 {
+				levelInt = 1
+			}
+			out := ImgCompress(img, width/levelInt, 0, str)
+			_,_=w.Write(out)
 			return
 		}
-		b := img.Bounds()
-		width := b.Max.X
-		levelInt := utils.Str2Int(compact)
-		if levelInt <= 0 {
-			levelInt = 1
+
+		// 图片指定尺寸
+		widthInt := utils.Str2Int(width)
+		heightInt := utils.Str2Int(height)
+		if widthInt > 0 && heightInt > 0 {
+			img, str, err := image.Decode(object)
+			if err != nil {
+				httpser.OutErrBody(w, 2001, err)
+				return
+			}
+			out := ImgCompress(img, widthInt, heightInt, str)
+			_,_=w.Write(out)
+			return
 		}
-		out := ImgCompress(img, width/levelInt, 0, str)
-		_,_=w.Write(out)
-		return
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -63,21 +83,25 @@ func GetFile(w http.ResponseWriter, bucket, obj, compact string) {
 	}
 }
 
-
+// 图片压缩,尺寸调整
+//
 // Nearest-neighbor interpolation
-//	NearestNeighbor InterpolationFunction = iota
-	// Bilinear interpolation
-//	Bilinear
-	// Bicubic interpolation (with cubic hermite spline)
-//	Bicubic
-	// Mitchell-Netravali interpolation
-//	MitchellNetravali
-	// Lanczos interpolation (a=2)
-//	Lanczos2
-	// Lanczos interpolation (a=3)
-//	Lanczos3
-
-// 图片压缩
+//		NearestNeighbor InterpolationFunction = iota
+//
+// Bilinear interpolation
+//		Bilinear
+//
+// Bicubic interpolation (with cubic hermite spline)
+//		Bicubic
+//
+// Mitchell-Netravali interpolation
+//		MitchellNetravali
+//
+// Lanczos interpolation (a=2)
+//		Lanczos2
+//
+// Lanczos interpolation (a=3)
+//		Lanczos3
 func ImgCompress(img image.Image, width, height int, outType string) []byte {
 	// resize.Resize 使用插值函数interp创建具有新尺寸（宽度，高度）的缩放图像。 如果宽度或高度设置为0，则将其设置为保留宽高比值。
 	m := resize.Resize(uint(width), uint(height), img, resize.Lanczos3)

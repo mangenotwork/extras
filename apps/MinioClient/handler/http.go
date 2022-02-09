@@ -23,9 +23,9 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	obj := objUrlList[len(objUrlList)-1]
 	bucket := strings.Replace(r.URL.Path, "/"+obj, "", -1)
 	compact := r.URL.Query().Get("compact")
-
-	service.GetFile(w, bucket, obj, compact)
-
+	width := r.URL.Query().Get("width")
+	height := r.URL.Query().Get("height")
+	service.GetFile(w, bucket, obj, compact, width, height)
 }
 
 func Error(w http.ResponseWriter, r *http.Request) {
