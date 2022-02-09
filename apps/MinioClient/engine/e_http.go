@@ -26,6 +26,9 @@ func StartHttp() {
 		// 查看桶文件列表
 		mux.Router("/bucket/files", handler.BucketFiles)
 
+		// 上传文件
+		mux.Router("/upload", handler.Upload)
+
 		mux.Run()
 
 	}()

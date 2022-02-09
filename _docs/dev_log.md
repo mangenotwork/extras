@@ -108,11 +108,11 @@
 - v0.4.14 [MinioClient] 查看和创建桶
 - v0.4.15 [MinioClient] 请求图片,与图片压缩
 - v0.4.16 [MinioClient] 请求图片,指定图片尺寸
+- v0.4.17 [MinioClient] 上传文件
 > Todo
 
 > v0.4
-- v0.4.17 [MinioClient] 上传文件
-- v0.4.18 
+- v0.4.18 [MinioClient] 备份
 - v0.4.19 
 - v0.4.20 
 - v0.4.21

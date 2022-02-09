@@ -7,6 +7,7 @@ import (
 	"github.com/mangenotwork/extras/common/logger"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -75,6 +76,35 @@ func BucketFiles(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+type UploadRse struct {
+	Url string
+	FileName string
+	Size int64
+	Timestamp int64
+}
 
+func Upload(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	logger.Info(handler.Filename, handler.Size, handler.Header)
+	bucket := r.FormValue("bucket")
 
+	url, err := service.UploadFile(bucket, file, handler)
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	rse := &UploadRse{
+		Url:       url,
+		FileName:  handler.Filename,
+		Size:      handler.Size,
+		Timestamp: time.Now().Unix(),
+	}
+	httpser.OutSucceedBodyJsonP(w, rse)
+	return
+}
 

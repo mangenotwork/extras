@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net"
 	"net/http"
 	"net/url"
@@ -199,6 +200,14 @@ func GetUrlArgInt(r *http.Request, name string) int {
 func GetJsonParam(r *http.Request, param interface{}) {
 	decoder:=json.NewDecoder(r.Body)
 	_=decoder.Decode(&param)
+}
+
+func GetFromArg(r *http.Request, name string) string {
+	return r.FormValue(name)
+}
+
+func GetFromFile(r *http.Request, name string) (multipart.File, *multipart.FileHeader, error) {
+	return r.FormFile(name)
 }
 
 func GetCookie(r *http.Request, name string) (*http.Cookie, error) {
