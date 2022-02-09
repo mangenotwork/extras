@@ -104,14 +104,13 @@
 - v0.4.10 [IM-Msg]  消息结构设计
 - v0.4.11 [Gateway] 初始化目录
 - v0.4.12 [MinioClient] 初始化目录
-
+- v0.4.13 [MinioClient] 连接Minio服务
 > Todo
 
 > v0.4
-- v0.4.13 [MinioClient] 连接Minio服务
-- v0.4.14 [MinioClient] 上传文件
+- v0.4.14 [MinioClient] 查看和创建桶
 - v0.4.15 [MinioClient] 请求图片,与图片缩略
-- v0.4.16 [IM-Msg]  发送消息
+- v0.4.16 [MinioClient] 上传文件
 - v0.4.17
 - v0.4.18
 - v0.4.19
@@ -125,6 +124,7 @@
 
 
 > 预计
+- [IM-Msg]  发送消息
 - [ServiceTableClient] 请求设计
 - [ServiceTableClient] 数据结构集合
 - [ServiceTableClient] 租约
