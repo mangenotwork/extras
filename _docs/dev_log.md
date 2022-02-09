@@ -106,15 +106,15 @@
 - v0.4.12 [MinioClient] 初始化目录
 - v0.4.13 [MinioClient] 连接Minio服务
 - v0.4.14 [MinioClient] 查看和创建桶
+- v0.4.15 [MinioClient] 请求图片,与图片压缩
 > Todo
 
 > v0.4
-- v0.4.15 [MinioClient] 请求图片,与图片缩略
-- v0.4.16 [MinioClient] 上传文件
-- v0.4.17
-- v0.4.18
-- v0.4.19
-- v0.4.20
+- v0.4.16 [MinioClient] 请求图片,指定图片尺寸
+- v0.4.17 [MinioClient] 上传文件
+- v0.4.18 
+- v0.4.19 
+- v0.4.20 
 - v0.4.21
 - v0.4.22
 - v0.4.23
@@ -125,6 +125,8 @@
 
 > 预计
 - [IM-Msg]  发送消息
+- [ImgHelper] 图片尺寸调整
+- [MinioClient] 请求图片,图片水印
 - [ServiceTableClient] 请求设计
 - [ServiceTableClient] 数据结构集合
 - [ServiceTableClient] 租约

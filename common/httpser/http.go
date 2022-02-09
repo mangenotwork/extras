@@ -76,12 +76,18 @@ func NewEngine() *Engine {
 		mux: http.NewServeMux(),
 		base : Base,
 	}
-
 	engine.mux.Handle("/", engine.base(http.HandlerFunc(Index)))
 	engine.mux.Handle("/hello", engine.base(http.HandlerFunc(Hello)))
 	engine.mux.Handle("/health", engine.base(http.HandlerFunc(Health)))
 
 	return engine
+}
+
+func SimpleEngine() *Engine {
+	return &Engine{
+		mux:  http.NewServeMux(),
+		base: Base,
+	}
 }
 
 func (engine *Engine) GetMux() *http.ServeMux {

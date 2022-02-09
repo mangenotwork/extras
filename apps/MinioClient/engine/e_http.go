@@ -9,7 +9,10 @@ import (
 func StartHttp() {
 	go func() {
 		logger.Info("StartHttp")
-		mux := httpser.NewEngine()
+		mux := httpser.SimpleEngine()
+
+		mux.Router("/", handler.Hello)
+		mux.Router("/err", handler.Error)
 
 		// 查看是否连接Minio
 		mux.Router("/hasConn", handler.HasConn)

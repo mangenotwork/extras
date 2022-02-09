@@ -13,7 +13,6 @@ import (
 	"github.com/mangenotwork/extras/apps/ShortLink/service"
 	"github.com/mangenotwork/extras/common/httpser"
 	"github.com/mangenotwork/extras/common/logger"
-	"github.com/mangenotwork/extras/common/middleware"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +32,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ip := middleware.GetIP(r)
+	ip := httpser.GetIP(r)
 	if !link.IsWhiteList(ip){
 		http.Redirect(w, r, "/WhiteNote", http.StatusMovedPermanently)
 		return

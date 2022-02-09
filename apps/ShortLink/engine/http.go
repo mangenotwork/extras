@@ -9,8 +9,9 @@ import (
 func StartHttp(){
 	go func() {
 		logger.Info("StartHttp")
-		mux := httpser.NewEngine()
+		mux := httpser.SimpleEngine()
 
+		mux.Router("/", handler.Hello)
 		mux.Router("/err", handler.Error)
 		mux.Router("/NotPrivacy", handler.NotPrivacy)
 		mux.Router("/WhiteNote", handler.WhiteNote)

@@ -4,8 +4,34 @@ import (
 	"github.com/mangenotwork/extras/apps/MinioClient/model"
 	"github.com/mangenotwork/extras/apps/MinioClient/service"
 	"github.com/mangenotwork/extras/common/httpser"
+	"github.com/mangenotwork/extras/common/logger"
 	"net/http"
+	"strings"
 )
+
+func Hello(w http.ResponseWriter, r *http.Request) {
+	logger.Infof("Received request %s %s %s\n", r.Method, r.Host, r.RemoteAddr)
+	logger.Info(r.URL)
+	logger.Info(r.URL.Path,  r.URL.User, r.URL.Query())
+
+	objUrlList := strings.Split(r.URL.Path, "/")
+	if len(objUrlList) < 1 {
+		http.Redirect(w, r, "/err", http.StatusMovedPermanently)
+		return
+	}
+
+	obj := objUrlList[len(objUrlList)-1]
+	bucket := strings.Replace(r.URL.Path, "/"+obj, "", -1)
+	compact := r.URL.Query().Get("compact")
+
+	service.GetFile(w, bucket, obj, compact)
+
+}
+
+func Error(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	_,_=w.Write([]byte("Error: 未知链接!"))
+}
 
 func HasConn(w http.ResponseWriter, r *http.Request) {
 	if model.MinioClient != nil {
