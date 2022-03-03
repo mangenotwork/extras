@@ -76,6 +76,9 @@ func addWord(key, word string) (err error) {
 	c := conn.RedisConn().Get()
 	defer c.Close()
 	_, err = c.Do("SADD", key, word)
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 

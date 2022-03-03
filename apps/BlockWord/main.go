@@ -9,7 +9,7 @@ import (
 
 func main(){
 	conf.InitConf()
-	logger.InitLogger()
+	//logger.InitLogger()
 
 	logger.Info(utils.Logo)
 	logger.Info("Starting block word http server")

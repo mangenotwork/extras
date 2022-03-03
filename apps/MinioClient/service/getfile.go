@@ -27,6 +27,7 @@ import (
 func GetFile(w http.ResponseWriter, bucket, obj, compact, width, height string) {
 	bucket = strings.TrimPrefix(bucket, "/")
 	log.Println("bucket = ", bucket)
+	bucket = strings.Replace(bucket, "media/", "", 1)
 	log.Println("obj = ", obj)
 	object, err := model.MinioClient.GetObject(bucket, obj, minio.GetObjectOptions{})
 	if err != nil {

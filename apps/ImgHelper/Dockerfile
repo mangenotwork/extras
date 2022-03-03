@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # app name
-ENV AppName=img-helper
+ENV AppName=imghelper
 
 
 # mkdir directory
@@ -11,7 +11,9 @@ RUN mkdir -p /app/logs
 COPY ${AppName} /app/
 
 # copy configs file to image
-COPY conf /app/configs
+COPY configs /app/configs
+
+COPY ttf /app/ttf
 
 # add timezone
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \

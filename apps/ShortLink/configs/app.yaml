@@ -1,5 +1,5 @@
 app:
-  name: ShortLink
+  name: shortlink
   runType: dev
 
 httpServer:
@@ -12,10 +12,10 @@ grpcServer:
   log: true
 
 redis:
-  host: 192.168.0.197
+  host: 119.23.143.202
   port: 6379
-  db: 4
-  password: love0021$%
+  db: 3
+  password:
   maxidle: 50
   maxactive: 10000
 

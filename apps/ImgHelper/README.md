@@ -30,7 +30,7 @@ ttf: /ttf/Alibaba-PuHuiTi-Heavy.ttf
 
 ## Http接口文档
 
-#### [get] /qrcode
+#### [get] /qrcode?value=
 > 生成二维码  QRCode
 
 参数

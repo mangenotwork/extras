@@ -2,7 +2,9 @@ package utils
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/gob"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"math/rand"
@@ -174,3 +176,8 @@ func RandInt(min, max int) int {
 	return rand.Intn(max) + min
 }
 
+func MD5(str string) string  {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
+}

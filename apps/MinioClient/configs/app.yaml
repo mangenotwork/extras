@@ -6,11 +6,8 @@ httpServer:
   open: true
   prod: 8282
 
-logCentre:
-  host: 192.168.0.9
-  prod: 22223
-
 minio:
-  host: "192.168.0.9:9000"
+  host: "127.0.0.1:9000"
+  #host: "192.168.0.9:9000"
   access: mange
   secret: Lm_123456

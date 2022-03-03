@@ -1,25 +1,25 @@
 #! /bin/bash
 
-cd ../apps/ShortLink/
-
-AppName=shortlink
+# app name
+AppName=minio-client
 
 # app version
-VERSION=0.0.1
+VERSION=0.0.6
 
 # ImageURL
 ImageURL=ccr.ccs.tencentyun.com/mange/
 
 # go mod
+rm -rf $AppName
 rm -rf vendor
 go mod vendor
-
 
 #builder app
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-w -s" -o $AppName main.go
 
 # docker build
 docker build --rm -t $AppName:latest .
+
 
 # docker push
 docker login ccr.ccs.tencentyun.com --username=100015308690 --password=Lm_123456
