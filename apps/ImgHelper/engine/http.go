@@ -28,6 +28,7 @@ func StartHttp(){
 
 		// 图片压缩
 		mux.Router("/image/compress", handler.ImageCompress)
+		mux.Router("/image/compress/base64", handler.ImageCompressBase64)
 
 		// 图片添加水印
 		mux.Router("/watermark/txt", handler.WatermarkTxt)   // - 文字水印

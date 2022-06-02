@@ -43,7 +43,8 @@ func FontTTFInit() {
 
 // position 1:左下角, 2:居中, 3:左上角, 4:右上角, 5:右下角
 func WatermarkTxt(file multipart.File, txt, color string, fontSize, dpi, position int) (outByte []byte, err error) {
-	strings.Replace(color, "#", "", -1)
+	logger.Error(color, fontSize, dpi)
+	color = strings.Replace(color, "#", "", -1)
 	if len(color) < 6 {
 		color = "FF0000"
 	}

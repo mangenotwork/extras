@@ -76,6 +76,9 @@ ___
 >
 > [点击查看](https://github.com/mangenotwork/extras/tree/master/apps/Minio)
 
+#### ProxyHelper  代理服务
+> 提供http/s, socket 代理
+
 #### Mail 邮件服务
 > 提供邮件服务
 

@@ -145,7 +145,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	if exp == 0 {
 		exp = params.Deadline
 	}
-
+	logger.Error("params.Url = ", params.Url)
 	shortLink := &model.ShortLink{
 		Short: "/"+service.MustGenerate(),
 		Url: params.Url,

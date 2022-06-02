@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/base64"
 	"fmt"
 	"image"
 	_ "image/gif"
@@ -8,6 +9,8 @@ import (
 	_ "image/png"
 	"mime/multipart"
 	"net/http"
+	"path"
+	"strings"
 
 	"github.com/mangenotwork/extras/apps/ImgHelper/service"
 	"github.com/mangenotwork/extras/common/httpser"
@@ -175,8 +178,49 @@ func ImageCompress(w http.ResponseWriter, r *http.Request) {
 	}
 	out := service.ImgCompress(img, width/levelInt, 0, str)
 
+
+	//ext := path.Ext(head.Filename)
+	//ext = strings.Replace(ext, ".", "", -1)
+	//w.Header().Add("Content-Type", "image/"+ext)
 	_,_=w.Write(out)
 }
+
+func ImageCompressBase64(w http.ResponseWriter, r *http.Request) {
+	file, head, err := r.FormFile("file")
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	ext := path.Ext(head.Filename)
+	ext = strings.Replace(ext, ".", "", -1)
+
+	defer file.Close()
+	level := r.FormValue("level")
+	logger.Error(level)
+	img, str, err := image.Decode(file)
+	if err != nil {
+		httpser.OutErrBody(w, 2001, err)
+		return
+	}
+	b := img.Bounds()
+	width := b.Max.X
+	levelInt := utils.Str2Int(level)
+	if levelInt <= 0 {
+		levelInt = 1
+	}
+	out := service.ImgCompress(img, width/levelInt, 0, str)
+
+	encodeString := base64.StdEncoding.EncodeToString(out)
+
+	logger.Error(encodeString)
+
+	w.WriteHeader(200)
+
+	_,_=w.Write([]byte("data:image/"+ext+";base64,"+encodeString))
+
+}
+
+
 
 func Txt2Img(w http.ResponseWriter, r *http.Request) {
 	txt := r.FormValue("txt")

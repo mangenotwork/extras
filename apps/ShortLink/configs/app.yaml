@@ -4,11 +4,11 @@ app:
 
 httpServer:
   open: true
-  prod: 1233
+  prod: 12333
 
 grpcServer:
   open: true
-  prod: 1234
+  prod: 12334
   log: true
 
 redis:

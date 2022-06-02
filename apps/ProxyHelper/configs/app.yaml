@@ -1,0 +1,7 @@
+app:
+  name: MinioClient
+  runType: dev
+
+httpServer:
+  open: true
+  prod: 8111

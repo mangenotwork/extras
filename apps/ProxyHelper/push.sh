@@ -1,25 +1,25 @@
 #! /bin/bash
 
-cd ../apps/ImgHelper/
-
-AppName=imghelper
+# app name
+AppName=proxy-helper
 
 # app version
-VERSION=0.0.2
+VERSION=0.1.1
 
 # ImageURL
 ImageURL=ccr.ccs.tencentyun.com/mange/
 
 # go mod
+rm -rf $AppName
 rm -rf vendor
 go mod vendor
-
 
 #builder app
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-w -s" -o $AppName main.go
 
 # docker build
 docker build --rm -t $AppName:latest .
+
 
 # docker push
 docker login ccr.ccs.tencentyun.com --username=100015308690 --password=Lm_123456

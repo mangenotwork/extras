@@ -1,10 +1,18 @@
 FROM alpine:latest
 
-ENV AppName=shortlink
+# app name
+ENV AppName=proxy-helper
+
+# mkdir directory
 RUN mkdir -p /app/logs
+
+# copy file to image
 COPY ${AppName} /app/
+
+# copy configs file to image
 COPY configs /app/configs
 
+# add timezone
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
         && apk --no-cache add ca-certificates tzdata\
         && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
@@ -13,10 +21,11 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 WORKDIR /app
 
+# 日志挂载
 VOLUME /app/logs
 
-EXPOSE 12333
-EXPOSE 12334
+# port
+EXPOSE 8111
 
 LABEL maintainer = "2912882908@qq.com"
 

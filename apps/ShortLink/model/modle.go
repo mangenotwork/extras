@@ -34,6 +34,8 @@ func (sl *ShortLink) Save() (err error) {
 	defer rc.Close()
 	args := redis.Args{}.Add(fmt.Sprintf(ShortLinkInfoKey, sl.Short))
 	// 不使用反射， 反射效率低
+
+	logger.Error("sl.Url = ", sl.Url)
 	args = args.Add("Short").Add(sl.Short)
 	args = args.Add("Url").Add(sl.Url)
 	args = args.Add("Expiration").Add(sl.Expiration)
